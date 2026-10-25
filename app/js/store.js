@@ -1,0 +1,262 @@
+/* In-memory view of .scrawl/. Every change is written straight to disk; files always win. */
+(function () {
+  const S = window.Scrawl;
+  const { parser, fs, util } = S;
+
+  const DIR = '.scrawl';
+  const ITEMS = `${DIR}/items`;
+  const CONFIG = `${DIR}/config.json`;
+  const COMMITS_TXT = `${DIR}/log/commits.txt`;
+  const COMMITS_JSONL = `${DIR}/log/commits.jsonl`;
+
+  const STATUSES = ['proposed', 'backlog', 'ready', 'doing', 'review', 'done', 'wontfix'];
+  const TYPES = ['feature', 'story', 'bug', 'idea'];
+  const SEVERITIES = ['ant', 'beetle', 'cockroach', 'kraken'];
+
+  const DEFAULT_CONFIG = {
+    version: 1,
+    nextId: 1,
+    columns: [
+      { status: 'backlog', label: 'Someday pile' },
+      { status: 'ready', label: "Claude's tray", wip: 5 },
+      { status: 'doing', label: 'On the bench', wip: 2 },
+      { status: 'review', label: 'Eyeball it' },
+      { status: 'done', label: 'Shipped!' },
+    ],
+  };
+
+  const state = {
+    root: null,
+    config: null,
+    project: '',
+    items: new Map(), // file name -> item
+    commits: [],
+    known: new Map(), // path -> lastModified we last saw or wrote
+    lastIndex: '',
+  };
+  const listeners = new Set();
+
+  function on(fn) { listeners.add(fn); }
+  function emit(change) { for (const fn of listeners) fn(change); }
+
+  /* ---------- loading ---------- */
+
+  function ingest(file, text, mtime) {
+    const doc = parser.parse(text);
+    let id = doc.meta.id;
+    if (typeof id !== 'number') id = parseInt(file, 10) || 0;
+    const item = { id, file, ...doc, mtime };
+    for (const other of state.items.values()) {
+      if (other.id === id && other.file !== file) item.errors.push(`duplicate id #${id} (also ${other.file})`);
+    }
+    state.items.set(file, item);
+    state.known.set(`${ITEMS}/${file}`, mtime);
+    return item;
+  }
+
+  async function loadConfig() {
+    const f = await fs.read(state.root, CONFIG);
+    state.known.set(CONFIG, f ? f.mtime : null);
+    if (!f) return false;
+    try {
+      state.config = { ...DEFAULT_CONFIG, ...JSON.parse(f.text) };
+    } catch {
+      state.config = state.config || { ...DEFAULT_CONFIG };
+      util.toast('config.json is smudged (bad JSON) - using defaults', 'warn');
+    }
+    return true;
+  }
+
+  async function loadProject() {
+    const f = await fs.read(state.root, `${DIR}/project.md`);
+    const h = f && f.text.match(/^#\s+(.+)$/m);
+    state.project = h ? h[1].trim() : state.root.name;
+  }
+
+  async function loadCommits() {
+    const out = [];
+    const txt = await fs.read(state.root, COMMITS_TXT);
+    state.known.set(COMMITS_TXT, txt ? txt.mtime : null);
+    for (const line of (txt ? txt.text : '').split('\n')) {
+      if (!line.trim()) continue;
+      // Subject may itself contain "|", so only the first three separators count.
+      const [sha, date, author, ...rest] = line.split('|');
+      out.push({ sha, date, author, subject: rest.join('|') });
+    }
+    const jl = await fs.read(state.root, COMMITS_JSONL);
+    state.known.set(COMMITS_JSONL, jl ? jl.mtime : null);
+    for (const line of (jl ? jl.text : '').split('\n')) {
+      try { if (line.trim()) out.push(JSON.parse(line)); } catch { /* skip bad line */ }
+    }
+    const seen = new Set();
+    state.commits = out.filter((c) => c.sha && !seen.has(c.sha) && seen.add(c.sha)).map((c) => ({
+      ...c,
+      refs: c.items || [...(c.subject || '').matchAll(/#(\d+)/g)].map((m) => Number(m[1])),
+    }));
+  }
+
+  async function loadItems() {
+    state.items.clear();
+    for (const { name, handle } of await fs.list(state.root, ITEMS)) {
+      if (!name.endsWith('.md')) continue;
+      const f = await handle.getFile();
+      ingest(name, await f.text(), f.lastModified);
+    }
+  }
+
+  // Returns false when the folder has no .scrawl/ yet.
+  async function open(root) {
+    state.root = root;
+    state.known.clear();
+    if (!(await loadConfig())) return false;
+    await Promise.all([loadProject(), loadItems(), loadCommits()]);
+    await writeIndex();
+    return true;
+  }
+
+  async function init(root) {
+    state.root = root;
+    const name = root.name;
+    await fs.write(root, CONFIG, JSON.stringify(DEFAULT_CONFIG, null, 2) + '\n');
+    await fs.write(root, `${DIR}/project.md`,
+      `# ${name}\n\n## Goal\n\n## For whom\n\n## Stack\n\n## Must-haves\n\n## Out of scope\n`);
+    await fs.dir(root, ITEMS, true);
+    await fs.append(root, `${DIR}/log/activity.jsonl`, '');
+    return open(root);
+  }
+
+  /* ---------- polling for outside changes (Claude, git, your editor) ---------- */
+
+  async function poll() {
+    const changed = [];
+    const seen = new Set();
+    for (const { name, handle } of await fs.list(state.root, ITEMS)) {
+      if (!name.endsWith('.md')) continue;
+      seen.add(name);
+      const f = await handle.getFile();
+      if (state.known.get(`${ITEMS}/${name}`) !== f.lastModified) {
+        ingest(name, await f.text(), f.lastModified);
+        changed.push(name);
+      }
+    }
+    for (const name of [...state.items.keys()]) {
+      if (!seen.has(name)) {
+        state.items.delete(name);
+        state.known.delete(`${ITEMS}/${name}`);
+        changed.push(name);
+      }
+    }
+    if ((await fs.mtime(state.root, CONFIG)) !== state.known.get(CONFIG)) await loadConfig();
+    const commitsMoved = (await fs.mtime(state.root, COMMITS_TXT)) !== state.known.get(COMMITS_TXT)
+      || (await fs.mtime(state.root, COMMITS_JSONL)) !== state.known.get(COMMITS_JSONL);
+    if (commitsMoved) await loadCommits();
+
+    if (changed.length || commitsMoved) {
+      if (changed.length) await writeIndex();
+      emit({ outside: changed, commits: commitsMoved });
+    }
+  }
+
+  /* ---------- writing ---------- */
+
+  // index.json is a cache for cheap overviews (one line per item). Rewritten only when it differs.
+  async function writeIndex() {
+    const rows = list().sort((a, b) => a.id - b.id).map((i) => {
+      const m = i.meta;
+      const row = { id: i.id, type: m.type, title: m.title, status: m.status };
+      if (m.parent) row.parent = m.parent;
+      if (m.assignee) row.assignee = m.assignee;
+      if (m.rank) row.rank = m.rank;
+      return row;
+    });
+    const text = `[\n${rows.map((r) => '  ' + JSON.stringify(r)).join(',\n')}\n]\n`;
+    if (text === state.lastIndex) return;
+    state.lastIndex = text;
+    await fs.write(state.root, `${DIR}/index.json`, text);
+  }
+
+  async function log(entry) {
+    const line = JSON.stringify({ at: util.stamp(), who: 'me', ...entry });
+    try { await fs.append(state.root, `${DIR}/log/activity.jsonl`, line + '\n'); } catch { /* log is best-effort */ }
+  }
+
+  /* Apply `mutate` to the latest copy on disk, not our cached one. That is the field-level merge:
+     whatever Claude changed meanwhile survives, and only the fields we touch are overwritten. */
+  async function update(file, mutate, { activity } = {}) {
+    const path = `${ITEMS}/${file}`;
+    const disk = await fs.read(state.root, path);
+    if (!disk) {
+      util.toast(`${file} is gone from disk`, 'warn');
+      return;
+    }
+    const outside = disk.mtime !== state.known.get(path);
+    const doc = parser.parse(disk.text);
+    const before = { ...doc.meta };
+    mutate(doc);
+    doc.meta.updated = util.stamp();
+    if (activity) doc.body = parser.appendActivity(doc.body, 'me', activity);
+    const text = parser.serialize(doc);
+    const mtime = await fs.write(state.root, path, text);
+    const item = ingest(file, text, mtime);
+
+    if (before.status !== doc.meta.status) log({ id: item.id, action: 'move', from: before.status, to: doc.meta.status });
+    if (outside) util.toast(`✎ Claude was here - merged with the latest #${item.id}`);
+    await writeIndex();
+    emit({ local: [file] });
+    return item;
+  }
+
+  async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '' }) {
+    await loadConfig(); // Claude may have bumped nextId since we last looked
+    const maxId = Math.max(0, ...list().map((i) => i.id));
+    const id = Math.max(Number(state.config.nextId) || 1, maxId + 1);
+    state.config.nextId = id + 1;
+    state.known.set(CONFIG, await fs.write(state.root, CONFIG, JSON.stringify(state.config, null, 2) + '\n'));
+
+    const last = column(status).at(-1);
+    const now = util.stamp();
+    const meta = { id, type, title: title.trim(), status, assignee, rank: S.rank.between(last && last.meta.rank, null) };
+    if (type === 'bug') meta.severity = 'beetle';
+    Object.assign(meta, { labels: [], created: now, updated: now });
+
+    const doc = { meta, keys: [], extra: [], body: parser.appendActivity(parser.newBody(description), 'me', 'Created') };
+    const file = `${String(id).padStart(4, '0')}-${type}-${util.slugify(title)}.md`;
+    const text = parser.serialize(doc);
+    const mtime = await fs.write(state.root, `${ITEMS}/${file}`, text);
+    const item = ingest(file, text, mtime);
+    log({ id, action: 'create', to: status });
+    await writeIndex();
+    emit({ local: [file] });
+    return item;
+  }
+
+  /* ---------- queries ---------- */
+
+  function list() { return [...state.items.values()]; }
+  function get(file) { return state.items.get(file); }
+  function byId(id) { return list().find((i) => i.id === Number(id)); }
+
+  function compareRank(a, b) {
+    const ra = a.meta.rank || '';
+    const rb = b.meta.rank || '';
+    if (ra && rb && ra !== rb) return ra < rb ? -1 : 1;
+    if (!ra !== !rb) return ra ? -1 : 1; // unranked items sink to the bottom
+    return a.id - b.id;
+  }
+
+  function column(status) {
+    return list().filter((i) => i.meta.status === status).sort(compareRank);
+  }
+
+  function commitsFor(item) {
+    const pinned = new Set(Array.isArray(item.meta.commits) ? item.meta.commits : []);
+    return state.commits.filter((c) => c.refs.includes(item.id) || [...pinned].some((p) => c.sha.startsWith(p) || p.startsWith(c.sha)));
+  }
+
+  S.store = {
+    STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create,
+    list, get, byId, column, compareRank, commitsFor,
+    get config() { return state.config; },
+    get project() { return state.project; },
+  };
+})();

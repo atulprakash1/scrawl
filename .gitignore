@@ -1,0 +1,13 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Rebuilt by the post-commit hook from `git log` whenever it is missing,
+# so it never leaves the tree dirty after a commit.
+.scrawl/log/commits.txt
+
+# Claude Code per-user settings
+.claude/settings.local.json

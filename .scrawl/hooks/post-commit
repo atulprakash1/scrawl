@@ -1,0 +1,14 @@
+#!/bin/sh
+# Scrawl: record each commit so the board can link it to items ("#42 ..." in the message).
+# Runs from the repo root. Line format: shortsha|ISO date|author|subject
+log=.scrawl/log/commits.txt
+fmt='%h|%cI|%an|%s'
+
+[ -d .scrawl/log ] || exit 0
+
+if [ -f "$log" ]; then
+  git log -1 --format="$fmt" >> "$log"
+else
+  # First run or fresh clone: backfill the whole history once.
+  git log --reverse --format="$fmt" > "$log"
+fi

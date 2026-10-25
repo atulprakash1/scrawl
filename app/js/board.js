@@ -1,0 +1,157 @@
+/* Kanban board: sticky-note cards in columns, drag to move and reorder. */
+(function () {
+  const S = window.Scrawl;
+  const { el } = S.util;
+  const store = S.store;
+
+  const TYPE_ICON = { feature: '★', story: '✎', bug: '🐞', idea: '💡' };
+  const SEVERITY_ICON = { ant: '🐜', beetle: '🪲', cockroach: '🪳', kraken: '🦑' };
+  const WHO_ICON = { claude: '🤖', me: '☕' };
+
+  const filters = { text: '', who: '' };
+  let dragging = false;
+  let pending = false;
+  const sortables = [];
+
+  function matches(item) {
+    const m = item.meta;
+    if (filters.who && (m.assignee || 'me') !== filters.who) return false;
+    if (!filters.text) return true;
+    const q = filters.text.toLowerCase();
+    const hay = `#${item.id} ${m.title || ''} ${m.type || ''} ${(m.labels || []).join(' ')}`.toLowerCase();
+    return hay.includes(q);
+  }
+
+  function card(item) {
+    const m = item.meta;
+    const type = m.type || 'story';
+    const who = m.assignee || 'me';
+    const tilt = (S.util.seeded(item.id) * 3 - 1.5).toFixed(2);
+    const checks = S.parser.checklist(item.body);
+    const done = checks.filter((c) => c.done).length;
+    const commits = store.commitsFor(item).length;
+
+    return el('article', {
+      class: `card type-${type}${item.errors.length ? ' smudged' : ''}`,
+      dataset: { file: item.file },
+      style: `--tilt:${tilt}deg`,
+      tabindex: 0,
+      'aria-label': `#${item.id} ${type}: ${m.title || 'untitled'}`,
+      onclick: () => S.drawer.open(item.file),
+      onkeydown: (e) => { if (e.key === 'Enter') S.drawer.open(item.file); },
+    },
+    el('span', { class: 'tape', 'aria-hidden': 'true' }),
+    el('div', { class: 'card-top' },
+      el('span', { class: 'num' }, `#${item.id}`),
+      el('span', { class: 'kind' }, `${TYPE_ICON[type] || '•'} ${type}`),
+      type === 'bug' && m.severity ? el('span', { class: 'sev', title: `severity: ${m.severity}` }, `${SEVERITY_ICON[m.severity] || ''} ${m.severity}`) : null),
+    el('h3', {}, m.title || '(untitled)'),
+    el('div', { class: 'card-foot' },
+      el('span', { class: `who who-${who}`, title: `assignee: ${who}` }, `${WHO_ICON[who] || '👤'} ${who}`),
+      checks.length ? el('span', { class: 'checks', title: 'acceptance' }, `☑ ${done}/${checks.length}`) : null,
+      commits ? el('span', { class: 'commits', title: 'linked commits' }, `⎇ ${commits}`) : null,
+      (m.labels || []).map((l) => el('span', { class: 'label' }, l))),
+    m.status === 'review' && who === 'claude' ? el('span', { class: 'stamp stamp-needs' }, 'NEEDS YOU') : null,
+    m.status === 'done' ? el('span', { class: 'stamp stamp-shipped' }, 'SHIPPED') : null,
+    item.errors.length ? el('span', { class: 'smudge', title: item.errors.join('\n') }, 'smudged') : null);
+  }
+
+  function render() {
+    if (dragging) { pending = true; return; }
+    const root = document.getElementById('board');
+    const scroll = root.scrollLeft;
+    sortables.splice(0).forEach((s) => s.destroy());
+    root.replaceChildren();
+
+    for (const col of store.config.columns) {
+      const all = store.column(col.status);
+      const shown = all.filter(matches);
+      const over = col.wip && all.length > col.wip;
+      const cards = el('div', { class: 'cards', dataset: { status: col.status } }, shown.map(card));
+      root.append(el('section', { class: `column col-${col.status}${over ? ' over-wip' : ''}` },
+        el('header', {},
+          el('h2', {}, col.label),
+          el('span', { class: 'count', title: col.wip ? 'items / WIP limit' : 'items' },
+            col.wip ? `${all.length}/${col.wip}` : String(all.length))),
+        cards));
+      sortables.push(window.Sortable.create(cards, {
+        group: 'board',
+        animation: 150,
+        ghostClass: 'card-ghost',
+        chosenClass: 'card-chosen',
+        dragClass: 'card-drag',
+        forceFallback: true, // consistent pencil-shadow look across browsers
+        onStart: () => { dragging = true; },
+        onEnd: onDrop,
+      }));
+    }
+    root.scrollLeft = scroll;
+    renderHidden();
+  }
+
+  // Statuses with no column (proposed, wontfix) still exist; say so instead of hiding them silently.
+  function renderHidden() {
+    const shown = new Set(store.config.columns.map((c) => c.status));
+    const hidden = store.list().filter((i) => !shown.has(i.meta.status));
+    const note = document.getElementById('hidden-note');
+    note.textContent = hidden.length ? `+${hidden.length} not on the board (proposed / wontfix)` : '';
+  }
+
+  async function onDrop(evt) {
+    dragging = false;
+    try {
+      if (evt.from === evt.to && evt.oldIndex === evt.newIndex) return;
+      const status = evt.to.dataset.status;
+      const files = [...evt.to.children].map((n) => n.dataset.file);
+      const idx = files.indexOf(evt.item.dataset.file);
+      const rankOf = (f) => (f && store.get(f) ? store.get(f).meta.rank : undefined);
+      const prev = rankOf(files[idx - 1]);
+      const next = rankOf(files[idx + 1]);
+      const label = store.config.columns.find((c) => c.status === status).label;
+      const moved = store.get(files[idx]);
+      const activity = moved.meta.status !== status ? `Moved to ${status} (${label})` : undefined;
+
+      const neighboursOk = (idx === 0 || prev) && (idx === files.length - 1 || next) && (!prev || !next || prev < next);
+      if (neighboursOk) {
+        const rank = S.rank.between(prev || '', next || null);
+        await store.update(files[idx], (d) => { d.meta.status = status; d.meta.rank = rank; }, { activity });
+      } else {
+        // Neighbours have no usable rank (e.g. Claude created them): re-rank the whole column once.
+        const keys = S.rank.spread(files.length);
+        for (let i = 0; i < files.length; i++) {
+          await store.update(files[i], (d) => {
+            d.meta.status = status;
+            d.meta.rank = keys[i];
+          }, i === idx ? { activity } : {});
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      S.util.toast(`Couldn't save the move: ${e.message}`, 'warn');
+    } finally {
+      pending = false;
+      render();
+    }
+  }
+
+  function bindToolbar() {
+    const form = document.getElementById('quick-add');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.elements.title;
+      const raw = input.value.trim();
+      if (!raw) return;
+      // "bug: crash on empty form" -> type bug. Default is story.
+      const m = raw.match(/^(feature|story|bug|idea)\s*:\s*(.+)$/i);
+      const type = m ? m[1].toLowerCase() : 'story';
+      const title = m ? m[2] : raw;
+      input.value = '';
+      const item = await store.create({ type, title });
+      S.util.toast(`Added #${item.id} to the Someday pile`);
+    });
+    document.getElementById('filter-text').addEventListener('input', (e) => { filters.text = e.target.value.trim(); render(); });
+    document.getElementById('filter-who').addEventListener('change', (e) => { filters.who = e.target.value; render(); });
+  }
+
+  S.board = { render, bindToolbar, TYPE_ICON, SEVERITY_ICON, WHO_ICON };
+})();

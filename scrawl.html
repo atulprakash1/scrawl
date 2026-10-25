@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scrawl</title>
+  <link rel="stylesheet" href="app/css/scrawl.css">
+</head>
+<body>
+  <!-- Welcome / folder picker -->
+  <main id="welcome" class="welcome" hidden>
+    <div class="welcome-card">
+      <h1 class="logo">Scrawl<span class="logo-dot">.</span></h1>
+      <p class="tagline">a sketchbook project board for you &amp; Claude</p>
+      <p id="welcome-msg"></p>
+      <div id="welcome-actions" class="welcome-actions"></div>
+    </div>
+  </main>
+
+  <!-- The board -->
+  <div id="app" hidden>
+    <header class="topbar">
+      <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
+      <span id="project-name" class="project-name"></span>
+      <form id="quick-add" class="quick-add" autocomplete="off">
+        <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
+        <button class="btn" type="submit">+ add</button>
+      </form>
+      <input id="filter-text" class="filter" type="search" placeholder="Filter" aria-label="Filter cards">
+      <select id="filter-who" class="filter" aria-label="Filter by assignee">
+        <option value="">everyone</option>
+        <option value="me">☕ me</option>
+        <option value="claude">🤖 claude</option>
+      </select>
+      <span class="spacer"></span>
+      <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
+      <button id="theme-toggle" class="icon-btn" title="Paper / chalkboard" aria-label="Toggle theme">◐</button>
+    </header>
+
+    <div id="offline" class="banner" hidden>
+      Lost access to the folder.
+      <button id="regrant" class="btn">Let Scrawl back in</button>
+    </div>
+
+    <main id="board" class="board"></main>
+    <p id="hidden-note" class="hidden-note muted"></p>
+  </div>
+
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Item details"></aside>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <!-- Classic scripts on purpose: Chrome blocks type="module" on file:// pages. -->
+  <script src="vendor/sortable.min.js"></script>
+  <script src="vendor/marked.umd.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script src="app/js/util.js"></script>
+  <script src="app/js/parser.js"></script>
+  <script src="app/js/rank.js"></script>
+  <script src="app/js/fs.js"></script>
+  <script src="app/js/store.js"></script>
+  <script src="app/js/watcher.js"></script>
+  <script src="app/js/board.js"></script>
+  <script src="app/js/drawer.js"></script>
+  <script src="app/js/main.js"></script>
+</body>
+</html>
