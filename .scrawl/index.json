@@ -12,5 +12,6 @@
   {"id":11,"type":"story","title":"Bug jar and Today view","status":"backlog","parent":8,"assignee":"me","rank":"j"},
   {"id":12,"type":"feature","title":"Polish: sketchy theme, motion, palette, keyboard, read-only mode","status":"backlog","assignee":"me","rank":"k"},
   {"id":13,"type":"idea","title":"Helper CLI scrawl.mjs","status":"backlog","assignee":"me","rank":"m"},
-  {"id":14,"type":"idea","title":"Experiments: FileSystemObserver, isomorphic-git, AGENTS.md","status":"backlog","assignee":"me","rank":"n"}
+  {"id":14,"type":"idea","title":"Experiments: FileSystemObserver, isomorphic-git, AGENTS.md","status":"backlog","assignee":"me","rank":"n"},
+  {"id":15,"type":"feature","title":"drag and drop cards","status":"review","assignee":"claude","rank":"t"}
 ]

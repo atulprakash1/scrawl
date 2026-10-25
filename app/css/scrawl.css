@@ -231,12 +231,25 @@ textarea { width: 100%; resize: vertical; }
 }
 .card.smudged { outline: 2px dashed #b3261e; }
 
-/* Drag states: lift, tilt, pencil shadow. */
-.card-ghost { opacity: 0.35; }
-.card-chosen, .card-drag {
+/* Drag states. SortableJS moves the floating copy by rewriting only the translation part of its
+   transform matrix, so a tilt set in `transform` here is kept while the copy follows the pointer.
+   No scale: Sortable divides pointer movement by it, which would make the copy drift. */
+.card-ghost { opacity: 0.3; outline: 2px dashed var(--line); outline-offset: 2px; }
+.card-ghost > * { visibility: hidden; }
+.card-drag {
   cursor: grabbing;
-  transform: rotate(3deg) scale(1.04) !important;
-  box-shadow: 8px 12px 0 rgba(43, 42, 51, 0.18) !important;
+  opacity: 1 !important;
+  transform: rotate(3deg);
+  transition: none !important; /* follow the pointer exactly, no easing lag */
+  box-shadow: 8px 12px 0 rgba(43, 42, 51, 0.18), 3px 6px 14px -4px rgba(0, 0, 0, 0.35);
+}
+body.dragging, body.dragging * { cursor: grabbing !important; }
+
+/* The column under the pointer (the one holding the placeholder) lights up as a drop target. */
+.column:has(.card-ghost) {
+  border-color: var(--blue);
+  border-style: dashed;
+  background: color-mix(in srgb, var(--blue) 10%, var(--paper-2));
 }
 
 /* ---------- drawer ---------- */

@@ -76,12 +76,15 @@
         cards));
       sortables.push(window.Sortable.create(cards, {
         group: 'board',
-        animation: 150,
+        animation: 180,
+        easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)',
         ghostClass: 'card-ghost',
         chosenClass: 'card-chosen',
         dragClass: 'card-drag',
-        forceFallback: true, // consistent pencil-shadow look across browsers
-        onStart: () => { dragging = true; },
+        forceFallback: true, // a real copy of the card follows the pointer, same in every browser
+        fallbackOnBody: true, // so the copy isn't clipped by the column's scroll box
+        fallbackTolerance: 4, // a click with a tiny wobble is still a click
+        onStart: () => { dragging = true; document.body.classList.add('dragging'); },
         onEnd: onDrop,
       }));
     }
@@ -97,10 +100,51 @@
     note.textContent = hidden.length ? `+${hidden.length} not on the board (proposed / wontfix)` : '';
   }
 
+  const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function pointerOf(evt) {
+    const e = evt.originalEvent;
+    const p = e && e.changedTouches ? e.changedTouches[0] : e;
+    return p && typeof p.clientX === 'number' ? { x: p.clientX, y: p.clientY } : null;
+  }
+
+  // Animate a freshly rendered card from where it was let go to where it now sits.
+  function flyHome(file, from) {
+    const node = document.querySelector(`.card[data-file="${CSS.escape(file)}"]`);
+    if (!node || !from || reducedMotion()) return;
+    const r = node.getBoundingClientRect();
+    const dx = from.x - (r.left + r.width / 2);
+    const dy = from.y - (r.top + r.height / 2);
+    node.animate([
+      { translate: `${dx}px ${dy}px`, rotate: '3deg', scale: '1.04' },
+      { translate: '0 0', rotate: '0deg', scale: '1' },
+    ], { duration: 320, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' });
+  }
+
+  // A little squash as the card lands.
+  function land(file) {
+    const node = document.querySelector(`.card[data-file="${CSS.escape(file)}"]`);
+    if (!node || reducedMotion()) return;
+    node.animate([{ scale: '1.04 0.94' }, { scale: '0.98 1.03' }, { scale: '1' }], { duration: 220, easing: 'ease-out' });
+  }
+
   async function onDrop(evt) {
     dragging = false;
+    document.body.classList.remove('dragging');
+    const file = evt.item.dataset.file;
+    const at = pointerOf(evt);
+    // Let go outside every column: nothing is saved and the card flies back to where it came from.
+    const target = at && document.elementFromPoint(at.x, at.y);
+    if (at && !(target && target.closest('.column'))) {
+      pending = false;
+      render();
+      flyHome(file, at);
+      return;
+    }
+    let saved = false;
     try {
       if (evt.from === evt.to && evt.oldIndex === evt.newIndex) return;
+      saved = true;
       const status = evt.to.dataset.status;
       const files = [...evt.to.children].map((n) => n.dataset.file);
       const idx = files.indexOf(evt.item.dataset.file);
@@ -131,6 +175,7 @@
     } finally {
       pending = false;
       render();
+      if (saved) land(file);
     }
   }
 
