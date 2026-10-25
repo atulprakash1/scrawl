@@ -16,5 +16,7 @@
   {"id":15,"type":"feature","title":"drag and drop cards","status":"done","assignee":"claude","rank":"t"},
   {"id":16,"type":"idea","title":"multiple implementation sessions","status":"backlog","assignee":"me","rank":"t"},
   {"id":17,"type":"idea","title":"the number of cards in a category","status":"done","assignee":"claude","rank":"w"},
-  {"id":18,"type":"story","title":"Branch and PR flow with auto-sync of main","status":"review","assignee":"claude"}
+  {"id":18,"type":"story","title":"Branch and PR flow with auto-sync of main","status":"done","assignee":"claude","rank":"0i"},
+  {"id":19,"type":"bug","title":"Reopened hand-shipped card ships again from old commits","status":"backlog","parent":18,"assignee":"me"},
+  {"id":20,"type":"bug","title":"Shipped category display","status":"doing","assignee":"claude","rank":"i"}
 ]

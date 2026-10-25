@@ -37,7 +37,7 @@ the PR waits to be merged.
 You never `git pull` by hand: every `/resolve` and `/next` starts with `.scrawl/hooks/scrawl-sync`,
 which fast-forwards `main` from GitHub and keeps your uncommitted board edits. The board then
 ships every card whose work is on `main`. Board edits (moves, comments) travel with the next PR.
-*Shipped!* is folded by default; click **▸ show** to see the history.
+*Shipped!* lists the most recently shipped first; **▾ hide** tucks its cards away without changing its width.
 
 ## Layout
 
