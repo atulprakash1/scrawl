@@ -1,0 +1,14 @@
+#!/bin/sh
+# Scrawl: list the commits on the main branch so the board can mark Resolved items as Shipped.
+# Called by post-commit and post-merge. Writes short shas, newest first, to .scrawl/log/main.txt.
+out=.scrawl/log/main.txt
+
+[ -d .scrawl/log ] || exit 0
+
+main=
+for b in main master; do
+  if git rev-parse --verify -q "refs/heads/$b" >/dev/null; then main=$b; break; fi
+done
+[ -n "$main" ] || exit 0
+
+git rev-list --abbrev-commit --max-count=2000 "$main" > "$out.tmp" && mv -f "$out.tmp" "$out"

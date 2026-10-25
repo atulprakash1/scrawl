@@ -22,7 +22,17 @@ git config core.hooksPath .scrawl/hooks
 
 Every commit is then logged to `.scrawl/log/commits.txt` (ignored by git; rebuilt from history
 if missing), and commits whose message starts with `#42` show up on card #42.
-On macOS/Linux make sure the hook is executable: `chmod +x .scrawl/hooks/post-commit`.
+The hooks also list the commits on `main` in `.scrawl/log/main.txt` (after commits, merges and pulls).
+On macOS/Linux make sure the hooks are executable: `chmod +x .scrawl/hooks/*`.
+
+## Flow
+
+Someday pile → Claude's tray → On the bench → Eyeball it → **Accept** → Resolved → Shipped!
+
+Claude commits when it moves a card to *Eyeball it*. When you accept it, the card waits in
+*Resolved* until one of its commits is on `main`, then the board ships it by itself.
+If you commit straight to `main`, that happens right away. *Shipped!* is folded by default;
+click **▸ show** to see the history.
 
 ## Layout
 

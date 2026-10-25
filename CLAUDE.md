@@ -23,15 +23,16 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
 - Overviews: read `.scrawl/index.json` (one line per item). It can lag behind; the item files always win.
 - Header format: flat `key: value` lines between `---` fences. No nesting. Lists are `[a, b]`.
   Keep fields you don't recognise exactly as they are.
-- Statuses: `proposed | backlog | ready | doing | review | done | wontfix`.
-  "Claude's tray" is `status: ready` + `assignee: claude`.
+- Statuses: `proposed | backlog | ready | doing | review | resolved | done | wontfix`.
+  "Claude's tray" is `status: ready` + `assignee: claude`. After review the user accepts an item
+  (`resolved`); the board marks it `done` (Shipped) once one of its commits is on main.
 - Picking up: set `status: doing`, `assignee: claude`, update `updated:`, add an Activity line.
 - Activity lines are append-only, newest last, one line each:
   `- 2026-10-25 11:02 · claude · Picked up. Root cause: null email.`
   Lines from `me` are the user's comments and instructions; read them before starting.
 - Commits: start the message with the item number, e.g. `#42 Handle empty form`.
 - Finishing: tick acceptance boxes you verified (`- [x]`), add a 1-3 sentence summary Activity line,
-  set `status: review`. Never set `done` — the user closes items after review.
+  set `status: review`. Never set `resolved` or `done` — the user accepts items after review.
 - Creating an item: take `nextId` from `.scrawl/config.json`, then increment it there. File name is
   `<id padded to 4>-<type>-<slug>.md`. Use this template:
 

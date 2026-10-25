@@ -74,7 +74,18 @@
         }, '🤖 Hand to Claude')
         : null,
       m.status === 'review'
-        ? el('button', { class: 'btn btn-ship', onclick: () => save((d) => { d.meta.status = 'done'; }, { activity: 'Reviewed and shipped' }) }, '✔ Ship it')
+        ? el('button', {
+          class: 'btn btn-ship',
+          title: 'Moves to Resolved; it ships by itself once its commit is on main',
+          onclick: () => save((d) => { d.meta.status = 'resolved'; }, { activity: 'Reviewed and accepted (Resolved)' }),
+        }, '✔ Accept')
+        : null,
+      m.status === 'resolved'
+        ? el('button', {
+          class: 'btn',
+          title: 'Mark shipped without waiting for main',
+          onclick: () => save((d) => { d.meta.status = 'done'; }, { activity: 'Shipped by hand' }),
+        }, '🚢 Ship now')
         : null);
 
     const smudge = item.errors.length

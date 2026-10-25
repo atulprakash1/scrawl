@@ -12,3 +12,5 @@ else
   # First run or fresh clone: backfill the whole history once.
   git log --reverse --format="$fmt" > "$log"
 fi
+
+sh .scrawl/hooks/scrawl-main

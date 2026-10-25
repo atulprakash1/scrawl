@@ -8,6 +8,8 @@ desktop.ini
 # Rebuilt by the post-commit hook from `git log` whenever it is missing,
 # so it never leaves the tree dirty after a commit.
 .scrawl/log/commits.txt
+.scrawl/log/main.txt
+.scrawl/log/main.txt.tmp
 
 # Claude Code per-user settings
 .claude/settings.local.json

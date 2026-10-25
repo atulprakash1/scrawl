@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nextId": 16,
+  "nextId": 18,
   "columns": [
     {
       "status": "backlog",
@@ -21,8 +21,13 @@
       "label": "Eyeball it"
     },
     {
+      "status": "resolved",
+      "label": "Resolved"
+    },
+    {
       "status": "done",
-      "label": "Shipped!"
+      "label": "Shipped!",
+      "collapsed": true
     }
   ]
 }

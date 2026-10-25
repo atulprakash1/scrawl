@@ -14,6 +14,6 @@ Resolve Scrawl item #$ARGUMENTS, following the "Scrawl work tracking" rules in C
 4. Verify: run the tests if the project has them, otherwise check the acceptance criteria by hand.
    If you can't make it work, append an Activity line explaining why, leave it in `doing`, and stop.
 5. Finish the item: tick the acceptance boxes you verified, append a 1-3 sentence summary Activity
-   line, set `status: review`, update `updated:`. Never set `done`.
+   line, set `status: review`, update `updated:`. Never set `resolved` or `done`.
 6. Commit the code and the item file together with the message `#$ARGUMENTS <summary>`.
    The board links the commit to the item from the `#$ARGUMENTS` in the message.

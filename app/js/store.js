@@ -8,8 +8,9 @@
   const CONFIG = `${DIR}/config.json`;
   const COMMITS_TXT = `${DIR}/log/commits.txt`;
   const COMMITS_JSONL = `${DIR}/log/commits.jsonl`;
+  const MAIN = `${DIR}/log/main.txt`; // short shas reachable from main, written by the git hooks
 
-  const STATUSES = ['proposed', 'backlog', 'ready', 'doing', 'review', 'done', 'wontfix'];
+  const STATUSES = ['proposed', 'backlog', 'ready', 'doing', 'review', 'resolved', 'done', 'wontfix'];
   const TYPES = ['feature', 'story', 'bug', 'idea'];
   const SEVERITIES = ['ant', 'beetle', 'cockroach', 'kraken'];
 
@@ -21,7 +22,8 @@
       { status: 'ready', label: "Claude's tray", wip: 5 },
       { status: 'doing', label: 'On the bench', wip: 2 },
       { status: 'review', label: 'Eyeball it' },
-      { status: 'done', label: 'Shipped!' },
+      { status: 'resolved', label: 'Resolved' },
+      { status: 'done', label: 'Shipped!', collapsed: true },
     ],
   };
 
@@ -31,6 +33,7 @@
     project: '',
     items: new Map(), // file name -> item
     commits: [],
+    onMain: new Set(), // 7-char sha prefixes
     known: new Map(), // path -> lastModified we last saw or wrote
     lastIndex: '',
   };
@@ -95,6 +98,12 @@
     }));
   }
 
+  async function loadMain() {
+    const f = await fs.read(state.root, MAIN);
+    state.known.set(MAIN, f ? f.mtime : null);
+    state.onMain = new Set((f ? f.text : '').split('\n').map((s) => s.trim().slice(0, 7)).filter(Boolean));
+  }
+
   async function loadItems() {
     state.items.clear();
     for (const { name, handle } of await fs.list(state.root, ITEMS)) {
@@ -109,8 +118,9 @@
     state.root = root;
     state.known.clear();
     if (!(await loadConfig())) return false;
-    await Promise.all([loadProject(), loadItems(), loadCommits()]);
+    await Promise.all([loadProject(), loadItems(), loadCommits(), loadMain()]);
     await writeIndex();
+    await autoShip();
     return true;
   }
 
@@ -150,10 +160,13 @@
     const commitsMoved = (await fs.mtime(state.root, COMMITS_TXT)) !== state.known.get(COMMITS_TXT)
       || (await fs.mtime(state.root, COMMITS_JSONL)) !== state.known.get(COMMITS_JSONL);
     if (commitsMoved) await loadCommits();
+    const mainMoved = (await fs.mtime(state.root, MAIN)) !== state.known.get(MAIN);
+    if (mainMoved) await loadMain();
 
-    if (changed.length || commitsMoved) {
+    if (changed.length || commitsMoved || mainMoved) {
       if (changed.length) await writeIndex();
       emit({ outside: changed, commits: commitsMoved });
+      await autoShip();
     }
   }
 
@@ -182,7 +195,7 @@
 
   /* Apply `mutate` to the latest copy on disk, not our cached one. That is the field-level merge:
      whatever Claude changed meanwhile survives, and only the fields we touch are overwritten. */
-  async function update(file, mutate, { activity } = {}) {
+  async function update(file, mutate, { activity, who = 'me' } = {}) {
     const path = `${ITEMS}/${file}`;
     const disk = await fs.read(state.root, path);
     if (!disk) {
@@ -194,16 +207,30 @@
     const before = { ...doc.meta };
     mutate(doc);
     doc.meta.updated = util.stamp();
-    if (activity) doc.body = parser.appendActivity(doc.body, 'me', activity);
+    if (activity) doc.body = parser.appendActivity(doc.body, who, activity);
     const text = parser.serialize(doc);
     const mtime = await fs.write(state.root, path, text);
     const item = ingest(file, text, mtime);
 
-    if (before.status !== doc.meta.status) log({ id: item.id, action: 'move', from: before.status, to: doc.meta.status });
+    if (before.status !== doc.meta.status) log({ id: item.id, action: 'move', from: before.status, to: doc.meta.status, who });
     if (outside) util.toast(`✎ Claude was here - merged with the latest #${item.id}`);
     await writeIndex();
     emit({ local: [file] });
+    if (doc.meta.status === 'resolved') await autoShip();
     return item;
+  }
+
+  /* Resolved -> Shipped once one of the item's commits is on main (merged, or committed there directly).
+     The browser can't run git, so this relies on .scrawl/log/main.txt from the hooks. */
+  async function autoShip() {
+    if (!state.onMain.size) return;
+    for (const item of list()) {
+      if (item.meta.status !== 'resolved') continue;
+      const hit = commitsFor(item).find((c) => state.onMain.has(c.sha.slice(0, 7)));
+      if (!hit) continue;
+      await update(item.file, (d) => { d.meta.status = 'done'; }, { activity: `Shipped: ${hit.sha} is on main`, who: 'scrawl' });
+      util.toast(`🚢 #${item.id} shipped - its commit is on main`);
+    }
   }
 
   async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '' }) {

@@ -6,7 +6,7 @@
 
   const TYPE_ICON = { feature: '★', story: '✎', bug: '🐞', idea: '💡' };
   const SEVERITY_ICON = { ant: '🐜', beetle: '🪲', cockroach: '🪳', kraken: '🦑' };
-  const WHO_ICON = { claude: '🤖', me: '☕' };
+  const WHO_ICON = { claude: '🤖', me: '☕', scrawl: '📌' };
 
   const filters = { text: '', who: '' };
   let dragging = false;
@@ -67,12 +67,23 @@
       const all = store.column(col.status);
       const shown = all.filter(matches);
       const over = col.wip && all.length > col.wip;
-      const cards = el('div', { class: 'cards', dataset: { status: col.status } }, shown.map(card));
-      root.append(el('section', { class: `column col-${col.status}${over ? ' over-wip' : ''}` },
+      const folded = isFolded(col);
+      // A folded column keeps an empty list so it still works as a drop target.
+      const cards = el('div', { class: 'cards', dataset: { status: col.status } }, folded ? [] : shown.map(card));
+      const toggle = col.collapsed
+        ? el('button', {
+          class: 'fold-btn',
+          title: folded ? `Show ${col.label}` : `Hide ${col.label}`,
+          'aria-expanded': String(!folded),
+          onclick: () => setFolded(col, !folded),
+        }, folded ? '▸ show' : '▾ hide')
+        : null;
+      root.append(el('section', { class: `column col-${col.status}${over ? ' over-wip' : ''}${folded ? ' folded' : ''}` },
         el('header', {},
           el('h2', {}, col.label),
           el('span', { class: 'count', title: col.wip ? 'items / WIP limit' : 'items' },
-            col.wip ? `${all.length}/${col.wip}` : String(all.length))),
+            col.wip ? `${all.length}/${col.wip}` : String(all.length)),
+          toggle),
         cards));
       sortables.push(window.Sortable.create(cards, {
         group: 'board',
@@ -90,6 +101,21 @@
     }
     root.scrollLeft = scroll;
     renderHidden();
+  }
+
+  // Columns marked `collapsed` in config.json (Shipped) start folded; opening one is remembered per browser.
+  const opened = {}; // this session's choice, in case localStorage is unavailable
+
+  function isFolded(col) {
+    if (!col.collapsed) return false;
+    if (col.status in opened) return !opened[col.status];
+    try { return localStorage.getItem(`scrawl-open-${col.status}`) !== '1'; } catch { return true; }
+  }
+
+  function setFolded(col, folded) {
+    opened[col.status] = !folded;
+    try { localStorage.setItem(`scrawl-open-${col.status}`, folded ? '0' : '1'); } catch { /* private window */ }
+    render();
   }
 
   // Statuses with no column (proposed, wontfix) still exist; say so instead of hiding them silently.
