@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "nextId": 19,
+  "nextId": 21,
   "columns": [
     {
       "status": "backlog",
@@ -27,7 +27,8 @@
     {
       "status": "done",
       "label": "Shipped!",
-      "collapsed": true
+      "foldable": true,
+      "sort": "recent"
     }
   ]
 }

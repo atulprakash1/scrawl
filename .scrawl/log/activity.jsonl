@@ -12,3 +12,6 @@
 {"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"backlog","to":"resolved"}
 {"at":"2026-10-25T14:09","who":"me","id":17,"action":"move","from":"review","to":"resolved"}
 {"at":"2026-10-25T14:10","who":"me","id":2,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-25T14:57","who":"me","id":18,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-25T15:04","who":"me","id":20,"action":"create","to":"backlog"}
+{"at":"2026-10-25T15:07","who":"me","id":20,"action":"move","from":"backlog","to":"ready"}

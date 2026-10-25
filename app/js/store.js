@@ -23,7 +23,7 @@
       { status: 'doing', label: 'On the bench', wip: 2 },
       { status: 'review', label: 'Eyeball it' },
       { status: 'resolved', label: 'Resolved' },
-      { status: 'done', label: 'Shipped!', collapsed: true },
+      { status: 'done', label: 'Shipped!', foldable: true, sort: 'recent' },
     ],
   };
 

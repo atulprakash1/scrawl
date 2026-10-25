@@ -64,13 +64,14 @@
     root.replaceChildren();
 
     for (const col of store.config.columns) {
-      const all = store.column(col.status);
+      const recent = col.sort === 'recent';
+      const all = recent ? store.column(col.status).sort(byRecent) : store.column(col.status);
       const shown = all.filter(matches);
       const over = col.wip && all.length > col.wip;
       const folded = isFolded(col);
-      // A folded column keeps an empty list so it still works as a drop target.
+      // A folded column keeps its width and an empty list, so it still works as a drop target.
       const cards = el('div', { class: 'cards', dataset: { status: col.status } }, folded ? [] : shown.map(card));
-      const toggle = col.collapsed
+      const toggle = isFoldable(col)
         ? el('button', {
           class: 'fold-btn',
           title: folded ? `Show ${col.label}` : `Hide ${col.label}`,
@@ -84,9 +85,11 @@
           el('span', { class: 'count', title: col.wip ? 'items / WIP limit' : 'items' },
             col.wip ? `${all.length}/${col.wip}` : String(all.length)),
           toggle),
+        folded && all.length ? el('p', { class: 'fold-note muted' }, `${all.length} hidden`) : null,
         cards));
       sortables.push(window.Sortable.create(cards, {
         group: 'board',
+        sort: !recent, // date-ordered columns accept drops but can't be hand-reordered
         animation: 180,
         easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)',
         ghostClass: 'card-ghost',
@@ -103,18 +106,27 @@
     renderHidden();
   }
 
-  // Columns marked `collapsed` in config.json (Shipped) start folded; opening one is remembered per browser.
-  const opened = {}; // this session's choice, in case localStorage is unavailable
+  // `sort: "recent"` in config.json: newest change first (for Shipped, that's when it shipped).
+  function byRecent(a, b) {
+    const ua = String(a.meta.updated || '');
+    const ub = String(b.meta.updated || '');
+    return ua !== ub ? (ua < ub ? 1 : -1) : b.id - a.id;
+  }
+
+  // Columns marked `foldable` in config.json (Shipped) get a hide button. They start open;
+  // hiding one is remembered per browser. (`collapsed` is the older name for the same flag.)
+  const folds = {}; // this session's choice, in case localStorage is unavailable
+  const isFoldable = (col) => Boolean(col.foldable || col.collapsed);
 
   function isFolded(col) {
-    if (!col.collapsed) return false;
-    if (col.status in opened) return !opened[col.status];
-    try { return localStorage.getItem(`scrawl-open-${col.status}`) !== '1'; } catch { return true; }
+    if (!isFoldable(col)) return false;
+    if (col.status in folds) return folds[col.status];
+    try { return localStorage.getItem(`scrawl-fold-${col.status}`) === '1'; } catch { return false; }
   }
 
   function setFolded(col, folded) {
-    opened[col.status] = !folded;
-    try { localStorage.setItem(`scrawl-open-${col.status}`, folded ? '0' : '1'); } catch { /* private window */ }
+    folds[col.status] = folded;
+    try { localStorage.setItem(`scrawl-fold-${col.status}`, folded ? '1' : '0'); } catch { /* private window */ }
     render();
   }
 
