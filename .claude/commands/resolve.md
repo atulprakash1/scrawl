@@ -23,7 +23,7 @@ Never commit to or push `main`. The user merges PRs on GitHub.
 7. Commit the code and all changed `.scrawl/` files (item file plus any pending board edits) with
    the message `#$ARGUMENTS <summary>`. Push the branch: `git push -u origin scrawl/$ARGUMENTS-<slug>`.
    Open the PR: `gh pr create --base main --title "#$ARGUMENTS <summary>" --body "<what and why, how verified>"`.
-8. Hand the board back: `git switch main`, then
-   `git restore --source=scrawl/$ARGUMENTS-<slug> --worktree -- .scrawl` so the board (which reads
-   the main checkout) shows the item in review. Append an Activity line with the PR link
+8. Hand the board back: `sh .scrawl/hooks/scrawl-home scrawl/$ARGUMENTS-<slug>`. It switches to
+   `main` and lays the branch's `.scrawl/` over it (keeping live board edits), so the board, which
+   reads the main checkout, shows the item in review. Then append an Activity line with the PR link
    (`· claude · PR: <url>`). Leave this uncommitted; the next PR carries it.

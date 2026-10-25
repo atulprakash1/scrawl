@@ -34,7 +34,7 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
   with a PR (`gh pr create`); the user merges on GitHub. Start every command with
   `sh .scrawl/hooks/scrawl-sync` on `main` — it fast-forwards `main` from GitHub (no manual pull)
   and keeps uncommitted board edits. The board lives in the main checkout, so after pushing a branch,
-  switch back to `main` and restore `.scrawl/` from the branch (see `.claude/commands/resolve.md`).
+  run `sh .scrawl/hooks/scrawl-home <branch>` (see `.claude/commands/resolve.md`).
 - Commits: start the message with the item number, e.g. `#42 Handle empty form`. Only a leading
   `#N` links a commit to an item (GitHub's `(#12)` PR suffix is ignored). Merging the PR ships the card.
 - Finishing: tick acceptance boxes you verified (`- [x]`), add a 1-3 sentence summary Activity line,
