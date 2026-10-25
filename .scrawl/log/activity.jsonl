@@ -1,2 +1,14 @@
 {"at":"2026-10-25T13:33","who":"me","id":15,"action":"create","to":"backlog"}
 {"at":"2026-10-25T13:37","who":"me","id":15,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T13:46","who":"me","id":15,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-25T13:47","who":"me","id":1,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-25T13:49","who":"me","id":16,"action":"create","to":"backlog"}
+{"at":"2026-10-25T13:52","who":"me","id":17,"action":"create","to":"backlog"}
+{"at":"2026-10-25T14:00","who":"me","id":17,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"doing","to":"review"}
+{"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"review","to":"doing"}
+{"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"doing","to":"ready"}
+{"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"ready","to":"backlog"}
+{"at":"2026-10-25T14:06","who":"me","id":2,"action":"move","from":"backlog","to":"resolved"}
+{"at":"2026-10-25T14:09","who":"me","id":17,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-25T14:10","who":"me","id":2,"action":"move","from":"resolved","to":"done"}

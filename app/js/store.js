@@ -33,7 +33,7 @@
     project: '',
     items: new Map(), // file name -> item
     commits: [],
-    onMain: new Set(), // 7-char sha prefixes
+    main: [], // commits on main, newest first: { sha, refs }
     known: new Map(), // path -> lastModified we last saw or wrote
     lastIndex: '',
   };
@@ -76,6 +76,17 @@
     state.project = h ? h[1].trim() : state.root.name;
   }
 
+  /* Which items a commit belongs to. Only a leading "#18" counts, because GitHub appends the PR
+     number to squash titles ("#18 Add wizard (#12)"). Merge commits name the branch instead:
+     "Merge pull request #12 from me/scrawl/18-add-wizard" or "Merge branch 'scrawl/18-add-wizard'". */
+  function refsOf(subject = '') {
+    const merge = subject.match(/^Merge (?:pull request #\d+ from |branch ')\S*?scrawl\/(\d+)-/);
+    if (merge) return [Number(merge[1])];
+    if (/^Merge /.test(subject)) return [];
+    const lead = subject.match(/^(?:#\d+[\s,]*)+/);
+    return lead ? [...lead[0].matchAll(/#(\d+)/g)].map((m) => Number(m[1])) : [];
+  }
+
   async function loadCommits() {
     const out = [];
     const txt = await fs.read(state.root, COMMITS_TXT);
@@ -94,14 +105,18 @@
     const seen = new Set();
     state.commits = out.filter((c) => c.sha && !seen.has(c.sha) && seen.add(c.sha)).map((c) => ({
       ...c,
-      refs: c.items || [...(c.subject || '').matchAll(/#(\d+)/g)].map((m) => Number(m[1])),
+      refs: c.items || refsOf(c.subject),
     }));
   }
 
   async function loadMain() {
     const f = await fs.read(state.root, MAIN);
     state.known.set(MAIN, f ? f.mtime : null);
-    state.onMain = new Set((f ? f.text : '').split('\n').map((s) => s.trim().slice(0, 7)).filter(Boolean));
+    // "sha|subject" per line, newest first (older hooks wrote the sha alone).
+    state.main = (f ? f.text : '').split('\n').filter((l) => l.trim()).map((l) => {
+      const [sha, ...rest] = l.trim().split('|');
+      return { sha: sha.slice(0, 7), refs: refsOf(rest.join('|')) };
+    });
   }
 
   async function loadItems() {
@@ -216,22 +231,37 @@
     if (outside) util.toast(`✎ Claude was here - merged with the latest #${item.id}`);
     await writeIndex();
     emit({ local: [file] });
-    if (doc.meta.status === 'resolved') await autoShip();
+    if (SHIPPABLE.has(doc.meta.status)) await autoShip();
     return item;
   }
 
-  /* Resolved -> Shipped once one of the item's commits is on main (merged, or committed there directly).
-     The browser can't run git, so this relies on .scrawl/log/main.txt from the hooks. */
+  /* Review/Resolved -> Shipped once the item's work is on main: a commit on main names the item
+     (squash, rebase or merge commit), or one of its own commits got there. The browser can't run
+     git, so this relies on .scrawl/log/main.txt from the hooks and scrawl-sync.
+     `shipped:` remembers the main commit an item shipped at; only newer commits can ship it again. */
+  const SHIPPABLE = new Set(['review', 'resolved']);
+
+  function mainHitFor(item) {
+    const own = new Set(commitsFor(item).map((c) => c.sha.slice(0, 7)));
+    const since = item.meta.shipped ? state.main.findIndex((c) => c.sha === String(item.meta.shipped).slice(0, 7)) : -1;
+    const newer = since >= 0 ? state.main.slice(0, since) : state.main;
+    return newer.find((c) => c.refs.includes(item.id) || own.has(c.sha));
+  }
+
   async function autoShip() {
-    if (!state.onMain.size) return;
+    if (!state.main.length) return;
     for (const item of list()) {
-      if (item.meta.status !== 'resolved') continue;
-      const hit = commitsFor(item).find((c) => state.onMain.has(c.sha.slice(0, 7)));
+      if (!SHIPPABLE.has(item.meta.status)) continue;
+      const hit = mainHitFor(item);
       if (!hit) continue;
-      await update(item.file, (d) => { d.meta.status = 'done'; }, { activity: `Shipped: ${hit.sha} is on main`, who: 'scrawl' });
-      util.toast(`🚢 #${item.id} shipped - its commit is on main`);
+      await update(item.file, (d) => { d.meta.status = 'done'; d.meta.shipped = hit.sha; },
+        { activity: `Shipped: ${hit.sha} is on main`, who: 'scrawl' });
+      util.toast(`🚢 #${item.id} shipped - its work is on main`);
     }
   }
+
+  // Newest commit on main, so a hand-shipped item also ignores older commits if it's reopened.
+  function mainHead() { return state.main.length ? state.main[0].sha : undefined; }
 
   async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '' }) {
     await loadConfig(); // Claude may have bumped nextId since we last looked
@@ -282,7 +312,7 @@
 
   S.store = {
     STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create,
-    list, get, byId, column, compareRank, commitsFor,
+    list, get, byId, column, compareRank, commitsFor, refsOf, mainHead,
     get config() { return state.config; },
     get project() { return state.project; },
   };

@@ -1,6 +1,7 @@
 #!/bin/sh
-# Scrawl: list the commits on the main branch so the board can mark Resolved items as Shipped.
-# Called by post-commit and post-merge. Writes short shas, newest first, to .scrawl/log/main.txt.
+# Scrawl: list the commits on the main branch so the board can mark finished items as Shipped.
+# Called by post-commit, post-merge and scrawl-sync. Writes "shortsha|subject", newest first,
+# to .scrawl/log/main.txt. Subjects matter: squash and rebase merges give the work new shas.
 out=.scrawl/log/main.txt
 
 [ -d .scrawl/log ] || exit 0
@@ -11,4 +12,4 @@ for b in main master; do
 done
 [ -n "$main" ] || exit 0
 
-git rev-list --abbrev-commit --max-count=2000 "$main" > "$out.tmp" && mv -f "$out.tmp" "$out"
+git log --format='%h|%s' --max-count=2000 "$main" > "$out.tmp" && mv -f "$out.tmp" "$out"

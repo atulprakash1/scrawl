@@ -24,13 +24,19 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
 - Header format: flat `key: value` lines between `---` fences. No nesting. Lists are `[a, b]`.
   Keep fields you don't recognise exactly as they are.
 - Statuses: `proposed | backlog | ready | doing | review | resolved | done | wontfix`.
-  "Claude's tray" is `status: ready` + `assignee: claude`. After review the user accepts an item
-  (`resolved`); the board marks it `done` (Shipped) once one of its commits is on main.
+  "Claude's tray" is `status: ready` + `assignee: claude`. After review the user may accept an item
+  (`resolved`); the board marks `review`/`resolved` items `done` (Shipped) once their PR is merged into main.
 - Picking up: set `status: doing`, `assignee: claude`, update `updated:`, add an Activity line.
 - Activity lines are append-only, newest last, one line each:
   `- 2026-10-25 11:02 · claude · Picked up. Root cause: null email.`
   Lines from `me` are the user's comments and instructions; read them before starting.
-- Commits: start the message with the item number, e.g. `#42 Handle empty form`.
+- Git: never commit to or push `main`. Each item gets its own branch `scrawl/<id>-<slug>`, pushed
+  with a PR (`gh pr create`); the user merges on GitHub. Start every command with
+  `sh .scrawl/hooks/scrawl-sync` on `main` — it fast-forwards `main` from GitHub (no manual pull)
+  and keeps uncommitted board edits. The board lives in the main checkout, so after pushing a branch,
+  switch back to `main` and restore `.scrawl/` from the branch (see `.claude/commands/resolve.md`).
+- Commits: start the message with the item number, e.g. `#42 Handle empty form`. Only a leading
+  `#N` links a commit to an item (GitHub's `(#12)` PR suffix is ignored). Merging the PR ships the card.
 - Finishing: tick acceptance boxes you verified (`- [x]`), add a 1-3 sentence summary Activity line,
   set `status: review`. Never set `resolved` or `done` — the user accepts items after review.
 - Creating an item: take `nextId` from `.scrawl/config.json`, then increment it there. File name is

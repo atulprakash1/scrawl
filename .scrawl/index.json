@@ -1,6 +1,6 @@
 [
-  {"id":1,"type":"feature","title":"Core loop: board, files and Claude","status":"review","assignee":"claude","rank":"1"},
-  {"id":2,"type":"story","title":"Spike: folder access from file:// on Windows and macOS","status":"doing","parent":1,"assignee":"me","rank":"i"},
+  {"id":1,"type":"feature","title":"Core loop: board, files and Claude","status":"done","assignee":"claude","rank":"1"},
+  {"id":2,"type":"story","title":"Spike: folder access from file:// on Windows and macOS","status":"done","parent":1,"assignee":"me","rank":"i"},
   {"id":3,"type":"feature","title":"Planning: wizard, /plan and the Plan view","status":"backlog","assignee":"me","rank":"a"},
   {"id":4,"type":"story","title":"Project wizard writes project.md","status":"backlog","parent":3,"assignee":"me","rank":"b"},
   {"id":5,"type":"story","title":"Proposed lane and Plan tree with accept/reject","status":"backlog","parent":3,"assignee":"me","rank":"c"},
@@ -13,5 +13,8 @@
   {"id":12,"type":"feature","title":"Polish: sketchy theme, motion, palette, keyboard, read-only mode","status":"backlog","assignee":"me","rank":"k"},
   {"id":13,"type":"idea","title":"Helper CLI scrawl.mjs","status":"backlog","assignee":"me","rank":"m"},
   {"id":14,"type":"idea","title":"Experiments: FileSystemObserver, isomorphic-git, AGENTS.md","status":"backlog","assignee":"me","rank":"n"},
-  {"id":15,"type":"feature","title":"drag and drop cards","status":"review","assignee":"claude","rank":"t"}
+  {"id":15,"type":"feature","title":"drag and drop cards","status":"done","assignee":"claude","rank":"t"},
+  {"id":16,"type":"idea","title":"multiple implementation sessions","status":"backlog","assignee":"me","rank":"t"},
+  {"id":17,"type":"idea","title":"the number of cards in a category","status":"done","assignee":"claude","rank":"w"},
+  {"id":18,"type":"story","title":"Branch and PR flow with auto-sync of main","status":"doing","assignee":"claude"}
 ]
