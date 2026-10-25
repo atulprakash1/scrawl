@@ -22,17 +22,22 @@ git config core.hooksPath .scrawl/hooks
 
 Every commit is then logged to `.scrawl/log/commits.txt` (ignored by git; rebuilt from history
 if missing), and commits whose message starts with `#42` show up on card #42.
-The hooks also list the commits on `main` in `.scrawl/log/main.txt` (after commits, merges and pulls).
+The hooks also list the commits on `main` in `.scrawl/log/main.txt` (after commits, merges, pulls and syncs).
 On macOS/Linux make sure the hooks are executable: `chmod +x .scrawl/hooks/*`.
 
 ## Flow
 
 Someday pile → Claude's tray → On the bench → Eyeball it → **Accept** → Resolved → Shipped!
 
-Claude commits when it moves a card to *Eyeball it*. When you accept it, the card waits in
-*Resolved* until one of its commits is on `main`, then the board ships it by itself.
-If you commit straight to `main`, that happens right away. *Shipped!* is folded by default;
-click **▸ show** to see the history.
+Nothing goes to `main` directly. For each card Claude works on a branch `scrawl/<id>-<slug>`,
+pushes it and opens a PR, and the card lands in *Eyeball it*. You review and merge the PR on GitHub
+(merge, squash or rebase all work). **Accept** is optional: it parks the card in *Resolved* while
+the PR waits to be merged.
+
+You never `git pull` by hand: every `/resolve` and `/next` starts with `.scrawl/hooks/scrawl-sync`,
+which fast-forwards `main` from GitHub and keeps your uncommitted board edits. The board then
+ships every card whose work is on `main`. Board edits (moves, comments) travel with the next PR.
+*Shipped!* is folded by default; click **▸ show** to see the history.
 
 ## Layout
 

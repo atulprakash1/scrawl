@@ -84,7 +84,7 @@
         ? el('button', {
           class: 'btn',
           title: 'Mark shipped without waiting for main',
-          onclick: () => save((d) => { d.meta.status = 'done'; }, { activity: 'Shipped by hand' }),
+          onclick: () => save((d) => { d.meta.status = 'done'; d.meta.shipped = store.mainHead(); }, { activity: 'Shipped by hand' }),
         }, '🚢 Ship now')
         : null);
 

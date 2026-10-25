@@ -1,0 +1,61 @@
+#!/bin/sh
+# Scrawl: bring local main up to date with GitHub, so merged PRs show up as Shipped on the board.
+# Claude runs this at the start of /resolve and /next; it is safe to run any time.
+#
+# Uncommitted changes under .scrawl/ are the live board (card moves, comments). They are kept,
+# and they win over any older snapshot of the same files that a merged PR brought in.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+remote=origin
+
+main=
+for b in main master; do
+  if git rev-parse --verify -q "refs/heads/$b" >/dev/null; then main=$b; break; fi
+done
+[ -n "$main" ] || exit 0
+
+done_() { sh .scrawl/hooks/scrawl-main; exit 0; }
+
+git remote get-url "$remote" >/dev/null 2>&1 || done_
+if ! git fetch -q --prune "$remote"; then
+  echo "scrawl-sync: couldn't reach $remote; the board may be behind GitHub" >&2
+  done_
+fi
+
+target="$remote/$main"
+[ "$(git rev-parse "$main")" = "$(git rev-parse "$target")" ] && done_
+
+if ! git merge-base --is-ancestor "$main" "$target"; then
+  echo "scrawl-sync: local $main has commits that $target doesn't; left it alone" >&2
+  done_
+fi
+
+if [ "$(git symbolic-ref -q --short HEAD)" != "$main" ]; then
+  # Another branch is checked out: just move the main ref forward.
+  git fetch -q "$remote" "$main:$main"
+  done_
+fi
+
+# On main: park the board edits, fast-forward, then put the board edits back on top.
+keep=$(mktemp -d)
+{ git diff --name-only HEAD -- .scrawl; git ls-files -o --exclude-standard -- .scrawl; } | sort -u > "$keep/list"
+while IFS= read -r f; do
+  [ -e "$f" ] || continue
+  mkdir -p "$keep/files/$(dirname "$f")"
+  cp -p "$f" "$keep/files/$f"
+done < "$keep/list"
+
+git checkout -q HEAD -- .scrawl
+git ls-files -o --exclude-standard -- .scrawl | while IFS= read -r f; do rm -f "$f"; done
+
+git merge -q --ff-only "$target" || echo "scrawl-sync: couldn't fast-forward $main (local code changes?)" >&2
+
+while IFS= read -r f; do
+  if [ -e "$keep/files/$f" ]; then
+    mkdir -p "$(dirname "$f")"
+    cp -p "$keep/files/$f" "$f"
+  else
+    rm -f "$f" # deleted on the board
+  fi
+done < "$keep/list"
+rm -rf "$keep"
+done_
