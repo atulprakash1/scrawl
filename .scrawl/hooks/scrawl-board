@@ -1,0 +1,59 @@
+# Scrawl: shared by scrawl-sync and scrawl-home (sourced, not run). Usage: with_board <name> <command...>
+#
+# Uncommitted changes under .scrawl/ are the live board (card moves, comments). with_board parks them,
+# runs a git command that rewrites the checkout (switch, merge), then lays them back on top.
+#
+# The open board polls .scrawl/ and writes to it at any moment (index.json, auto-ship), and git refuses
+# to switch or merge over those writes. So the command is retried a few times, with .scrawl/ reset to
+# HEAD before each try. Whatever the board wrote in between is dropped: the parked copies win.
+# Tracked changes outside .scrawl/ are code, never thrown away: with_board refuses to start instead.
+
+tries=5
+
+park_board() {
+  keep=$(mktemp -d)
+  { git diff --name-only HEAD -- .scrawl; git ls-files -o --exclude-standard -- .scrawl; } | sort -u > "$keep/list"
+  while IFS= read -r f; do
+    [ -e "$f" ] || continue
+    mkdir -p "$keep/files/$(dirname "$f")"
+    cp -p "$f" "$keep/files/$f"
+  done < "$keep/list"
+}
+
+reset_board() {
+  git checkout -q HEAD -- .scrawl
+  git ls-files -o --exclude-standard -- .scrawl | while IFS= read -r f; do rm -f "$f"; done
+}
+
+unpark_board() {
+  while IFS= read -r f; do
+    if [ -e "$keep/files/$f" ]; then
+      mkdir -p "$(dirname "$f")"
+      cp -p "$keep/files/$f" "$f"
+    else
+      rm -f "$f" # deleted on the board
+    fi
+  done < "$keep/list"
+  rm -rf "$keep"
+}
+
+with_board() {
+  name=$1; shift
+  code=$(git diff --name-only HEAD -- . ':(exclude).scrawl')
+  if [ -n "$code" ]; then
+    echo "$name: uncommitted changes outside .scrawl/; commit or stash them first:" >&2
+    echo "$code" | sed 's/^/  /' >&2
+    return 1
+  fi
+  park_board
+  n=1
+  while :; do
+    reset_board
+    if "$@" 2>"$keep/err"; then rc=0; break; fi
+    if [ "$n" -ge "$tries" ]; then rc=1; cat "$keep/err" >&2; break; fi
+    n=$((n + 1))
+    sleep 2 # let the board finish writing before the next try
+  done
+  unpark_board
+  return $rc
+}

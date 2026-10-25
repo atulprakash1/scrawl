@@ -35,27 +35,8 @@ if [ "$(git symbolic-ref -q --short HEAD)" != "$main" ]; then
   done_
 fi
 
-# On main: park the board edits, fast-forward, then put the board edits back on top.
-keep=$(mktemp -d)
-{ git diff --name-only HEAD -- .scrawl; git ls-files -o --exclude-standard -- .scrawl; } | sort -u > "$keep/list"
-while IFS= read -r f; do
-  [ -e "$f" ] || continue
-  mkdir -p "$keep/files/$(dirname "$f")"
-  cp -p "$f" "$keep/files/$f"
-done < "$keep/list"
-
-git checkout -q HEAD -- .scrawl
-git ls-files -o --exclude-standard -- .scrawl | while IFS= read -r f; do rm -f "$f"; done
-
-git merge -q --ff-only "$target" || echo "scrawl-sync: couldn't fast-forward $main (local code changes?)" >&2
-
-while IFS= read -r f; do
-  if [ -e "$keep/files/$f" ]; then
-    mkdir -p "$(dirname "$f")"
-    cp -p "$keep/files/$f" "$f"
-  else
-    rm -f "$f" # deleted on the board
-  fi
-done < "$keep/list"
-rm -rf "$keep"
+# On main: fast-forward with the live board edits parked and laid back on top.
+. .scrawl/hooks/scrawl-board
+with_board scrawl-sync git merge -q --ff-only "$target" ||
+  echo "scrawl-sync: couldn't fast-forward $main; the board may be behind GitHub" >&2
 done_

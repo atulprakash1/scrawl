@@ -15,3 +15,10 @@
 {"at":"2026-10-25T14:57","who":"me","id":18,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-25T15:04","who":"me","id":20,"action":"create","to":"backlog"}
 {"at":"2026-10-25T15:07","who":"me","id":20,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T15:11","who":"me","id":20,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-25T22:53","who":"me","id":21,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T22:54","who":"scrawl","id":20,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-25T22:56","who":"me","id":4,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T22:56","who":"me","id":5,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T22:56","who":"me","id":3,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-25T22:57","who":"me","id":6,"action":"move","from":"backlog","to":"ready"}

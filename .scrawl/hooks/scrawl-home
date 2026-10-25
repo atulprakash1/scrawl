@@ -3,32 +3,14 @@
 # keeps showing the branch's card states. Usage: sh .scrawl/hooks/scrawl-home <branch>
 #
 # The board may write .scrawl/ files at any moment (index.json, moves, comments), so those live
-# edits are parked first, then laid back on top of the branch's .scrawl/ in the main checkout.
+# edits are parked first, then laid back on top of the branch's .scrawl/ in the main checkout
+# (see scrawl-board).
 branch=${1:?usage: scrawl-home <branch>}
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
-keep=$(mktemp -d)
-{ git diff --name-only HEAD -- .scrawl; git ls-files -o --exclude-standard -- .scrawl; } | sort -u > "$keep/list"
-while IFS= read -r f; do
-  [ -e "$f" ] || continue
-  mkdir -p "$keep/files/$(dirname "$f")"
-  cp -p "$f" "$keep/files/$f"
-done < "$keep/list"
-git checkout -q HEAD -- .scrawl
-git ls-files -o --exclude-standard -- .scrawl | while IFS= read -r f; do rm -f "$f"; done
-
-if git switch -q main; then
-  git restore --source="$branch" --worktree -- .scrawl
-else
-  echo "scrawl-home: couldn't switch to main (uncommitted code changes?)" >&2
+. .scrawl/hooks/scrawl-board
+go_home() { git switch -q main && git restore --source="$branch" --worktree -- .scrawl; }
+if ! with_board scrawl-home go_home; then
+  echo "scrawl-home: couldn't switch to main; still on $(git symbolic-ref -q --short HEAD)" >&2
+  exit 1
 fi
-
-while IFS= read -r f; do
-  if [ -e "$keep/files/$f" ]; then
-    mkdir -p "$(dirname "$f")"
-    cp -p "$keep/files/$f" "$f"
-  else
-    rm -f "$f"
-  fi
-done < "$keep/list"
-rm -rf "$keep"
