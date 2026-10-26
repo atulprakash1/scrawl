@@ -30,6 +30,10 @@
       <nav class="views" aria-label="View">
         <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
         <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
+        <button class="view-btn" data-view="bugs" aria-pressed="false">Bug jar</button>
+        <button class="view-btn" data-view="today" aria-pressed="false">Today</button>
+        <button class="view-btn" data-view="timeline" aria-pressed="false">Timeline</button>
+        <button class="view-btn" data-view="releases" aria-pressed="false">Releases</button>
       </nav>
       <form id="quick-add" class="quick-add" autocomplete="off">
         <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
@@ -55,6 +59,10 @@
     <main id="board" class="board"></main>
     <p id="hidden-note" class="hidden-note muted"></p>
     <main id="plan" class="plan" hidden></main>
+    <main id="bugs" class="view" hidden></main>
+    <main id="today" class="view" hidden></main>
+    <main id="timeline" class="view" hidden></main>
+    <main id="releases" class="view releases" hidden></main>
   </div>
 
   <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Item details"></aside>
@@ -73,6 +81,10 @@
   <script src="app/js/watcher.js"></script>
   <script src="app/js/board.js"></script>
   <script src="app/js/plan.js"></script>
+  <script src="app/js/releases.js"></script>
+  <script src="app/js/timeline.js"></script>
+  <script src="app/js/bugs.js"></script>
+  <script src="app/js/today.js"></script>
   <script src="app/js/drawer.js"></script>
   <script src="app/js/wizard.js"></script>
   <script src="app/js/templates.js"></script>
