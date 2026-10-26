@@ -2,12 +2,13 @@
 id: 33
 type: story
 title: Today page redesign
-status: resolved
+status: done
 assignee: claude
 rank: i
 labels: []
 created: 2026-10-26T22:03
-updated: 2026-10-26T22:13
+updated: 2026-10-26T22:46
+shipped: 41787bc
 ---
 ## Description
 Today page can use redesign. when there are several items, user has to scroll to see Waiting for You section. there is enough space for horizontal or same level display.
@@ -23,3 +24,4 @@ Today page can use redesign. when there are several items, user has to scroll to
 - 2026-10-26 22:08 · claude · Done: the three Today panels now sit side by side under the heading, each scrolling on its own when its list is long, so Waiting for you is always in view. Below 900px they stack, each capped at 45% of the screen height. Only CSS changed, so the content is the same as before. Measured with 30 changed items at 1280x720 and 800x900.
 - 2026-10-26 22:08 · claude · PR: https://github.com/atulprakash1/scrawl/pull/13
 - 2026-10-26 22:13 · me · Moved to resolved (Resolved)
+- 2026-10-26 22:46 · scrawl · Shipped: 41787bc is on main
