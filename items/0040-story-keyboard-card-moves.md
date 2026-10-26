@@ -2,14 +2,15 @@
 id: 40
 type: story
 title: Move cards with the keyboard
-status: resolved
+status: done
 parent: 12
 assignee: claude
 size: M
 labels: [phase-3]
 created: 2026-10-26T23:34
-updated: 2026-10-26T23:45
+updated: 2026-10-26T23:55
 rank: m
+shipped: 4370b01
 ---
 ## Description
 Cards can only be moved with a mouse. Focus a card, press Space to pick it up, use the arrow keys to move it (left/right between columns, up/down within one), then Space to drop or Esc to cancel. Saves exactly like a drag.
@@ -25,3 +26,4 @@ Cards can only be moved with a mouse. Focus a card, press Space to pick it up, u
 - 2026-10-26 23:38 · claude · Done: Space picks up a focused card (lifted with an accent ring), the arrows carry it between and within columns, Space or Enter drops it and saves through the same code as a mouse drop, and Esc or a click puts it back. A live region announces each step. Verified headless: moves, rank, Activity, focus, cancel, and the mouse drag test still passes.
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
+- 2026-10-26 23:55 · scrawl · Shipped: 4370b01 is on main

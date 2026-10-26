@@ -2,14 +2,15 @@
 id: 41
 type: story
 title: Fix button for smudged items
-status: resolved
+status: done
 parent: 12
 assignee: claude
 size: S
 labels: [phase-3]
 created: 2026-10-26T23:34
-updated: 2026-10-26T23:45
+updated: 2026-10-26T23:55
 rank: mi
+shipped: 3f3a8cd
 ---
 ## Description
 An item whose header can't be read fully is shown as "smudged". The drawer explains the problem but offers no fix. Add a Fix button that rewrites the header cleanly, keeping every field and line it can read.
@@ -25,3 +26,4 @@ An item whose header can't be read fully is shown as "smudged". The drawer expla
 - 2026-10-26 23:39 · claude · Done: a smudged item's drawer has a Fix it button. store.repair() rewrites the header keeping every readable field (unknown ones too), fills only missing id/type/title/status from the file name, moves unreadable lines into the Description, and gives a duplicate id a new number (renaming the file). Verified headless on all four kinds of smudge.
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
+- 2026-10-26 23:55 · scrawl · Shipped: 3f3a8cd is on main

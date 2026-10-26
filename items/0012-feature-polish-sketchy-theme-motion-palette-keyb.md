@@ -2,12 +2,13 @@
 id: 12
 type: feature
 title: Polish: sketchy theme, motion, palette, keyboard, read-only mode
-status: resolved
+status: done
 assignee: claude
 rank: i
 labels: [phase-3]
 created: 2026-10-25T13:30
-updated: 2026-10-26T23:45
+updated: 2026-10-26T23:55
+shipped: c098579
 ---
 ## Description
 Rough.js frames and charts, footprints/confetti motion, Ctrl+K palette, Space-to-pick-up keyboard drag, read-only fallback for Firefox/Safari, fix button for smudged items.
@@ -25,3 +26,4 @@ Rough.js frames and charts, footprints/confetti motion, Ctrl+K palette, Space-to
 - 2026-10-26 23:44 · claude · Done as a whole feature on scrawl/12-polish: #39 Ctrl+K palette, #40 keyboard card moves, #41 smudged-item fix, #42 read-only Firefox/Safari, #43 subtle motion, one commit each. Rough.js stays unused.
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
+- 2026-10-26 23:55 · scrawl · Shipped: c098579 is on main

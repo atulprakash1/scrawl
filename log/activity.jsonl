@@ -88,3 +88,6 @@
 {"at":"2026-10-26T23:48","who":"me","id":14,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-26T23:48","who":"me","id":44,"action":"create","to":"backlog"}
 {"at":"2026-10-26T23:51","who":"me","id":44,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-26T23:55","who":"scrawl","id":12,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-26T23:55","who":"scrawl","id":40,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-26T23:55","who":"scrawl","id":42,"action":"move","from":"resolved","to":"done"}
