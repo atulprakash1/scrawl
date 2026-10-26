@@ -114,7 +114,7 @@
     return ua !== ub ? (ua < ub ? 1 : -1) : b.id - a.id;
   }
 
-  // Columns marked `foldable` in config.json (Shipped) get a hide button. They start open;
+  // Columns marked `foldable` in config.json (Someday pile, Shipped) get a hide button. They start open;
   // hiding one is remembered per browser. (`collapsed` is the older name for the same flag.)
   const folds = {}; // this session's choice, in case localStorage is unavailable
   const isFoldable = (col) => Boolean(col.foldable || col.collapsed);
