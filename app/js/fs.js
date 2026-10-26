@@ -93,6 +93,15 @@
     await w.close();
   }
 
+  async function remove(root, path) {
+    const i = path.lastIndexOf('/');
+    try {
+      await (await dir(root, path.slice(0, i))).removeEntry(path.slice(i + 1));
+    } catch (e) {
+      if (!missing(e)) throw e;
+    }
+  }
+
   async function list(root, path) {
     try {
       const d = await dir(root, path);
@@ -105,5 +114,5 @@
     }
   }
 
-  S.fs = { supported, pick, remembered, permission, dir, read, file, mtime, write, append, list };
+  S.fs = { supported, pick, remembered, permission, dir, read, file, mtime, write, append, remove, list };
 })();

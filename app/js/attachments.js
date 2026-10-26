@@ -43,6 +43,19 @@
     return lines;
   }
 
+  async function remove(id, name) {
+    await S.fs.remove(S.store.state.root, `${folder(id)}/${name}`);
+  }
+
+  // The Description without any Markdown link (or embedded image) pointing at this attachment.
+  function unlink(text, id, name) {
+    const target = `../attachments/${id}/`;
+    const names = new Set([name, encodeURIComponent(name), encodeURI(name)]);
+    return text.replace(/!?\[[^\]]*\]\(([^)\s]+)\)/g, (link, href) =>
+      (href.startsWith(target) && names.has(href.slice(target.length)) ? '' : link))
+      .replace(/[ \t]+$/gm, '').replace(/\n{3,}/g, '\n\n').trim();
+  }
+
   // The page can't load "../attachments/…" by itself, so rendered links and images get blob URLs.
   let urls = [];
   function release() {
@@ -85,5 +98,5 @@
     if (hasFiles(e) && !e.target.closest?.('.desc-drop')) e.preventDefault();
   });
 
-  S.attachments = { add, list, hydrate, release, urlFor, hasFiles, MAX_MB };
+  S.attachments = { add, list, remove, unlink, hydrate, release, urlFor, hasFiles, MAX_MB };
 })();
