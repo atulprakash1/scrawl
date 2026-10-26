@@ -2,12 +2,13 @@
 id: 50
 type: story
 title: parent child relationship
-status: resolved
+status: done
 assignee: claude
 rank: r
 labels: []
 created: 2026-10-27T00:26
-updated: 2026-10-27T00:39
+updated: 2026-10-27T00:40
+shipped: 739b6cf
 ---
 ## Description
 the story should show somewhere the parent item and link.
@@ -25,3 +26,4 @@ the story should show somewhere the parent item and link.
 - 2026-10-27 00:36 · claude · Done: board cards with a parent show "↳ #N title" above their title, in the parent's type colour and truncated when long. Clicking it (or Enter/Space) opens the parent in the drawer instead of the card, and the drawer's "Part of #N" is unchanged. Verified headless with a screenshot.
 - 2026-10-27 00:36 · claude · PR: https://github.com/atulprakash1/scrawl/pull/24
 - 2026-10-27 00:39 · me · Moved to resolved (Resolved)
+- 2026-10-27 00:40 · scrawl · Shipped: 739b6cf is on main
