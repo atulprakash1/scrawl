@@ -8,7 +8,7 @@ The full design is in `Scrawl — Local LLM-Powered Project Board.md`; phases ar
 
 - No build step, no npm, no server. Plain JS in `app/js/` loaded with classic `<script>` tags
   (Chrome blocks `type="module"` on `file://`). Each file is an IIFE that adds to `window.Scrawl`.
-- Load order matters and is set in `scrawl.html`: util → parser → rank → fs → store → watcher → board → plan → releases → timeline → bugs → today → drawer → wizard → templates → hookup → main.
+- Load order matters and is set in `scrawl.html`: util → parser → rank → fs → store → watcher → board → plan → releases → timeline → bugs → today → attachments → drawer → wizard → templates → hookup → main.
 - Third-party code lives in `vendor/` (copied, never loaded from a CDN). Don't add dependencies lightly.
 - `app/js/templates.js` is generated: after changing the "Scrawl work tracking" section below,
   `.claude/commands/` or `.scrawl/hooks/`, run `node tools/bundle.mjs` and commit it. The same command
@@ -34,6 +34,9 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
 - Activity lines are append-only, newest last, one line each:
   `- 2026-10-25 11:02 · claude · Picked up. Root cause: null email.`
   Lines from `me` are the user's comments and instructions; read them before starting.
+- Attachments: files the user attached to an item live in `.scrawl/attachments/<id>/` and are linked
+  from its Description (`../attachments/<id>/<name>`, relative to the item file). Open them (images too)
+  before starting; they are part of the brief.
 - The board is not part of the project's git: `.scrawl/` is a separate worktree of its own
   `scrawl-board` branch (set up once per clone by `sh .scrawl/hooks/scrawl-setup`). Edit item files
   there as usual, but never `git add` or commit them yourself; `scrawl-sync` commits and pushes the board.

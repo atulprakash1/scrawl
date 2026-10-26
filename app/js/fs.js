@@ -60,6 +60,14 @@
     }
   }
 
+  // The File itself (a Blob), or null when it isn't there.
+  async function file(root, path) {
+    try { return await (await fileHandle(root, path)).getFile(); } catch (e) {
+      if (missing(e)) return null;
+      throw e;
+    }
+  }
+
   async function mtime(root, path) {
     try { return (await (await fileHandle(root, path)).getFile()).lastModified; } catch (e) {
       if (missing(e)) return null;
@@ -97,5 +105,5 @@
     }
   }
 
-  S.fs = { supported, pick, remembered, permission, dir, read, mtime, write, append, list };
+  S.fs = { supported, pick, remembered, permission, dir, read, file, mtime, write, append, list };
 })();

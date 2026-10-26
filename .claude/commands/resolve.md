@@ -9,6 +9,7 @@ Never commit to or push `main`. The user merges PRs on GitHub.
    board (its own `scrawl-board` branch). If it prints a warning, tell me.
 2. Find the item file: `.scrawl/items/` file whose name starts with the number padded to 4 digits
    (e.g. #42 → `0042-*.md`). Read it fully, including Activity comments from `me`.
+   Open every file it links under `.scrawl/attachments/<id>/` (screenshots, samples, logs).
    If it has a `parent`, skim the parent item's Description for context.
    **If it is a feature, follow "Resolving a feature" below instead of steps 3-8.**
 3. Pick it up: set `status: doing`, `assignee: claude`, update `updated:`, append an Activity line
