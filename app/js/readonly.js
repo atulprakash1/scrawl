@@ -20,6 +20,8 @@
       supported: false,
       pick: refuse,
       remembered: async () => null,
+      recent: async () => [],
+      remember: async () => {},
       permission: async () => true,
       dir: async () => ({}),
       read: async (root, p) => (files.has(p) ? { text: await files.get(p).text(), mtime: files.get(p).lastModified } : null),

@@ -26,6 +26,22 @@
     return handle;
   }
 
+  const RECENT_MAX = 6;
+
+  async function recent() {
+    try { return (await idb('readonly', (s) => s.get('recent'))) || []; } catch { return []; }
+  }
+
+  // Puts a folder at the top of the recent list (no duplicates) and makes it the one reopened next time.
+  async function remember(handle) {
+    try {
+      const others = [];
+      for (const h of await recent()) if (!(await h.isSameEntry(handle))) others.push(h);
+      await idb('readwrite', (s) => s.put([handle, ...others].slice(0, RECENT_MAX), 'recent'));
+      await idb('readwrite', (s) => s.put(handle, 'root'));
+    } catch { /* still usable this session */ }
+  }
+
   async function remembered() {
     try { return (await idb('readonly', (s) => s.get('root'))) || null; } catch { return null; }
   }
@@ -114,5 +130,5 @@
     }
   }
 
-  S.fs = { supported, pick, remembered, permission, dir, read, file, mtime, write, append, remove, list };
+  S.fs = { supported, pick, remembered, recent, remember, permission, dir, read, file, mtime, write, append, remove, list };
 })();
