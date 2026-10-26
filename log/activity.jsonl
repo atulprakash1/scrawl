@@ -109,3 +109,4 @@
 {"at":"2026-10-27T01:19","who":"me","id":53,"action":"create","to":"backlog"}
 {"at":"2026-10-27T01:22","who":"me","id":53,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-27T01:22","who":"me","id":52,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-27T01:23","who":"scrawl","id":52,"action":"move","from":"resolved","to":"done"}
