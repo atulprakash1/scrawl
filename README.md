@@ -62,6 +62,7 @@ Code PRs carry code only.
 scrawl.html            the board (open in Chromium)
 app/js, app/css        plain classic scripts and styles
 vendor/                SortableJS, marked, DOMPurify, Rough.js, fonts (no CDN at runtime)
+templates/hooks/       the git hooks that Hook up Claude installs in .scrawl/hooks/
 tools/bundle.mjs       builds app/js/templates.js and the single-file dist/scrawl.html
 CLAUDE.md              the protocol Claude follows
 .claude/commands/      /resolve, /next, /plan, /groom, /inbox, /release

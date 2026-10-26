@@ -11,7 +11,8 @@ The original design notes and roadmap are private and not in git; the README des
 - Load order matters and is set in `scrawl.html`: util → parser → rank → fs → readonly → store → watcher → board → plan → releases → timeline → bugs → today → attachments → drawer → wizard → templates → hookup → palette → main.
 - Third-party code lives in `vendor/` (copied, never loaded from a CDN). Don't add dependencies lightly.
 - `app/js/templates.js` is generated: after changing the "Scrawl work tracking" section below,
-  `.claude/commands/` or `.scrawl/hooks/`, run `node tools/bundle.mjs` and commit it. The same command
+  `.claude/commands/` or `templates/hooks/` (the git hook sources; the bundler also refreshes
+  this repo's installed copy in `.scrawl/hooks/`), run `node tools/bundle.mjs` and commit it. The same command
   builds the single-file `dist/scrawl.html` (not committed).
 - Keep it simple: this is a tool, not an app platform. Anything outside the current phase goes on the
   board as an idea, not into the code.
