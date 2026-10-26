@@ -2,11 +2,12 @@
 id: 52
 type: story
 title: Git hook sources on main
-status: review
+status: resolved
 assignee: claude
 labels: []
 created: 2026-10-27T01:05
-updated: 2026-10-27T01:07
+updated: 2026-10-27T01:22
+rank: i
 ---
 ## Description
 The git hook scripts are part of the tool, but their only copy is `.scrawl/hooks/` on the
@@ -24,3 +25,4 @@ copy kept as Scrawl's own installed hooks.
 ## Activity
 - 2026-10-27 01:05 · claude · Created from the open-source prep (step 2), with acceptance from the description. Picked up.
 - 2026-10-27 01:07 · claude · Moved the hooks to templates/hooks/ on main; the bundler reads them there and refreshes .scrawl/hooks/ when the board is present. templates.js output is unchanged, and the bundler runs in a clone without the board. PR #27.
+- 2026-10-27 01:22 · me · Moved to resolved (Resolved)
