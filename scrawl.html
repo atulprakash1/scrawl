@@ -25,30 +25,38 @@
   <!-- The board -->
   <div id="app" hidden>
     <header class="topbar">
-      <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
-      <span id="project-name" class="project-name"></span>
-      <nav class="views" aria-label="View">
-        <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
-        <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
-        <button class="view-btn" data-view="bugs" aria-pressed="false">Bug jar</button>
-        <button class="view-btn" data-view="today" aria-pressed="false">Today</button>
-        <button class="view-btn" data-view="timeline" aria-pressed="false">Timeline</button>
-        <button class="view-btn" data-view="releases" aria-pressed="false">Releases</button>
-      </nav>
-      <form id="quick-add" class="quick-add" autocomplete="off">
-        <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
-        <button class="btn" type="submit">+ add</button>
-      </form>
-      <input id="filter-text" class="filter" type="search" placeholder="Filter" aria-label="Filter cards">
-      <select id="filter-who" class="filter" aria-label="Filter by assignee">
-        <option value="">everyone</option>
-        <option value="me">☕ me</option>
-        <option value="claude">🤖 claude</option>
-      </select>
-      <span class="spacer"></span>
-      <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 Hook up Claude</button>
-      <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
-      <button id="theme-toggle" class="icon-btn" title="Paper / chalkboard" aria-label="Toggle theme">◐</button>
+      <div class="topbar-main">
+        <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
+        <span class="crumb-sep" aria-hidden="true">/</span>
+        <span id="project-name" class="project-name"></span>
+        <span class="spacer"></span>
+        <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 <span class="btn-label">Hook up Claude</span></button>
+        <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
+        <button id="theme-toggle" class="icon-btn" title="Light / dark" aria-label="Toggle theme">◐</button>
+      </div>
+      <div class="topbar-nav">
+        <nav class="views" aria-label="View">
+          <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
+          <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
+          <button class="view-btn" data-view="bugs" aria-pressed="false">Bug jar</button>
+          <button class="view-btn" data-view="today" aria-pressed="false">Today</button>
+          <button class="view-btn" data-view="timeline" aria-pressed="false">Timeline</button>
+          <button class="view-btn" data-view="releases" aria-pressed="false">Releases</button>
+        </nav>
+        <!-- Only on the Board: these act on its cards -->
+        <div id="board-tools" class="board-tools">
+          <form id="quick-add" class="quick-add" autocomplete="off">
+            <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
+            <button class="btn" type="submit">+ Add</button>
+          </form>
+          <input id="filter-text" class="filter" type="search" placeholder="Filter" aria-label="Filter cards">
+          <select id="filter-who" class="filter" aria-label="Filter by assignee">
+            <option value="">Everyone</option>
+            <option value="me">☕ Me</option>
+            <option value="claude">🤖 Claude</option>
+          </select>
+        </div>
+      </div>
     </header>
 
     <div id="offline" class="banner" hidden>
