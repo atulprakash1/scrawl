@@ -2,11 +2,12 @@
 id: 22
 type: story
 title: Keep the board on its own branch so it never dirties the project
-status: review
+status: resolved
 assignee: claude
 labels: [workflow]
 created: 2026-10-26T11:45
-updated: 2026-10-26T11:54
+updated: 2026-10-26T11:58
+rank: i
 ---
 ## Description
 Every card move, comment and index rebuild edits tracked files under `.scrawl/`, so the project's `git status` and PRs are always full of files that aren't the user's work. The board's state also follows whatever branch is checked out, which is why scrawl-home and the park/restore dance in scrawl-board exist (and why #21 happened).
@@ -27,3 +28,6 @@ Move the board onto its own `scrawl-board` branch with no shared history, checke
 - 2026-10-26 11:45 · claude · Picked up on branch scrawl/22-board-on-own-branch. Plan: scrawl-setup to move .scrawl/ onto an orphan scrawl-board worktree, scrawl-sync to save/push the board, drop scrawl-home/scrawl-board, update protocol and docs, test in a throwaway repo.
 - 2026-10-26 11:54 · claude · .scrawl/ is now its own worktree on the scrawl-board branch (excluded via .git/info/exclude): scrawl-setup does the one-time move in place, scrawl-sync commits and pushes the board, and scrawl-home and the park/restore helper are gone. index.json and the commit logs aren't tracked anymore. 35 checks in throwaway repos (migration, fresh clone, two machines, conflicts, new project) pass, and this repo is migrated.
 - 2026-10-26 11:55 · claude · PR: https://github.com/atulprakash1/scrawl/pull/4
+- 2026-10-26 11:58 · me · Moved to resolved (Resolved)
+- 2026-10-26 11:58 · me · Moved to review (Eyeball it)
+- 2026-10-26 11:58 · me · Moved to resolved (Resolved)
