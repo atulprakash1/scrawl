@@ -2,13 +2,13 @@
 id: 51
 type: bug
 title: red horizontal bar when new item created
-status: review
+status: resolved
 severity: beetle
 assignee: claude
-rank: 9
+rank: i
 labels: []
 created: 2026-10-27T00:28
-updated: 2026-10-27T00:31
+updated: 2026-10-27T00:34
 ---
 ## Description
 there was a red horizontal bar when new item created. just a flicker for a fraction of a second. what was that? if it has no significant purpose, then remove it.
@@ -25,3 +25,4 @@ there was a red horizontal bar when new item created. just a flicker for a fract
 - 2026-10-27 00:31 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
 - 2026-10-27 00:31 · claude · Found it: the red bar was the "Lost access to the folder" banner. Since #45 the board refreshes within 150ms of a save, sometimes while Chrome is still swapping the new file into place; that one read failed, the banner showed, and the next refresh hid it. Now a file that vanishes mid-read is skipped, and the banner waits for a real permission error or 3 failures in a row. Reproduced and verified headless.
 - 2026-10-27 00:32 · claude · PR: https://github.com/atulprakash1/scrawl/pull/23
+- 2026-10-27 00:34 · me · Moved to resolved (Resolved)
