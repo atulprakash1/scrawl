@@ -40,9 +40,17 @@
     releases: [], // .scrawl/releases/v*.md, newest version first: { file, version, text }
     releasesSeen: '',
     known: new Map(), // path -> lastModified we last saw or wrote
+    readOnly: false, // Firefox/Safari: nothing may be written
     lastIndex: '',
   };
   const listeners = new Set();
+
+  // In read-only mode every change is refused with a short note instead.
+  function refused() {
+    if (!state.readOnly) return false;
+    util.toast('Read-only here: open scrawl.html in Chrome or Edge to make changes', 'warn');
+    return true;
+  }
 
   function on(fn) { listeners.add(fn); }
   function emit(change) { for (const fn of listeners) fn(change); }
@@ -85,6 +93,7 @@
   }
 
   async function saveProject(text) {
+    if (refused()) return;
     await fs.write(state.root, PROJECT, text);
     await loadProject();
   }
@@ -232,6 +241,7 @@
 
   // index.json is a cache for cheap overviews (one line per item). Rewritten only when it differs.
   async function writeIndex() {
+    if (state.readOnly) return;
     const rows = list().sort((a, b) => a.id - b.id).map((i) => {
       const m = i.meta;
       const row = { id: i.id, type: m.type, title: m.title, status: m.status };
@@ -254,6 +264,7 @@
   /* Apply `mutate` to the latest copy on disk, not our cached one. That is the field-level merge:
      whatever Claude changed meanwhile survives, and only the fields we touch are overwritten. */
   async function update(file, mutate, { activity, who = 'me' } = {}) {
+    if (refused()) return undefined;
     const path = `${ITEMS}/${file}`;
     const disk = await fs.read(state.root, path);
     if (!disk) {
@@ -292,6 +303,7 @@
   }
 
   async function autoShip() {
+    if (state.readOnly) return;
     if (!state.main.length) return;
     for (const item of list()) {
       if (!SHIPPABLE.has(item.meta.status)) continue;
@@ -306,12 +318,19 @@
   // Newest commit on main, so a hand-shipped item also ignores older commits if it's reopened.
   function mainHead() { return state.main.length ? state.main[0].sha : undefined; }
 
-  async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '', severity = 'beetle' }) {
+  // Takes the next free item number and records it in config.json.
+  async function takeId() {
     await loadConfig(); // Claude may have bumped nextId since we last looked
     const maxId = Math.max(0, ...list().map((i) => i.id));
     const id = Math.max(Number(state.config.nextId) || 1, maxId + 1);
     state.config.nextId = id + 1;
     state.known.set(CONFIG, await fs.write(state.root, CONFIG, JSON.stringify(state.config, null, 2) + '\n'));
+    return id;
+  }
+
+  async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '', severity = 'beetle' }) {
+    if (refused()) return null;
+    const id = await takeId();
 
     const last = column(status).at(-1);
     const now = util.stamp();
@@ -327,6 +346,52 @@
     log({ id, action: 'create', to: status });
     await writeIndex();
     emit({ local: [file] });
+    return item;
+  }
+
+  /* Rewrite a smudged item's header cleanly. Every field that parses is kept; a missing id, type, title
+     or status comes from the file name (or a default), and nothing that is there is changed; unreadable header lines are moved into the
+     Description so nothing is lost; an id that another item already uses gets a new number (and the
+     file is renamed to match). Returns the repaired item. */
+  async function repair(file) {
+    if (refused()) return null;
+    const path = `${ITEMS}/${file}`;
+    const disk = await fs.read(state.root, path);
+    if (!disk) {
+      util.toast(`${file} is gone from disk`, 'warn');
+      return null;
+    }
+    const doc = parser.parse(disk.text);
+    const m = doc.meta;
+    const name = file.match(/^(\d+)?-?(feature|story|bug|idea)?-?(.*?)\.md$/i) || [];
+    if (!m.type) m.type = TYPES.includes((name[2] || '').toLowerCase()) ? name[2].toLowerCase() : 'story';
+    if (!m.title) m.title = (name[3] || '').replace(/[-_]+/g, ' ').trim().replace(/^./, (c) => c.toUpperCase()) || 'Untitled';
+    if (!m.status) m.status = 'backlog';
+    if (typeof m.id !== 'number' && name[1]) m.id = Number(name[1]);
+    const taken = list().some((i) => i.id === m.id && i.file !== file);
+    const renumber = typeof m.id !== 'number' || taken;
+    if (renumber) m.id = await takeId();
+    if (doc.extra.length) {
+      const desc = parser.getSection(doc.body, 'Description').trim();
+      const kept = `Recovered from the old header:\n\n\`\`\`\n${doc.extra.join('\n')}\n\`\`\``;
+      doc.body = parser.setSection(doc.body, 'Description', [desc, kept].filter(Boolean).join('\n\n'));
+      doc.extra = [];
+    }
+    m.updated = util.stamp();
+    doc.body = parser.appendActivity(doc.body, 'me', renumber ? `Fixed the smudged header (new number #${m.id})` : 'Fixed the smudged header');
+
+    const target = renumber ? `${String(m.id).padStart(4, '0')}-${m.type}-${util.slugify(m.title)}.md` : file;
+    const text = parser.serialize(doc);
+    const mtime = await fs.write(state.root, `${ITEMS}/${target}`, text);
+    if (target !== file) {
+      await fs.remove(state.root, path);
+      state.items.delete(file);
+      state.known.delete(path);
+    }
+    const item = ingest(target, text, mtime);
+    log({ id: item.id, action: 'repair' });
+    await writeIndex();
+    emit({ local: [target] });
     return item;
   }
 
@@ -354,7 +419,7 @@
   }
 
   S.store = {
-    STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create, saveProject,
+    STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create, repair, saveProject,
     list, get, byId, column, compareRank, commitsFor, refsOf, mainHead,
     get config() { return state.config; },
     get project() { return state.project; },

@@ -85,7 +85,7 @@
     document.getElementById('project-name').textContent = S.store.project;
     document.title = `${S.store.project} · Scrawl`;
     S.today.visit(S.store.project);
-    if (S.store.state.projectEmpty) {
+    if (S.store.state.projectEmpty && !S.store.state.readOnly) {
       show('wizard');
       return S.wizard.start(document.getElementById('wizard-card'), openBoard);
     }
@@ -96,6 +96,25 @@
     show('app');
     setView(view);
     S.watcher.start();
+  }
+
+  // Firefox/Safari: load the picked folder's .scrawl/ into memory and show it without any way to write.
+  async function openReadOnly(entries) {
+    const { count, impl } = S.readonly.fsFrom(entries);
+    if (!count) {
+      return welcome('That folder has no .scrawl/ in it. Pick your repo\'s root folder.', S.readonly.button('📂 Open read-only', openReadOnly));
+    }
+    S.watcher.stop();
+    Object.assign(S.fs, impl); // the store holds this same object
+    S.store.state.readOnly = true;
+    document.body.classList.add('read-only');
+    const banner = document.getElementById('readonly-banner');
+    banner.replaceChildren(
+      el('span', {}, 'Read-only: this browser can\'t save to the folder, so nothing here can be changed. Open scrawl.html in Chrome or Edge to edit. '),
+      ...S.readonly.button('↻ Load the folder again', openReadOnly));
+    banner.querySelector('.btn').classList.remove('btn-big');
+    banner.hidden = false;
+    start({ name: (entries[0].path || '').split('/')[0] || 'project' });
   }
 
   async function initAndReturn(root) {
@@ -118,17 +137,15 @@
 
   async function boot() {
     bindTheme();
-    if (!S.fs.supported) {
-      return welcome('This browser can\'t write to folders. Open scrawl.html in Chrome, Edge, Arc or Opera. ' +
-        '(Brave: enable "File System Access API" in brave://flags.)', []);
-    }
     S.board.bindToolbar();
     bindViews();
     document.getElementById('hookup-btn').addEventListener('click', S.hookup.open);
+    document.getElementById('palette-btn').addEventListener('click', S.palette.open);
     S.store.on((change) => {
       renderView();
       S.drawer.refresh();
       if (change.outside && change.outside.length) {
+        S.board.flash(change.outside);
         const ids = change.outside.map((f) => (S.store.get(f) ? `#${S.store.get(f).id}` : f)).join(', ');
         S.util.toast(`✎ Changed outside Scrawl: ${ids}`);
       }
@@ -137,8 +154,15 @@
       if (await S.fs.permission(S.store.state.root, true)) setOffline(false);
     });
     document.getElementById('switch-folder').addEventListener('click', async () => {
+      if (S.store.state.readOnly) return document.querySelector('#readonly-banner input[type=file]')?.click();
       try { S.watcher.stop(); start(await S.fs.pick()); } catch (e) { if (e.name !== 'AbortError') S.util.toast(e.message, 'warn'); }
     });
+
+    if (!S.fs.supported) {
+      return welcome('This browser can\'t save to folders, so Scrawl opens your board read-only here. ' +
+        'Pick your repo\'s root folder (the one that holds .scrawl/). To make changes, use Chrome, Edge, Arc or Opera. ' +
+        '(Brave: enable "File System Access API" in brave://flags.)', S.readonly.button('📂 Open read-only', openReadOnly));
+    }
 
     const handle = await S.fs.remembered();
     if (handle && (await S.fs.permission(handle, false))) return start(handle);
@@ -154,6 +178,6 @@
     welcome('Pick the root folder of your repo (the one that holds .scrawl/).', [pickButton()]);
   }
 
-  S.app = { setOffline };
+  S.app = { setOffline, setView };
   document.addEventListener('DOMContentLoaded', boot);
 })();

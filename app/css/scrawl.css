@@ -269,6 +269,16 @@ select.filter { width: auto; }
   background: color-mix(in srgb, var(--red) 12%, var(--panel));
 }
 
+/* Read-only (Firefox/Safari): a calm banner, and every control that would write is gone. */
+.banner-info {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.9rem;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); background: var(--accent-soft);
+}
+body.read-only :is(.quick-add, #hookup-btn, .drawer .actions, .comment-form, .inline-form, .drawer-section h4 .link-btn,
+  .attach-remove, .decide, .bug-add, .critter .btn, .smudge-box .btn, .plan-tree > header .muted) { display: none !important; }
+body.read-only :is(.fields select, .checklist input, .drawer-title) { pointer-events: none; }
+body.read-only .card, body.read-only .plan-children .plan-row { cursor: pointer; }
+
 /* ---------- board: calm column panels with a status dot and a count pill ---------- */
 
 .board {
@@ -370,6 +380,22 @@ select.filter { width: auto; }
   border: 1px solid currentColor; border-radius: 999px; padding: 0 6px; background: var(--surface);
 }
 .card.smudged { outline: 2px dashed var(--red); outline-offset: -2px; }
+
+/* Motion: a glow on cards changed outside the board, confetti when one ships. */
+@keyframes claude-was-here {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent), var(--shadow-sm); }
+  25% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 35%, transparent), var(--shadow-md); }
+  100% { box-shadow: 0 0 0 10px transparent, var(--shadow-sm); }
+}
+.card.just-changed { animation: claude-was-here 1.6s ease-out 2; }
+.confetti { position: fixed; z-index: 40; width: 7px; height: 9px; border-radius: 2px; pointer-events: none; }
+
+/* Keyboard move: the carried card lifts and gets an accent ring. */
+.card.carrying {
+  transform: translateY(-3px) rotate(1.5deg); box-shadow: var(--shadow-lg);
+  outline: 2px solid var(--accent); outline-offset: 2px; z-index: 2;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Drag states. SortableJS moves the floating copy by rewriting only the translation part of its
    transform matrix, so a tilt set in `transform` here is kept while the copy follows the pointer.
@@ -683,6 +709,7 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 }
 .activity .who-claude .who-icon { background: var(--accent-soft); }
 .comment-form { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.smudge-box .btn { margin-top: 8px; }
 .smudge-box { border: 1px dashed var(--red); background: color-mix(in srgb, var(--red) 6%, transparent); border-radius: var(--r-md); padding: 10px 12px; }
 .file-path { font-family: var(--font-mono); font-size: 0.72rem; }
 
@@ -699,6 +726,30 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .hookup-list code { overflow-wrap: anywhere; }
 .hookup .wizard-command { flex-wrap: wrap; }
 .hookup .wizard-command code { font-size: 0.9rem; }
+
+/* ---------- command palette ---------- */
+
+.palette-dialog { width: min(620px, calc(100vw - 32px)); padding: 0; margin-top: 12vh; overflow: hidden; }
+.palette { display: flex; flex-direction: column; }
+.palette-input {
+  width: 100%; padding: 16px 18px !important; font-size: 1.05rem;
+  border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; box-shadow: none !important;
+}
+.palette-list { list-style: none; margin: 0; padding: 6px; max-height: 50vh; overflow-y: auto; }
+.palette-entry {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; cursor: pointer; border-radius: var(--r-sm);
+}
+.palette-entry.selected { background: var(--accent-soft); }
+.palette-icon { width: 20px; text-align: center; color: var(--ink-soft); }
+.palette-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.palette-hint { font-size: 0.72rem; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; }
+.palette-empty { padding: 10px; }
+.palette-foot { margin: 0; padding: 8px 14px; font-size: 0.75rem; border-top: 1px solid var(--border); }
+.palette-trigger { color: var(--ink-soft); font-weight: 500; }
+kbd {
+  font-family: var(--font-mono); font-size: 0.7rem; padding: 1px 5px; color: var(--ink-soft);
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px;
+}
 
 /* ---------- toasts ---------- */
 
@@ -723,7 +774,7 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 
 @media (max-width: 640px) {
   .topbar-main, .topbar-nav { padding-inline: 16px; }
-  #hookup-btn .btn-label { display: none; }
+  #hookup-btn .btn-label, .palette-trigger .btn-label, .palette-trigger kbd { display: none; }
   .crumb-sep, .project-name { display: none; }
   .board-tools { flex-wrap: wrap; }
   .quick-add { flex-basis: 100%; }

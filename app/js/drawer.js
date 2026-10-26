@@ -104,7 +104,18 @@
 
     const smudge = item.errors.length
       ? el('div', { class: 'smudge-box' }, el('strong', {}, 'Smudged: '), item.errors.join('; '),
-        el('div', { class: 'muted' }, `Fix the header in .scrawl/items/${item.file}. Nothing was dropped.`))
+        el('div', { class: 'muted' }, `The header of .scrawl/items/${item.file} can't be read fully. Nothing was dropped.`),
+        el('button', {
+          class: 'btn',
+          title: 'Rewrite the header cleanly, keeping everything that can be read',
+          onclick: async () => {
+            const fixed = await store.repair(item.file);
+            if (!fixed) return;
+            current = fixed.file;
+            render();
+            S.util.toast(fixed.errors.length ? `#${fixed.id} still has problems: ${fixed.errors.join('; ')}` : `Fixed #${fixed.id}`, fixed.errors.length ? 'warn' : 'info');
+          },
+        }, '🧹 Fix it'))
       : null;
 
     const desc = parser.getSection(item.body, 'Description');
@@ -112,7 +123,7 @@
     // Attached files are saved next to the item and linked from the Description, so Claude sees them.
     // While editing, the links go into the textarea; otherwise straight into the file.
     async function attach(files) {
-      if (!files.length) return;
+      if (!files.length || store.state.readOnly) return;
       const lines = await S.attachments.add(id, files);
       if (!lines.length) return;
       const box = panel().querySelector('textarea[name="desc"]');

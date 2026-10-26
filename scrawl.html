@@ -30,6 +30,7 @@
         <span class="crumb-sep" aria-hidden="true">/</span>
         <span id="project-name" class="project-name"></span>
         <span class="spacer"></span>
+        <button id="palette-btn" class="btn palette-trigger" title="Command palette (Ctrl+K)">⌕ <span class="btn-label">Search</span> <kbd>Ctrl K</kbd></button>
         <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 <span class="btn-label">Hook up Claude</span></button>
         <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
         <button id="theme-toggle" class="icon-btn" title="Light / dark" aria-label="Toggle theme">◐</button>
@@ -59,12 +60,15 @@
       </div>
     </header>
 
+    <div id="readonly-banner" class="banner banner-info" hidden></div>
     <div id="offline" class="banner" hidden>
       Lost access to the folder.
       <button id="regrant" class="btn">Let Scrawl back in</button>
     </div>
 
-    <main id="board" class="board"></main>
+    <main id="board" class="board" aria-describedby="board-keys"></main>
+    <p id="board-keys" class="sr-only">Cards: Enter opens one, Space picks it up, arrow keys move it, Space drops it, Escape cancels.</p>
+    <p id="board-live" class="sr-only" aria-live="assertive"></p>
     <p id="hidden-note" class="hidden-note muted"></p>
     <main id="plan" class="plan" hidden></main>
     <main id="bugs" class="view" hidden></main>
@@ -75,6 +79,7 @@
 
   <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Item details"></aside>
   <dialog id="hookup" class="dialog" aria-label="Hook up Claude"></dialog>
+  <dialog id="palette" class="dialog palette-dialog" aria-label="Command palette"></dialog>
   <div id="toasts" class="toasts" aria-live="polite"></div>
 
   <!-- Classic scripts on purpose: Chrome blocks type="module" on file:// pages. -->
@@ -85,6 +90,7 @@
   <script src="app/js/parser.js"></script>
   <script src="app/js/rank.js"></script>
   <script src="app/js/fs.js"></script>
+  <script src="app/js/readonly.js"></script>
   <script src="app/js/store.js"></script>
   <script src="app/js/watcher.js"></script>
   <script src="app/js/board.js"></script>
@@ -98,6 +104,7 @@
   <script src="app/js/wizard.js"></script>
   <script src="app/js/templates.js"></script>
   <script src="app/js/hookup.js"></script>
+  <script src="app/js/palette.js"></script>
   <script src="app/js/main.js"></script>
 </body>
 </html>
