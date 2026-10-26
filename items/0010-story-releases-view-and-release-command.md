@@ -2,13 +2,14 @@
 id: 10
 type: story
 title: Releases view and /release command
-status: resolved
+status: done
 parent: 8
 assignee: claude
 rank: i
 labels: [phase-3]
 created: 2026-10-25T13:30
-updated: 2026-10-26T20:29
+updated: 2026-10-26T21:27
+shipped: e49e782
 ---
 ## Description
 `/release 0.2.0` tags the repo and writes `.scrawl/releases/v0.2.0.md` from done items. The view previews the next changelog.
@@ -25,3 +26,4 @@ updated: 2026-10-26T20:29
 - 2026-10-26 20:55 · claude · Done: a Releases view shows .scrawl/releases/v*.md as notebook pages (newest version first, live), with a preview of the next changelog from shipped items that have no `release:` field and a copy button for /release. /release writes the same format, marks the items and tags main. The view is verified headless; /release itself hasn't been run, because that would tag this repo.
 - 2026-10-26 20:29 · me · Moved to resolved (Resolved)
 - 2026-10-26 21:52 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
+- 2026-10-26 21:27 · scrawl · Shipped: e49e782 is on main

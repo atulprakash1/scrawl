@@ -17,3 +17,4 @@ With six views (Board, Plan, Bug jar, Today, Timeline, Releases), the top bar wr
 
 ## Activity
 - 2026-10-26 21:40 · claude · Created while working on #8
+- 2026-10-26 22:10 · claude · Covered by #29 (two-tier header, board-only toolbar) under #23. Reject this one once #29 ships.

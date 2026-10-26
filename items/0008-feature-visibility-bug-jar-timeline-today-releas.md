@@ -2,12 +2,13 @@
 id: 8
 type: feature
 title: Visibility: Bug jar, Timeline, Today, Releases
-status: resolved
+status: done
 assignee: claude
 rank: v
 labels: [phase-3]
 created: 2026-10-25T13:30
-updated: 2026-10-26T20:35
+updated: 2026-10-26T21:26
+shipped: 2f337c6
 ---
 ## Description
 Phase 3 views. See docs/ROADMAP.md.
@@ -27,3 +28,4 @@ Phase 3 views. See docs/ROADMAP.md.
 - 2026-10-26 21:50 · claude · Done as a whole feature on scrawl/8-visibility: #10 Releases view + /release, #9 Timeline with orphan commits, #11 Bug jar + Today, one commit each. All four views sit in the top bar and update live. Filed #27 for the crowded top bar.
 - 2026-10-26 21:52 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 20:35 · me · Moved to resolved (Resolved)
+- 2026-10-26 21:26 · scrawl · Shipped: 2f337c6 is on main
