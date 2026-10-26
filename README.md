@@ -15,7 +15,8 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 
 Run `node tools/bundle.mjs` here once (Node 18+, nothing to install). It builds `dist/scrawl.html`, the
 whole board in one file. Copy it into the other repo, open it, click **Start Scrawl**, answer the
-project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md`, the slash
+project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md` (and `AGENTS.md`,
+for other coding agents such as Codex, Gemini CLI or Cursor), the slash
 commands into `.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own
 `CLAUDE.md` text or commands. Run the setup command it shows once, then `/plan` in Claude Code.
 
