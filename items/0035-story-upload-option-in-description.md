@@ -2,12 +2,12 @@
 id: 35
 type: story
 title: upload option in description
-status: review
+status: resolved
 assignee: claude
-rank: i
+rank: k
 labels: []
 created: 2026-10-26T22:48
-updated: 2026-10-26T22:55
+updated: 2026-10-26T22:59
 ---
 ## Description
 the description field could use a upload functionality. user can provide some sample for inspiration, bug fixing, etc. drag and drop should also work, but active area is only the description box.
@@ -22,3 +22,4 @@ the description field could use a upload functionality. user can provide some sa
 - 2026-10-26 22:52 · claude · Picked up on branch scrawl/35-attachments. Plan: an Attach button and drag-and-drop on the description box save files to .scrawl/attachments/<id>/ and link them in the Description (images shown inline, plus an Attachments list); the protocol and /resolve tell Claude to open them.
 - 2026-10-26 22:55 · claude · Done: an "attach" link and drag-and-drop (only on the description box) save files to .scrawl/attachments/<id>/ and add Markdown links to the Description. Images show inline, and there's an Attachments list. The protocol and /resolve now tell Claude to open linked attachments, and templates.js is regenerated. Verified headless (drop, picker, rename on clash, edit mode, 20 MB limit, drops outside the box ignored), and opened an attachment by following an item's link.
 - 2026-10-26 22:55 · claude · PR: https://github.com/atulprakash1/scrawl/pull/15
+- 2026-10-26 22:59 · me · Moved to resolved (Resolved)

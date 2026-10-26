@@ -65,3 +65,5 @@
 {"at":"2026-10-26T22:47","who":"me","id":3,"action":"move","from":"backlog","to":"resolved"}
 {"at":"2026-10-26T22:48","who":"me","id":35,"action":"create","to":"backlog"}
 {"at":"2026-10-26T22:51","who":"me","id":35,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-26T22:59","who":"me","id":35,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T22:59","who":"me","id":3,"action":"move","from":"resolved","to":"done"}
