@@ -364,9 +364,10 @@ body.read-only .card, body.read-only .plan-children .plan-row { cursor: pointer;
   border-radius: 999px;
 }
 .card .sev { font-size: 0.75rem; color: var(--ink-soft); }
+/* contain: a long parent title would otherwise set the column's minimum width and widen it. */
 .card-parent {
-  display: block; max-width: 100%; margin: 7px 0 -3px; padding: 0; cursor: pointer;
-  font-size: 0.72rem; font-weight: 600; text-align: left; color: color-mix(in srgb, var(--c) 75%, var(--ink-soft));
+  display: block; width: 100%; contain: inline-size; margin: 7px 0 -3px; padding: 0; cursor: pointer;
+  font-size: 0.68rem; font-weight: 600; text-align: left; color: color-mix(in srgb, var(--c) 75%, var(--ink-soft));
   background: none; border: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .card-parent:hover { text-decoration: underline; }
