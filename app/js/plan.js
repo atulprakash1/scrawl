@@ -40,9 +40,22 @@
 
   const pill = (item) => el('span', { class: `pill pill-${item.meta.status}` }, label(item.meta.status) || item.meta.status);
 
-  function decide(item) {
+  // A proposed feature and its proposed stories, accepted in one go (after a big /plan run).
+  async function acceptAll(item, kids) {
+    await accept(item);
+    for (const kid of kids) await accept(kid);
+    S.util.toast(`Accepted #${item.id} and ${kids.length} ${kids.length === 1 ? 'story' : 'stories'}`);
+  }
+
+  function decide(item, kids = []) {
     const click = (fn) => (e) => { e.stopPropagation(); fn(item); };
     return el('span', { class: 'decide' },
+      kids.length
+        ? el('button', {
+          class: 'btn btn-ship', title: `Accept #${item.id} and its ${kids.length} proposed ${kids.length === 1 ? 'story' : 'stories'}`,
+          onclick: (e) => { e.stopPropagation(); acceptAll(item, kids); },
+        }, `✔ all (${kids.length + 1})`)
+        : null,
       el('button', { class: 'btn btn-ship', title: 'Accept: move to the Someday pile', onclick: click(accept) }, '✔ accept'),
       el('button', { class: 'btn btn-reject', title: 'Reject: mark wontfix', onclick: click(reject) }, '✗'));
   }
@@ -59,7 +72,7 @@
       const kids = items.filter((i) => i.meta.parent === item.id && !shown.has(i.id));
       const parent = !ids.has(item.meta.parent) && item.meta.parent ? store.byId(item.meta.parent) : null;
       return el('li', {},
-        row(item, decide(item)),
+        row(item, decide(item, kids)),
         parent ? el('p', { class: 'muted plan-under' }, `under #${parent.id} ${parent.meta.title || ''}`) : null,
         kids.length ? el('ul', { class: 'plan-list' }, kids.map(entry)) : null);
     }
@@ -161,5 +174,5 @@
     }
   }
 
-  S.plan = { render, accept, reject };
+  S.plan = { render, accept, reject, acceptAll };
 })();
