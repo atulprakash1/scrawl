@@ -26,33 +26,34 @@
     const m = item.meta;
     const type = m.type || 'story';
     const who = m.assignee || 'me';
-    const tilt = (S.util.seeded(item.id) * 3 - 1.5).toFixed(2);
     const checks = S.parser.checklist(item.body);
     const done = checks.filter((c) => c.done).length;
     const commits = store.commitsFor(item).length;
+    const badge = m.status === 'review' && who === 'claude' ? ['needs', 'Needs you']
+      : m.status === 'done' ? ['shipped', 'Shipped'] : null;
 
     return el('article', {
       class: `card type-${type}${item.errors.length ? ' smudged' : ''}`,
       dataset: { file: item.file },
-      style: `--tilt:${tilt}deg`,
       tabindex: 0,
       'aria-label': `#${item.id} ${type}: ${m.title || 'untitled'}`,
       onclick: () => S.drawer.open(item.file),
       onkeydown: (e) => { if (e.key === 'Enter') S.drawer.open(item.file); },
     },
-    el('span', { class: 'tape', 'aria-hidden': 'true' }),
     el('div', { class: 'card-top' },
-      el('span', { class: 'num' }, `#${item.id}`),
-      el('span', { class: 'kind' }, `${TYPE_ICON[type] || '•'} ${type}`),
-      type === 'bug' && m.severity ? el('span', { class: 'sev', title: `severity: ${m.severity}` }, `${SEVERITY_ICON[m.severity] || ''} ${m.severity}`) : null),
+      el('span', { class: 'type-badge' }, el('span', { 'aria-hidden': 'true' }, TYPE_ICON[type] || '•'), type),
+      type === 'bug' && m.severity ? el('span', { class: 'sev', title: `severity: ${m.severity}` }, `${SEVERITY_ICON[m.severity] || ''} ${m.severity}`) : null,
+      el('span', { class: 'num' }, `#${item.id}`)),
     el('h3', {}, m.title || '(untitled)'),
     el('div', { class: 'card-foot' },
-      el('span', { class: `who who-${who}`, title: `assignee: ${who}` }, `${WHO_ICON[who] || '👤'} ${who}`),
-      checks.length ? el('span', { class: 'checks', title: 'acceptance' }, `☑ ${done}/${checks.length}`) : null,
-      commits ? el('span', { class: 'commits', title: 'linked commits' }, `⎇ ${commits}`) : null,
-      (m.labels || []).map((l) => el('span', { class: 'label' }, l))),
-    m.status === 'review' && who === 'claude' ? el('span', { class: 'stamp stamp-needs' }, 'NEEDS YOU') : null,
-    m.status === 'done' ? el('span', { class: 'stamp stamp-shipped' }, 'SHIPPED') : null,
+      el('span', { class: `chip who who-${who}`, title: `assignee: ${who}` }, `${WHO_ICON[who] || '👤'} ${who}`),
+      checks.length
+        ? el('span', { class: 'chip checks', title: `acceptance: ${done} of ${checks.length}` }, `${done}/${checks.length}`,
+          el('span', { class: 'meter', 'aria-hidden': 'true' }, el('span', { style: `width:${Math.round((done / checks.length) * 100)}%` })))
+        : null,
+      commits ? el('span', { class: 'chip commits', title: 'linked commits' }, `⎇ ${commits}`) : null,
+      (m.labels || []).map((l) => el('span', { class: 'chip label' }, l)),
+      badge ? el('span', { class: `badge badge-${badge[0]}` }, badge[1]) : null),
     item.errors.length ? el('span', { class: 'smudge', title: item.errors.join('\n') }, 'smudged') : null);
   }
 

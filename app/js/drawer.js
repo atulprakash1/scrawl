@@ -50,7 +50,7 @@
 
     const head = el('header', { class: 'drawer-head' },
       el('span', { class: 'num' }, `#${id}`),
-      el('span', { class: `kind type-${m.type}` }, `${S.board.TYPE_ICON[m.type] || '•'} ${m.type || 'item'}`),
+      el('span', { class: `type-badge type-${m.type || 'story'}` }, el('span', { 'aria-hidden': 'true' }, S.board.TYPE_ICON[m.type] || '•'), m.type || 'item'),
       el('button', { class: 'icon-btn', title: 'Close (Esc)', 'aria-label': 'Close', onclick: close }, '✕'));
 
     const title = el('input', {

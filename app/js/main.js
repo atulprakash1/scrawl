@@ -31,6 +31,7 @@
     view = next in VIEWS ? next : 'board';
     for (const name of Object.keys(VIEWS)) document.getElementById(name).hidden = name !== view;
     document.getElementById('hidden-note').hidden = view !== 'board';
+    document.getElementById('board-tools').hidden = view !== 'board';
     for (const b of document.querySelectorAll('.view-btn')) b.setAttribute('aria-pressed', String(b.dataset.view === view));
     try { localStorage.setItem('scrawl-view', view); } catch { /* private window */ }
     renderView();
