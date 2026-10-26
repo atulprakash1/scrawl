@@ -2,12 +2,13 @@
 id: 38
 type: story
 title: hide button for Someday pile category
-status: resolved
+status: done
 assignee: claude
 rank: i
 labels: []
 created: 2026-10-26T23:07
-updated: 2026-10-26T23:21
+updated: 2026-10-26T23:23
+shipped: 719ef81
 ---
 ## Description
 The Someday pile can get long; give it the same hide/show button the Shipped column has.
@@ -25,3 +26,4 @@ The Someday pile can get long; give it the same hide/show button the Shipped col
 - 2026-10-26 23:19 · claude · Done: the Someday pile is now foldable, like Shipped. This board's .scrawl/config.json (saved by the sync) and the default config for new projects both mark it. Verified headless: hide, "4 hidden" at the same width, a drop onto the hidden pile, still hidden after a reload, and a new project's config.
 - 2026-10-26 23:19 · claude · PR: https://github.com/atulprakash1/scrawl/pull/18
 - 2026-10-26 23:21 · me · Moved to resolved (Resolved)
+- 2026-10-26 23:23 · scrawl · Shipped: 719ef81 is on main
