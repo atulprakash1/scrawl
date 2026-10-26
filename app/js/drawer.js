@@ -129,6 +129,14 @@
         d.body = parser.setSection(d.body, 'Description', [current, ...lines].filter(Boolean).join('\n\n'));
       }, { activity: `Attached ${names}` });
     }
+    // Deletes the file and takes its link out of the Description.
+    async function detach(name) {
+      if (!window.confirm(`Remove ${name} from #${id}? The file is deleted.`)) return;
+      await S.attachments.remove(id, name);
+      await save((d) => {
+        d.body = parser.setSection(d.body, 'Description', S.attachments.unlink(parser.getSection(d.body, 'Description'), id, name));
+      }, { activity: `Removed attachment ${name}` });
+    }
     const picker = el('input', { type: 'file', multiple: true, hidden: true, onchange: (e) => attach([...e.target.files]) });
     const dropZone = (body) => el('div', {
       class: 'desc-drop',
@@ -153,7 +161,11 @@
       if (!files.length) return;
       attachedList.replaceChildren(...files.map(({ name, file }) => el('li', {},
         el('a', { href: S.attachments.urlFor(file), target: '_blank', rel: 'noopener' }, `📎 ${name}`),
-        el('span', { class: 'muted' }, ` ${file.size < 1024 * 1024 ? `${Math.max(1, Math.round(file.size / 1024))} KB` : `${(file.size / 1048576).toFixed(1)} MB`}`))));
+        el('span', { class: 'muted' }, ` ${file.size < 1024 * 1024 ? `${Math.max(1, Math.round(file.size / 1024))} KB` : `${(file.size / 1048576).toFixed(1)} MB`}`),
+        el('button', {
+          class: 'attach-remove', title: `Remove ${name}`, 'aria-label': `Remove ${name}`,
+          onclick: () => detach(name),
+        }, '×'))));
       attachedList.hidden = false;
     }).catch(() => {});
 
