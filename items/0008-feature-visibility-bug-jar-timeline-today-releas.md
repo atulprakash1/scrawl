@@ -2,12 +2,12 @@
 id: 8
 type: feature
 title: Visibility: Bug jar, Timeline, Today, Releases
-status: review
+status: resolved
 assignee: claude
-rank: i
+rank: v
 labels: [phase-3]
 created: 2026-10-25T13:30
-updated: 2026-10-26T21:50
+updated: 2026-10-26T20:35
 ---
 ## Description
 Phase 3 views. See docs/ROADMAP.md.
@@ -26,3 +26,4 @@ Phase 3 views. See docs/ROADMAP.md.
 - 2026-10-26 20:30 · claude · Picked up on branch scrawl/8-visibility, as a whole feature: #10 Releases + /release, then #9 Timeline, then #11 Bug jar + Today, one commit each and one PR.
 - 2026-10-26 21:50 · claude · Done as a whole feature on scrawl/8-visibility: #10 Releases view + /release, #9 Timeline with orphan commits, #11 Bug jar + Today, one commit each. All four views sit in the top bar and update live. Filed #27 for the crowded top bar.
 - 2026-10-26 21:52 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
+- 2026-10-26 20:35 · me · Moved to resolved (Resolved)

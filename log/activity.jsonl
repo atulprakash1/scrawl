@@ -41,3 +41,6 @@
 {"at":"2026-10-26T20:29","who":"scrawl","id":25,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-26T20:29","who":"me","id":10,"action":"move","from":"review","to":"resolved"}
 {"at":"2026-10-26T20:29","who":"me","id":9,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T20:35","who":"me","id":11,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T20:35","who":"me","id":8,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T21:23","who":"me","id":23,"action":"move","from":"backlog","to":"ready"}
