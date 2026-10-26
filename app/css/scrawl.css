@@ -690,6 +690,7 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 }
 .activity .who-claude .who-icon { background: var(--accent-soft); }
 .comment-form { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.smudge-box .btn { margin-top: 8px; }
 .smudge-box { border: 1px dashed var(--red); background: color-mix(in srgb, var(--red) 6%, transparent); border-radius: var(--r-md); padding: 10px 12px; }
 .file-path { font-family: var(--font-mono); font-size: 0.72rem; }
 
