@@ -2,12 +2,12 @@
 id: 8
 type: feature
 title: Visibility: Bug jar, Timeline, Today, Releases
-status: ready
+status: backlog
 assignee: me
-rank: o
+rank: i
 labels: [phase-3]
 created: 2026-10-25T13:30
-updated: 2026-10-26T12:06
+updated: 2026-10-26T19:29
 ---
 ## Description
 Phase 3 views. See docs/ROADMAP.md.
@@ -17,3 +17,4 @@ Phase 3 views. See docs/ROADMAP.md.
 ## Activity
 - 2026-10-25 13:30 · claude · Created from the plan
 - 2026-10-26 12:06 · me · Moved to ready (Claude's tray)
+- 2026-10-26 19:29 · me · Moved to backlog (Someday pile)
