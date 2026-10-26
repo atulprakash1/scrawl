@@ -21,7 +21,7 @@ One click writes the CLAUDE.md protocol, `.claude/commands/`, the post-commit ho
 
 ## Activity
 - 2026-10-25 13:30 · claude · Created from the plan
-- 2026-10-26 15:20 · claude · Picked up on branch scrawl/7-hook-up-claude. No acceptance yet, so I added three criteria from the description. Plan: node tools/bundle.mjs generates app/js/templates.js (protocol, commands and hooks embedded, because file:// pages can't read files) and dist/scrawl.html (everything inlined). A topbar button writes the templates into the open repo.
-- 2026-10-26 15:55 · claude · Done: node tools/bundle.mjs generates app/js/templates.js (protocol, commands, hooks) and a single-file dist/scrawl.html. The new Hook up Claude button writes the templates into the open repo without overwriting your CLAUDE.md text or commands, then shows the setup command to copy. Verified in headless Chrome (button against an in-memory repo, bundle opened alone from another folder). The real folder picker and scrawl-setup in a fresh repo are untested.
-- 2026-10-26 15:55 · claude · PR: https://github.com/atulprakash1/scrawl/pull/8
+- 2026-10-26 15:28 · claude · Picked up on branch scrawl/7-hook-up-claude. No acceptance yet, so I added three criteria from the description. Plan: node tools/bundle.mjs generates app/js/templates.js (protocol, commands and hooks embedded, because file:// pages can't read files) and dist/scrawl.html (everything inlined). A topbar button writes the templates into the open repo.
+- 2026-10-26 16:03 · claude · Done: node tools/bundle.mjs generates app/js/templates.js (protocol, commands, hooks) and a single-file dist/scrawl.html. The new Hook up Claude button writes the templates into the open repo without overwriting your CLAUDE.md text or commands, then shows the setup command to copy. Verified in headless Chrome (button against an in-memory repo, bundle opened alone from another folder). The real folder picker and scrawl-setup in a fresh repo are untested.
+- 2026-10-26 16:05 · claude · PR: https://github.com/atulprakash1/scrawl/pull/8
 - 2026-10-26 18:55 · scrawl · Shipped: dc5344c is on main

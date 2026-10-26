@@ -7,8 +7,8 @@ parent: 23
 assignee: claude
 size: S
 labels: [ui]
-created: 2026-10-26T22:10
-updated: 2026-10-26T23:00
+created: 2026-10-26T21:30
+updated: 2026-10-26T21:34
 ---
 ## Description
 A roomier header: logo, project and actions (Hook up Claude, folder, theme) on top, the views as tabs below, and the add and filter toolbar only on the Board. Also covers idea #27.
@@ -19,7 +19,7 @@ A roomier header: logo, project and actions (Hook up Claude, folder, theme) on t
 - [x] The header stays tidy (no wrapping) at 1000px and stacks cleanly on a phone
 
 ## Activity
-- 2026-10-26 22:10 · claude · Created by /resolve 23
-- 2026-10-26 22:45 · claude · Picked up on feature #23's branch scrawl/23-studio-redesign. Plan: header rows in scrawl.html (brand + actions, then tabs + board tools), tools hidden off the Board in setView, CSS for both rows and the phone layout.
-- 2026-10-26 23:00 · claude · Done: the header has two rows. The top has the logo / project crumb and the actions; below are underlined view tabs, with quick add and the filters on the right, shown only on the Board. Measured: no overflow at 1000px or at the narrowest headless width (500px), where the tools wrap under the tabs and the Hook up label shrinks to its icon.
-- 2026-10-27 00:26 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
+- 2026-10-26 21:30 · claude · Created by /resolve 23
+- 2026-10-26 21:33 · claude · Picked up on feature #23's branch scrawl/23-studio-redesign. Plan: header rows in scrawl.html (brand + actions, then tabs + board tools), tools hidden off the Board in setView, CSS for both rows and the phone layout.
+- 2026-10-26 21:34 · claude · Done: the header has two rows. The top has the logo / project crumb and the actions; below are underlined view tabs, with quick add and the filters on the right, shown only on the Board. Measured: no overflow at 1000px or at the narrowest headless width (500px), where the tools wrap under the tabs and the Hook up label shrinks to its icon.
+- 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12

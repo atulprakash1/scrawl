@@ -21,9 +21,9 @@ Everything in date order: commits, moves, comments, releases. Filter by you vs C
 
 ## Activity
 - 2026-10-25 13:30 · claude · Created from the plan
-- 2026-10-26 21:00 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
-- 2026-10-26 21:00 · claude · Picked up on feature #8's branch scrawl/8-visibility. Plan: a Timeline view built from item Activity lines, commits.txt and the release pages, with a who filter and orphan commits drawn as sticky notes.
-- 2026-10-26 21:15 · claude · Done: a Timeline view merges every item's Activity lines, commits and release pages, newest first by day, with an everything/me/Claude/commits filter. Commits without a leading #N (merge commits aside) are orphan sticky notes, and item links open the drawer. Verified headless.
+- 2026-10-26 20:25 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
+- 2026-10-26 20:25 · claude · Picked up on feature #8's branch scrawl/8-visibility. Plan: a Timeline view built from item Activity lines, commits.txt and the release pages, with a who filter and orphan commits drawn as sticky notes.
+- 2026-10-26 20:26 · claude · Done: a Timeline view merges every item's Activity lines, commits and release pages, newest first by day, with an everything/me/Claude/commits filter. Commits without a leading #N (merge commits aside) are orphan sticky notes, and item links open the drawer. Verified headless.
 - 2026-10-26 20:29 · me · Moved to resolved (Resolved)
-- 2026-10-26 21:52 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
+- 2026-10-26 20:30 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 21:26 · scrawl · Shipped: 919da11 is on main

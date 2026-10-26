@@ -21,9 +21,9 @@ Bugs by severity and age as critters in a jar, one-line quick add, "Hand to Clau
 
 ## Activity
 - 2026-10-25 13:30 · claude · Created from the plan
-- 2026-10-26 21:20 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
-- 2026-10-26 21:20 · claude · Picked up on feature #8's branch scrawl/8-visibility. Plan: bugs.js (jar, quick add, Hand to Claude) and today.js (last visit kept per project in the browser; changes since, waiting, stale with the /groom thresholds).
-- 2026-10-26 21:40 · claude · Done: the Bug jar shows open bugs as critters (worst severity, then oldest), with a title + severity quick add and Hand to Claude. Today shows Claude and git changes since your last visit (kept per project in the browser), review items and questions to @me, and stale items with the /groom thresholds. Verified headless with screenshots.
-- 2026-10-26 21:52 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
+- 2026-10-26 20:26 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
+- 2026-10-26 20:26 · claude · Picked up on feature #8's branch scrawl/8-visibility. Plan: bugs.js (jar, quick add, Hand to Claude) and today.js (last visit kept per project in the browser; changes since, waiting, stale with the /groom thresholds).
+- 2026-10-26 20:29 · claude · Done: the Bug jar shows open bugs as critters (worst severity, then oldest), with a title + severity quick add and Hand to Claude. Today shows Claude and git changes since your last visit (kept per project in the browser), review items and questions to @me, and stale items with the /groom thresholds. Verified headless with screenshots.
+- 2026-10-26 20:30 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 20:35 · me · Moved to resolved (Resolved)
 - 2026-10-26 21:27 · scrawl · Shipped: 415316d is on main
