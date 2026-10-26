@@ -41,6 +41,7 @@
   }
 
   function render() {
+    S.attachments.release();
     const item = current && store.get(current);
     if (!item) { if (current) close(); return; }
     const m = item.meta;
@@ -107,10 +108,64 @@
       : null;
 
     const desc = parser.getSection(item.body, 'Description');
+
+    // Attached files are saved next to the item and linked from the Description, so Claude sees them.
+    // While editing, the links go into the textarea; otherwise straight into the file.
+    async function attach(files) {
+      if (!files.length) return;
+      const lines = await S.attachments.add(id, files);
+      if (!lines.length) return;
+      const box = panel().querySelector('textarea[name="desc"]');
+      if (editingDescription && box) {
+        const at = box.selectionEnd ?? box.value.length;
+        const insert = `${box.value && !box.value.slice(0, at).endsWith('\n') ? '\n' : ''}${lines.join('\n')}\n`;
+        box.value = box.value.slice(0, at) + insert + box.value.slice(at);
+        S.util.toast('Attached. Save the description to keep the links.');
+        return;
+      }
+      const names = lines.map((l) => l.match(/\[(.*?)\]/)[1]).join(', ');
+      await save((d) => {
+        const current = parser.getSection(d.body, 'Description').trim();
+        d.body = parser.setSection(d.body, 'Description', [current, ...lines].filter(Boolean).join('\n\n'));
+      }, { activity: `Attached ${names}` });
+    }
+    const picker = el('input', { type: 'file', multiple: true, hidden: true, onchange: (e) => attach([...e.target.files]) });
+    const dropZone = (body) => el('div', {
+      class: 'desc-drop',
+      title: 'Drop files here to attach them',
+      ondragover: (e) => {
+        if (!S.attachments.hasFiles(e)) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        e.currentTarget.classList.add('over');
+      },
+      ondragleave: (e) => { if (!e.currentTarget.contains(e.relatedTarget)) e.currentTarget.classList.remove('over'); },
+      ondrop: (e) => {
+        if (!S.attachments.hasFiles(e)) return;
+        e.preventDefault();
+        e.currentTarget.classList.remove('over');
+        attach([...e.dataTransfer.files]);
+      },
+    }, body);
+
+    const attachedList = el('ul', { class: 'attach-list', hidden: true });
+    S.attachments.list(id).then((files) => {
+      if (!files.length) return;
+      attachedList.replaceChildren(...files.map(({ name, file }) => el('li', {},
+        el('a', { href: S.attachments.urlFor(file), target: '_blank', rel: 'noopener' }, `📎 ${name}`),
+        el('span', { class: 'muted' }, ` ${file.size < 1024 * 1024 ? `${Math.max(1, Math.round(file.size / 1024))} KB` : `${(file.size / 1048576).toFixed(1)} MB`}`))));
+      attachedList.hidden = false;
+    }).catch(() => {});
+
+    const descView = el('div', { class: 'md', html: desc ? S.util.markdown(desc) : '<p class="muted">Nothing yet. Drop files here to attach them.</p>' });
+    S.attachments.hydrate(descView).catch(() => {});
+
     const description = el('section', { class: 'drawer-section' },
       el('h4', {}, 'Description ',
-        el('button', { class: 'link-btn', onclick: () => { editingDescription = !editingDescription; render(); } }, editingDescription ? 'cancel' : 'edit')),
-      editingDescription
+        el('button', { class: 'link-btn', onclick: () => { editingDescription = !editingDescription; render(); } }, editingDescription ? 'cancel' : 'edit'),
+        el('button', { class: 'link-btn', title: `Attach files (up to ${S.attachments.MAX_MB} MB each)`, onclick: () => picker.click() }, 'attach'),
+        picker),
+      dropZone(editingDescription
         ? el('form', {
           onsubmit: (e) => {
             e.preventDefault();
@@ -121,7 +176,8 @@
         },
         el('textarea', { name: 'desc', rows: 8, value: desc }),
         el('button', { class: 'btn', type: 'submit' }, 'Save'))
-        : el('div', { class: 'md', html: desc ? S.util.markdown(desc) : '<p class="muted">Nothing yet.</p>' }));
+        : descView),
+      attachedList);
 
     const checks = parser.checklist(item.body);
     const acceptance = el('section', { class: 'drawer-section' },

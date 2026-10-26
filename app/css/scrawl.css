@@ -644,6 +644,14 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 }
 .drawer-section h4 .link-btn { text-transform: none; letter-spacing: 0; font-weight: 600; }
 .md p:first-child { margin-top: 0; }
+.md img { max-width: 100%; height: auto; border: 1px solid var(--border); border-radius: var(--r-sm); }
+.desc-drop { margin: -6px; padding: 6px; border: 1px dashed transparent; border-radius: var(--r-md); transition: background 0.12s, border-color 0.12s; }
+.desc-drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.attach-list { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.attach-list li { padding: 2px 10px; font-size: 0.8rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; }
+.attach-list a { color: var(--ink); text-decoration: none; }
+.attach-list a:hover { color: var(--accent); }
+.attachment-missing { color: var(--red); text-decoration: line-through; }
 .md pre { overflow-x: auto; background: var(--surface-2); padding: 10px; border-radius: var(--r-sm); }
 .checklist { list-style: none; padding: 0; margin: 0 0 8px; }
 .checklist li { padding: 3px 0; }
