@@ -22,6 +22,19 @@
     return hay.includes(q);
   }
 
+  // "↳ #3 Planning…" on a card with a parent; it opens the parent, not the card.
+  function parentLink(id) {
+    const parent = id ? store.byId(id) : null;
+    if (!parent) return null;
+    const open = (e) => { e.stopPropagation(); S.drawer.open(parent.file); };
+    return el('button', {
+      class: `card-parent type-${parent.meta.type || 'feature'}`,
+      title: `Part of #${parent.id} ${parent.meta.title || ''}`,
+      onclick: open,
+      onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } },
+    }, el('span', { 'aria-hidden': 'true' }, '↳ '), `#${parent.id} ${parent.meta.title || ''}`);
+  }
+
   function card(item) {
     const m = item.meta;
     const type = m.type || 'story';
@@ -44,6 +57,7 @@
       el('span', { class: 'type-badge' }, el('span', { 'aria-hidden': 'true' }, TYPE_ICON[type] || '•'), type),
       type === 'bug' && m.severity ? el('span', { class: 'sev', title: `severity: ${m.severity}` }, `${SEVERITY_ICON[m.severity] || ''} ${m.severity}`) : null,
       el('span', { class: 'num' }, `#${item.id}`)),
+    parentLink(m.parent),
     el('h3', {}, m.title || '(untitled)'),
     el('div', { class: 'card-foot' },
       el('span', { class: `chip who who-${who}`, title: `assignee: ${who}` }, `${WHO_ICON[who] || '👤'} ${who}`),
