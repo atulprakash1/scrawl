@@ -65,7 +65,9 @@
       <button id="regrant" class="btn">Let Scrawl back in</button>
     </div>
 
-    <main id="board" class="board"></main>
+    <main id="board" class="board" aria-describedby="board-keys"></main>
+    <p id="board-keys" class="sr-only">Cards: Enter opens one, Space picks it up, arrow keys move it, Space drops it, Escape cancels.</p>
+    <p id="board-live" class="sr-only" aria-live="assertive"></p>
     <p id="hidden-note" class="hidden-note muted"></p>
     <main id="plan" class="plan" hidden></main>
     <main id="bugs" class="view" hidden></main>

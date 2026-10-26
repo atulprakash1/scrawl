@@ -38,7 +38,7 @@
       tabindex: 0,
       'aria-label': `#${item.id} ${type}: ${m.title || 'untitled'}`,
       onclick: () => S.drawer.open(item.file),
-      onkeydown: (e) => { if (e.key === 'Enter') S.drawer.open(item.file); },
+      onkeydown: (e) => onCardKey(e, item),
     },
     el('div', { class: 'card-top' },
       el('span', { class: 'type-badge' }, el('span', { 'aria-hidden': 'true' }, TYPE_ICON[type] || '•'), type),
@@ -184,30 +184,7 @@
     try {
       if (evt.from === evt.to && evt.oldIndex === evt.newIndex) return;
       saved = true;
-      const status = evt.to.dataset.status;
-      const files = [...evt.to.children].map((n) => n.dataset.file);
-      const idx = files.indexOf(evt.item.dataset.file);
-      const rankOf = (f) => (f && store.get(f) ? store.get(f).meta.rank : undefined);
-      const prev = rankOf(files[idx - 1]);
-      const next = rankOf(files[idx + 1]);
-      const label = store.config.columns.find((c) => c.status === status).label;
-      const moved = store.get(files[idx]);
-      const activity = moved.meta.status !== status ? `Moved to ${status} (${label})` : undefined;
-
-      const neighboursOk = (idx === 0 || prev) && (idx === files.length - 1 || next) && (!prev || !next || prev < next);
-      if (neighboursOk) {
-        const rank = S.rank.between(prev || '', next || null);
-        await store.update(files[idx], (d) => { d.meta.status = status; d.meta.rank = rank; }, { activity });
-      } else {
-        // Neighbours have no usable rank (e.g. Claude created them): re-rank the whole column once.
-        const keys = S.rank.spread(files.length);
-        for (let i = 0; i < files.length; i++) {
-          await store.update(files[i], (d) => {
-            d.meta.status = status;
-            d.meta.rank = keys[i];
-          }, i === idx ? { activity } : {});
-        }
-      }
+      await place(file, evt.to);
     } catch (e) {
       console.error(e);
       S.util.toast(`Couldn't save the move: ${e.message}`, 'warn');
@@ -217,6 +194,123 @@
       if (saved) land(file);
     }
   }
+
+  // Save a card's new column and rank from where it now sits in `list` (a column's .cards element).
+  async function place(file, list) {
+    const status = list.dataset.status;
+    const files = [...list.children].map((n) => n.dataset.file);
+    const idx = files.indexOf(file);
+    const rankOf = (f) => (f && store.get(f) ? store.get(f).meta.rank : undefined);
+    const prev = rankOf(files[idx - 1]);
+    const next = rankOf(files[idx + 1]);
+    const label = store.config.columns.find((c) => c.status === status).label;
+    const moved = store.get(files[idx]);
+    const activity = moved.meta.status !== status ? `Moved to ${status} (${label})` : undefined;
+
+    const neighboursOk = (idx === 0 || prev) && (idx === files.length - 1 || next) && (!prev || !next || prev < next);
+    if (neighboursOk) {
+      const rank = S.rank.between(prev || '', next || null);
+      await store.update(files[idx], (d) => { d.meta.status = status; d.meta.rank = rank; }, { activity });
+    } else {
+      // Neighbours have no usable rank (e.g. Claude created them): re-rank the whole column once.
+      const keys = S.rank.spread(files.length);
+      for (let i = 0; i < files.length; i++) {
+        await store.update(files[i], (d) => {
+          d.meta.status = status;
+          d.meta.rank = keys[i];
+        }, i === idx ? { activity } : {});
+      }
+    }
+  }
+
+  /* Keyboard moves: Space picks up the focused card, arrows carry it (left/right between columns,
+     up/down within one), Space or Enter drops it, Esc puts it back. Rendering waits meanwhile. */
+  let carrying = null; // { file, from: list, index }
+
+  const cardEl = (file) => document.querySelector(`.card[data-file="${CSS.escape(file)}"]`);
+  const lists = () => [...document.querySelectorAll('#board .cards')];
+
+  function announce(text) {
+    const live = document.getElementById('board-live');
+    if (live) live.textContent = text;
+  }
+
+  function describe(node) {
+    const list = node.parentElement;
+    const label = store.config.columns.find((c) => c.status === list.dataset.status).label;
+    return `${label}, position ${[...list.children].indexOf(node) + 1} of ${list.children.length}`;
+  }
+
+  function pickUp(node) {
+    carrying = { file: node.dataset.file, from: node.parentElement, index: [...node.parentElement.children].indexOf(node) };
+    dragging = true;
+    node.classList.add('carrying');
+    announce(`Picked up #${store.get(carrying.file).id}. ${describe(node)}. Arrows move it, Space drops, Escape cancels.`);
+  }
+
+  function carry(node, key) {
+    const list = node.parentElement;
+    const at = [...list.children].indexOf(node);
+    if (key === 'ArrowUp' && at > 0) list.insertBefore(node, list.children[at - 1]);
+    else if (key === 'ArrowDown' && at < list.children.length - 1) list.insertBefore(node, list.children[at + 2] || null);
+    else if (key === 'ArrowLeft' || key === 'ArrowRight') {
+      const all = lists();
+      const to = all[all.indexOf(list) + (key === 'ArrowLeft' ? -1 : 1)];
+      if (!to) return;
+      to.insertBefore(node, to.children[Math.min(at, to.children.length)] || null);
+    } else return;
+    node.focus();
+    node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    announce(describe(node));
+  }
+
+  async function drop(node) {
+    const { file, from, index } = carrying;
+    const moved = node.parentElement !== from || [...from.children].indexOf(node) !== index;
+    carrying = null;
+    dragging = false;
+    node.classList.remove('carrying');
+    try {
+      if (moved) await place(file, node.parentElement);
+      announce(moved ? `Dropped. ${describe(node)}.` : 'Dropped in the same place.');
+    } catch (e) {
+      console.error(e);
+      S.util.toast(`Couldn't save the move: ${e.message}`, 'warn');
+    } finally {
+      pending = false;
+      render();
+      cardEl(file)?.focus();
+      if (moved) land(file);
+    }
+  }
+
+  function cancel() {
+    if (!carrying) return;
+    const { file } = carrying;
+    carrying = null;
+    dragging = false;
+    pending = false;
+    render();
+    cardEl(file)?.focus();
+    announce('Move cancelled.');
+  }
+
+  function onCardKey(e, item) {
+    const node = e.currentTarget;
+    if (carrying && carrying.file === item.file) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); drop(node); } else if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        cancel();
+      } else if (e.key.startsWith('Arrow')) { e.preventDefault(); carry(node, e.key); }
+      return;
+    }
+    if (e.key === 'Enter') S.drawer.open(item.file);
+    else if (e.key === ' ' && !carrying) { e.preventDefault(); pickUp(node); }
+  }
+
+  // A click anywhere puts a carried card back.
+  document.addEventListener('pointerdown', () => { if (carrying) cancel(); }, true);
 
   function bindToolbar() {
     const form = document.getElementById('quick-add');
