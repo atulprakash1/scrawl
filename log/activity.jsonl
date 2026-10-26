@@ -38,3 +38,6 @@
 {"at":"2026-10-26T18:55","who":"scrawl","id":7,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-26T19:29","who":"me","id":8,"action":"move","from":"ready","to":"backlog"}
 {"at":"2026-10-26T20:20","who":"me","id":8,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-26T20:29","who":"scrawl","id":25,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-26T20:29","who":"me","id":10,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T20:29","who":"me","id":9,"action":"move","from":"review","to":"resolved"}

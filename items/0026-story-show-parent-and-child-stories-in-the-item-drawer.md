@@ -2,12 +2,13 @@
 id: 26
 type: story
 title: Show parent and child stories in the item drawer
-status: review
+status: done
 assignee: claude
 size: S
 labels: [ui]
 created: 2026-10-26T16:20
-updated: 2026-10-26T17:15
+updated: 2026-10-26T20:29
+shipped: e74bb7b
 ---
 ## Description
 The drawer doesn't show where an item sits in the plan. A story should show its feature, and a feature should list its stories, so you can move between them without the Plan view.
@@ -22,3 +23,4 @@ The drawer doesn't show where an item sits in the plan. A story should show its 
 - 2026-10-26 17:00 · claude · Picked up on branch scrawl/26-drawer-parent-children. Plan: a "Part of #N" link under the title, and a Stories section with status and x/y done on features, both opening the linked item in the drawer.
 - 2026-10-26 17:15 · claude · Done: the drawer shows "Part of #N <title>" for items with a parent, and a Stories section with each child's status and "x/y done" (wontfix left out). Both link to the other item. Verified in headless Chrome with sample items, including a missing parent.
 - 2026-10-26 17:15 · claude · PR: https://github.com/atulprakash1/scrawl/pull/10
+- 2026-10-26 20:29 · scrawl · Shipped: e74bb7b is on main

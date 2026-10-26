@@ -2,12 +2,13 @@
 id: 25
 type: story
 title: Resolve a whole feature on one branch and PR
-status: review
+status: done
 assignee: claude
 size: M
 labels: [workflow]
 created: 2026-10-26T16:20
-updated: 2026-10-26T16:50
+updated: 2026-10-26T20:29
+shipped: 71e19ce
 ---
 ## Description
 When `/resolve` or `/next` picks up a feature, Claude does all of its stories on one branch `scrawl/<feature id>-<slug>` and opens one PR. It also fills in missing acceptance criteria and creates missing stories instead of stopping.
@@ -34,3 +35,4 @@ Change `.claude/commands/resolve.md`, `next.md` and the CLAUDE.md protocol, then
 - 2026-10-26 16:30 · claude · Picked up on branch scrawl/25-feature-workflow. Plan: add a feature path to resolve.md (children, one branch, a commit per story, one PR titled with all ids), the fill-acceptance and create-stories rules, matching lines in next.md and CLAUDE.md, then regenerate templates.js.
 - 2026-10-26 16:50 · claude · Done: resolve.md has a "Resolving a feature" path (one branch, a commit per story, one PR titled with every id, resume after a stop, create up to 6 missing stories, skip proposed). Single items fill empty acceptance instead of stopping. next.md and CLAUDE.md match, and templates.js is regenerated. I only dry-ran it on this board, where it caught and fixed #3 getting new stories, and checked that refsOf ships every id. The first four boxes need a real run, e.g. /resolve 8.
 - 2026-10-26 16:50 · claude · PR: https://github.com/atulprakash1/scrawl/pull/9
+- 2026-10-26 20:29 · scrawl · Shipped: 71e19ce is on main
