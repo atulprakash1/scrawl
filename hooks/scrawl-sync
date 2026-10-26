@@ -1,42 +1,71 @@
 #!/bin/sh
-# Scrawl: bring local main up to date with GitHub, so merged PRs show up as Shipped on the board.
-# Claude runs this at the start of /resolve and /next; it is safe to run any time.
+# Scrawl: bring local main up to date with GitHub, so merged PRs show up as Shipped on the board,
+# and save the board. Claude runs this at the start of /resolve and /next; it is safe to run any time.
 #
-# Uncommitted changes under .scrawl/ are the live board (card moves, comments). They are kept,
-# and they win over any older snapshot of the same files that a merged PR brought in.
-cd "$(git rev-parse --show-toplevel)" || exit 1
+# The board (.scrawl/) is its own worktree on the scrawl-board branch (see scrawl-setup), so main
+# and the board never get in each other's way. Board edits (moves, comments, Claude's item edits)
+# are committed on scrawl-board and pushed; your code branches and PRs never carry them.
+cd "$(dirname "$0")/../.." || exit 1
 remote=origin
+board=scrawl-board
 
 main=
 for b in main master; do
   if git rev-parse --verify -q "refs/heads/$b" >/dev/null; then main=$b; break; fi
 done
-[ -n "$main" ] || exit 0
 
-done_() { sh .scrawl/hooks/scrawl-main; exit 0; }
-
-git remote get-url "$remote" >/dev/null 2>&1 || done_
-if ! git fetch -q --prune "$remote"; then
-  echo "scrawl-sync: couldn't reach $remote; the board may be behind GitHub" >&2
-  done_
+online=
+if git remote get-url "$remote" >/dev/null 2>&1; then
+  if git fetch -q --prune "$remote"; then online=1
+  else echo "scrawl-sync: couldn't reach $remote; the board may be behind GitHub" >&2; fi
 fi
 
-target="$remote/$main"
-[ "$(git rev-parse "$main")" = "$(git rev-parse "$target")" ] && done_
+sync_main() {
+  [ -n "$main" ] && [ -n "$online" ] || return 0
+  target="$remote/$main"
+  git rev-parse --verify -q "$target" >/dev/null || return 0
+  [ "$(git rev-parse "$main")" = "$(git rev-parse "$target")" ] && return 0
+  if ! git merge-base --is-ancestor "$main" "$target"; then
+    echo "scrawl-sync: local $main has commits that $target doesn't; left it alone" >&2
+    return 0
+  fi
+  if [ "$(git symbolic-ref -q --short HEAD)" = "$main" ]; then
+    git merge -q --ff-only "$target" || echo "scrawl-sync: couldn't fast-forward $main; the board may be behind GitHub" >&2
+  else
+    # Another branch is checked out: just move the main ref forward.
+    git fetch -q "$remote" "$main:$main" || echo "scrawl-sync: couldn't fast-forward $main" >&2
+  fi
+}
 
-if ! git merge-base --is-ancestor "$main" "$target"; then
-  echo "scrawl-sync: local $main has commits that $target doesn't; left it alone" >&2
-  done_
+# Commit whatever changed on the board, then line it up with GitHub's copy and push.
+sync_board() {
+  if [ ! -e .scrawl/.git ]; then
+    [ -d .scrawl ] && echo "scrawl-sync: .scrawl/ isn't on its own branch yet; run: sh .scrawl/hooks/scrawl-setup" >&2
+    return 0
+  fi
+  g() { git -C .scrawl "$@"; }
+  g add -A
+  g diff --cached --quiet || g commit -q --no-verify -m "Board: $(date '+%Y-%m-%d %H:%M')"
+  [ -n "$online" ] || return 0
+  theirs="refs/remotes/$remote/$board"
+  if g rev-parse --verify -q "$theirs" >/dev/null && ! g merge-base --is-ancestor "$theirs" HEAD; then
+    # Edited on another machine too. One file per item keeps real conflicts rare.
+    if ! g rebase -q --autostash "$theirs" >/dev/null 2>&1; then
+      g rebase --abort >/dev/null 2>&1
+      echo "scrawl-sync: the board changed here and on $remote in the same place; kept the local board, not pushed" >&2
+      return 0
+    fi
+  fi
+  g push -q -u "$remote" "HEAD:refs/heads/$board" 2>/dev/null ||
+    echo "scrawl-sync: couldn't push the board to $remote" >&2
+}
+
+sync_main
+if [ -n "$main" ] && [ -e .scrawl/.git ] && git cat-file -e "$main:.scrawl" 2>/dev/null; then
+  echo "scrawl-sync: $main still tracks .scrawl/; merge the PR that moves the board onto its own branch," >&2
+  echo "  and don't switch to $main until then (it would write old board files over the live board)." >&2
 fi
 
-if [ "$(git symbolic-ref -q --short HEAD)" != "$main" ]; then
-  # Another branch is checked out: just move the main ref forward.
-  git fetch -q "$remote" "$main:$main"
-  done_
-fi
-
-# On main: fast-forward with the live board edits parked and laid back on top.
-. .scrawl/hooks/scrawl-board
-with_board scrawl-sync git merge -q --ff-only "$target" ||
-  echo "scrawl-sync: couldn't fast-forward $main; the board may be behind GitHub" >&2
-done_
+sync_board
+sh .scrawl/hooks/scrawl-main
+exit 0
