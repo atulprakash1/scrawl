@@ -11,6 +11,8 @@
   let settle = null;
   let busy = false;
   let again = false;
+  let failures = 0;
+  const DENIED = new Set(['NotAllowedError', 'SecurityError']);
 
   async function tick() {
     if (document.hidden) return;
@@ -18,11 +20,14 @@
     busy = true;
     try {
       await S.store.poll();
+      failures = 0;
       S.app.setOffline(false);
     } catch (e) {
-      // Usually a lost permission after a browser update, or the folder moved.
+      // A lost permission shows at once. Anything else (a file mid-save, a busy disk) has to keep
+      // failing before we say the folder is gone, so one bad read doesn't flash the banner.
       console.warn('Scrawl poll failed', e);
-      S.app.setOffline(true);
+      failures += 1;
+      if (DENIED.has(e.name) || failures >= 3) S.app.setOffline(true);
     } finally {
       busy = false;
       if (again) { again = false; tick(); }

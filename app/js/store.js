@@ -209,7 +209,15 @@
     for (const { name, handle } of await fs.list(state.root, ITEMS)) {
       if (!name.endsWith('.md')) continue;
       seen.add(name);
-      const f = await handle.getFile();
+      let f;
+      try {
+        f = await handle.getFile();
+      } catch (e) {
+        // Listed but gone a moment later: the browser (or git) is still swapping the file into place.
+        // Keep what we have; the next refresh reads it.
+        if (e.name === 'NotFoundError') continue;
+        throw e;
+      }
       if (state.known.get(`${ITEMS}/${name}`) !== f.lastModified) {
         ingest(name, await f.text(), f.lastModified);
         changed.push(name);
