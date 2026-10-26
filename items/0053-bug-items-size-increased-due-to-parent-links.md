@@ -2,13 +2,14 @@
 id: 53
 type: bug
 title: items size increased due to parent links
-status: review
+status: done
 severity: beetle
 assignee: claude
 rank: i
 labels: []
 created: 2026-10-27T01:19
-updated: 2026-10-27T01:25
+updated: 2026-10-27T01:27
+shipped: 16968d1
 ---
 ## Description
 the parent link increases the item box size causing a bottom scroll bar. reduce the link size.
@@ -28,3 +29,5 @@ the parent link increases the item box size causing a bottom scroll bar. reduce 
 - 2026-10-27 01:25 · claude · Added acceptance criteria; correct them at review if I guessed wrong.
 - 2026-10-27 01:25 · claude · Fixed: the parent link no longer sets the column's minimum width (contain: inline-size, width 100%), so long titles end in an ellipsis instead of widening the column; font 0.72 → 0.68rem. Checked in headless Chrome with the real stylesheet: column 579px before, 272px after, link clipped; click handler and tooltip unchanged.
 - 2026-10-27 01:26 · claude · PR: https://github.com/atulprakash1/scrawl/pull/28
+- 2026-10-27 01:27 · me · Moved to resolved (Resolved)
+- 2026-10-27 01:27 · me · Shipped by hand
