@@ -145,6 +145,7 @@
       renderView();
       S.drawer.refresh();
       if (change.outside && change.outside.length) {
+        S.board.flash(change.outside);
         const ids = change.outside.map((f) => (S.store.get(f) ? `#${S.store.get(f).id}` : f)).join(', ');
         S.util.toast(`✎ Changed outside Scrawl: ${ids}`);
       }

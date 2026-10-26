@@ -106,6 +106,7 @@
     }
     root.scrollLeft = scroll;
     renderHidden();
+    noticeShipped();
   }
 
   // `sort: "recent"` in config.json: newest change first (for Shipped, that's when it shipped).
@@ -141,6 +142,50 @@
   }
 
   const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Cards changed outside the board (Claude, git, an editor) glow briefly where they now sit.
+  function flash(files) {
+    if (reducedMotion()) return;
+    for (const file of files) {
+      const node = document.querySelector(`.card[data-file="${CSS.escape(file)}"]`);
+      if (!node) continue;
+      node.classList.remove('just-changed');
+      void node.offsetWidth; // restart the animation if it is still running
+      node.classList.add('just-changed');
+      node.addEventListener('animationend', () => node.classList.remove('just-changed'), { once: true });
+    }
+  }
+
+  // A card that has just become Shipped gets a small burst of confetti (from the column header if
+  // Shipped is folded). Statuses from the previous render tell us what changed.
+  let lastStatus = null; // file -> status
+  function noticeShipped() {
+    const now = new Map(store.list().map((i) => [i.file, i.meta.status]));
+    const shipped = lastStatus ? [...now].filter(([f, st]) => st === 'done' && lastStatus.has(f) && lastStatus.get(f) !== 'done') : [];
+    lastStatus = now;
+    shipped.slice(0, 3).forEach(([f]) => celebrate(f));
+  }
+
+  function celebrate(file) {
+    if (reducedMotion()) return;
+    const node = document.querySelector(`.card[data-file="${CSS.escape(file)}"]`) || document.querySelector('.col-done > header');
+    if (!node) return;
+    const r = node.getBoundingClientRect();
+    const css = getComputedStyle(document.documentElement);
+    const colors = ['--c-feature', '--c-story', '--c-bug', '--c-idea', '--accent'].map((v) => css.getPropertyValue(v).trim());
+    for (let i = 0; i < 18; i++) {
+      const bit = el('span', { class: 'confetti', style: `left:${r.left + r.width / 2}px;top:${r.top + 16}px;background:${colors[i % colors.length]}` });
+      document.body.append(bit);
+      const angle = (Math.PI * 2 * i) / 18 + Math.random() * 0.35;
+      const dist = 38 + Math.random() * 46;
+      const ms = 850 + Math.random() * 350;
+      setTimeout(() => bit.remove(), ms + 50);
+      bit.animate([
+        { transform: 'translate(-50%, -50%) rotate(0deg)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(angle) * dist}px), calc(-50% + ${Math.sin(angle) * dist + 26}px)) rotate(${200 + Math.random() * 300}deg)`, opacity: 0 },
+      ], { duration: ms, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)', fill: 'forwards' });
+    }
+  }
 
   function pointerOf(evt) {
     const e = evt.originalEvent;
@@ -332,5 +377,5 @@
     document.getElementById('filter-who').addEventListener('change', (e) => { filters.who = e.target.value; render(); });
   }
 
-  S.board = { render, bindToolbar, TYPE_ICON, SEVERITY_ICON, WHO_ICON };
+  S.board = { render, bindToolbar, flash, TYPE_ICON, SEVERITY_ICON, WHO_ICON };
 })();

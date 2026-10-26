@@ -381,6 +381,15 @@ body.read-only .card, body.read-only .plan-children .plan-row { cursor: pointer;
 }
 .card.smudged { outline: 2px dashed var(--red); outline-offset: -2px; }
 
+/* Motion: a glow on cards changed outside the board, confetti when one ships. */
+@keyframes claude-was-here {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent), var(--shadow-sm); }
+  25% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 35%, transparent), var(--shadow-md); }
+  100% { box-shadow: 0 0 0 10px transparent, var(--shadow-sm); }
+}
+.card.just-changed { animation: claude-was-here 1.6s ease-out 2; }
+.confetti { position: fixed; z-index: 40; width: 7px; height: 9px; border-radius: 2px; pointer-events: none; }
+
 /* Keyboard move: the carried card lifts and gets an accent ring. */
 .card.carrying {
   transform: translateY(-3px) rotate(1.5deg); box-shadow: var(--shadow-lg);
