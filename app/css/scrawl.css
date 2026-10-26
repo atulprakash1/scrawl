@@ -365,6 +365,11 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .inline-form { display: flex; gap: 6px; }
 .inline-form input { flex: 1; min-width: 0; }
 .commits-list { padding-left: 18px; margin: 0; }
+.part-of { margin: -4px 0 0; font-size: 0.9rem; color: var(--ink-soft); }
+.part-of .link-btn, .kids .link-btn { font-size: 0.95rem; text-align: left; padding: 0; }
+.kids-count { font-family: var(--font-body); font-size: 0.85rem; }
+.kids { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.kids .pill { border-color: var(--line); }
 .activity { list-style: none; padding: 0; margin: 0 0 10px; display: flex; flex-direction: column; gap: 8px; }
 .activity li { display: grid; grid-template-columns: 24px 1fr; gap: 0 6px; }
 .activity li .muted { font-size: 0.8rem; }
