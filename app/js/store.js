@@ -6,6 +6,7 @@
   const DIR = '.scrawl';
   const ITEMS = `${DIR}/items`;
   const CONFIG = `${DIR}/config.json`;
+  const PROJECT = `${DIR}/project.md`;
   const COMMITS_TXT = `${DIR}/log/commits.txt`;
   const COMMITS_JSONL = `${DIR}/log/commits.jsonl`;
   const MAIN = `${DIR}/log/main.txt`; // short shas reachable from main, written by the git hooks
@@ -31,6 +32,7 @@
     root: null,
     config: null,
     project: '',
+    projectEmpty: false,
     items: new Map(), // file name -> item
     commits: [],
     main: [], // commits on main, newest first: { sha, refs }
@@ -71,9 +73,17 @@
   }
 
   async function loadProject() {
-    const f = await fs.read(state.root, `${DIR}/project.md`);
-    const h = f && f.text.match(/^#\s+(.+)$/m);
+    const f = await fs.read(state.root, PROJECT);
+    const text = f ? f.text : '';
+    const h = text.match(/^#\s+(.+)$/m);
     state.project = h ? h[1].trim() : state.root.name;
+    // Nothing but headings (what `init` writes) means the project wizard hasn't been filled in yet.
+    state.projectEmpty = !text.split('\n').some((l) => l.trim() && !l.trim().startsWith('#'));
+  }
+
+  async function saveProject(text) {
+    await fs.write(state.root, PROJECT, text);
+    await loadProject();
   }
 
   /* Which items a commit belongs to. Only a leading "#18" counts, because GitHub appends the PR
@@ -143,7 +153,7 @@
     state.root = root;
     const name = root.name;
     await fs.write(root, CONFIG, JSON.stringify(DEFAULT_CONFIG, null, 2) + '\n');
-    await fs.write(root, `${DIR}/project.md`,
+    await fs.write(root, PROJECT,
       `# ${name}\n\n## Goal\n\n## For whom\n\n## Stack\n\n## Must-haves\n\n## Out of scope\n`);
     await fs.dir(root, ITEMS, true);
     await fs.append(root, `${DIR}/log/activity.jsonl`, '');
@@ -311,7 +321,7 @@
   }
 
   S.store = {
-    STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create,
+    STATUSES, TYPES, SEVERITIES, state, on, open, init, poll, update, create, saveProject,
     list, get, byId, column, compareRank, commitsFor, refsOf, mainHead,
     get config() { return state.config; },
     get project() { return state.project; },
