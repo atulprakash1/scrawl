@@ -330,6 +330,33 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   .plan { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* ---------- one-column views (Releases, Timeline, Bug jar, Today) ---------- */
+
+.view { flex: 1; min-height: 0; overflow-y: auto; padding: 18px 16px 32px; }
+.view-title { font-family: var(--font-hand); font-size: 2.2rem; margin: 0 0 12px; }
+.view .md h1, .view .md h2 { font-family: var(--font-hand); font-weight: normal; }
+
+/* Releases: notebook pages with a torn bottom edge */
+.releases-inner { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+.release-page {
+  position: relative; padding: 18px 24px 34px; color: var(--card-ink);
+  background: repeating-linear-gradient(transparent 0 27px, rgba(47, 95, 208, 0.16) 27px 28px), #fffdf5;
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.15);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 96% 100%, 91% calc(100% - 8px), 85% 100%, 78% calc(100% - 9px),
+    71% 100%, 64% calc(100% - 7px), 57% 100%, 50% calc(100% - 10px), 43% 100%, 36% calc(100% - 8px), 29% 100%,
+    22% calc(100% - 9px), 15% 100%, 8% calc(100% - 7px), 0 100%);
+}
+.release-page .md h1 { font-size: 2rem; margin: 0; }
+.release-page .md h2 { font-size: 1.4rem; margin: 14px 0 2px; }
+.release-page .md ul { margin: 0; padding-left: 20px; }
+.release-next { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.release-next .btn { color: var(--ink); }
+.stamp-draft {
+  font-family: var(--font-hand); font-size: 1.1rem; letter-spacing: 1px; color: #1f47a8;
+  padding: 0 6px; border: 3px double currentColor; border-radius: 6px; transform: rotate(-4deg);
+}
+.release-empty { margin: 0; }
+
 /* ---------- drawer ---------- */
 
 .drawer {

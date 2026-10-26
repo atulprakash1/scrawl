@@ -10,6 +10,7 @@
   const COMMITS_TXT = `${DIR}/log/commits.txt`;
   const COMMITS_JSONL = `${DIR}/log/commits.jsonl`;
   const MAIN = `${DIR}/log/main.txt`; // short shas reachable from main, written by the git hooks
+  const RELEASES = `${DIR}/releases`;
 
   const STATUSES = ['proposed', 'backlog', 'ready', 'doing', 'review', 'resolved', 'done', 'wontfix'];
   const TYPES = ['feature', 'story', 'bug', 'idea'];
@@ -36,6 +37,8 @@
     items: new Map(), // file name -> item
     commits: [],
     main: [], // commits on main, newest first: { sha, refs }
+    releases: [], // .scrawl/releases/v*.md, newest version first: { file, version, text }
+    releasesSeen: '',
     known: new Map(), // path -> lastModified we last saw or wrote
     lastIndex: '',
   };
@@ -129,6 +132,34 @@
     });
   }
 
+  // Version numbers compare part by part, so v0.10.0 is newer than v0.9.0.
+  function compareVersions(a, b) {
+    const pa = a.split(/[.-]/);
+    const pb = b.split(/[.-]/);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const x = pa[i] || '0';
+      const y = pb[i] || '0';
+      const d = /^\d+$/.test(x) && /^\d+$/.test(y) ? Number(x) - Number(y) : x.localeCompare(y);
+      if (d) return d;
+    }
+    return 0;
+  }
+
+  // Cheap to call every poll: only the listing is compared, files are read when it changes.
+  async function loadReleases() {
+    const files = (await fs.list(state.root, RELEASES)).filter((f) => /^v.+\.md$/.test(f.name));
+    const stamps = await Promise.all(files.map(async (f) => `${f.name}@${(await f.handle.getFile()).lastModified}`));
+    const seen = stamps.sort().join('|');
+    if (seen === state.releasesSeen) return false;
+    state.releasesSeen = seen;
+    state.releases = (await Promise.all(files.map(async (f) => ({
+      file: f.name,
+      version: f.name.slice(1, -3),
+      text: await (await f.handle.getFile()).text(),
+    })))).sort((a, b) => compareVersions(b.version, a.version));
+    return true;
+  }
+
   async function loadItems() {
     state.items.clear();
     for (const { name, handle } of await fs.list(state.root, ITEMS)) {
@@ -142,8 +173,9 @@
   async function open(root) {
     state.root = root;
     state.known.clear();
+    state.releasesSeen = '';
     if (!(await loadConfig())) return false;
-    await Promise.all([loadProject(), loadItems(), loadCommits(), loadMain()]);
+    await Promise.all([loadProject(), loadItems(), loadCommits(), loadMain(), loadReleases()]);
     await writeIndex();
     await autoShip();
     return true;
@@ -187,8 +219,9 @@
     if (commitsMoved) await loadCommits();
     const mainMoved = (await fs.mtime(state.root, MAIN)) !== state.known.get(MAIN);
     if (mainMoved) await loadMain();
+    const releasesMoved = await loadReleases();
 
-    if (changed.length || commitsMoved || mainMoved) {
+    if (changed.length || commitsMoved || mainMoved || releasesMoved) {
       if (changed.length) await writeIndex();
       emit({ outside: changed, commits: commitsMoved });
       await autoShip();

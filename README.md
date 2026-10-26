@@ -63,7 +63,7 @@ app/js, app/css        plain classic scripts and styles
 vendor/                SortableJS, marked, DOMPurify, Rough.js, fonts (no CDN at runtime)
 tools/bundle.mjs       builds app/js/templates.js and the single-file dist/scrawl.html
 CLAUDE.md              the protocol Claude follows
-.claude/commands/      /resolve, /next, /plan, /groom, /inbox
+.claude/commands/      /resolve, /next, /plan, /groom, /inbox, /release
 .scrawl/               the board, from the scrawl-board branch: project.md, config.json, items/,
                        log/, hooks/, releases/ (plus the rebuilt index.json)
 docs/ROADMAP.md        phases and gates

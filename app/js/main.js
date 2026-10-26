@@ -12,19 +12,22 @@
     document.getElementById('offline').hidden = !off;
   }
 
-  // Board or Plan. The choice is remembered per browser.
+  // One view at a time, each in the element with its name. The choice is remembered per browser.
+  const VIEWS = {
+    board: () => S.board.render(),
+    plan: () => S.plan.render(),
+    releases: () => S.releases.render(),
+  };
   let view = 'board';
 
   function renderView() {
-    if (view === 'plan') S.plan.render();
-    else S.board.render();
+    VIEWS[view]();
   }
 
   function setView(next) {
-    view = next === 'plan' ? 'plan' : 'board';
-    document.getElementById('board').hidden = view !== 'board';
+    view = next in VIEWS ? next : 'board';
+    for (const name of Object.keys(VIEWS)) document.getElementById(name).hidden = name !== view;
     document.getElementById('hidden-note').hidden = view !== 'board';
-    document.getElementById('plan').hidden = view !== 'plan';
     for (const b of document.querySelectorAll('.view-btn')) b.setAttribute('aria-pressed', String(b.dataset.view === view));
     try { localStorage.setItem('scrawl-view', view); } catch { /* private window */ }
     renderView();
