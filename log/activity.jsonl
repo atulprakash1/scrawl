@@ -76,3 +76,4 @@
 {"at":"2026-10-26T23:07","who":"me","id":38,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-26T23:09","who":"scrawl","id":36,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-26T23:15","who":"me","id":37,"action":"move","from":"review","to":"resolved"}
+{"at":"2026-10-26T23:15","who":"scrawl","id":37,"action":"move","from":"resolved","to":"done"}

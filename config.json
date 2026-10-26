@@ -4,7 +4,8 @@
   "columns": [
     {
       "status": "backlog",
-      "label": "Someday pile"
+      "label": "Someday pile",
+      "foldable": true
     },
     {
       "status": "ready",
