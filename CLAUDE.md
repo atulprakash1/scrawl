@@ -2,7 +2,7 @@
 
 A local, file-based project board for working with Claude Code. `scrawl.html` is opened straight
 from disk in a Chromium browser and reads/writes `.scrawl/` through the File System Access API.
-The full design is in `Scrawl — Local LLM-Powered Project Board.md`; phases are in `docs/ROADMAP.md`.
+The original design notes and roadmap are private and not in git; the README describes how it works.
 
 ## Developing Scrawl itself
 
