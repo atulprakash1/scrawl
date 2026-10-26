@@ -700,6 +700,30 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .hookup .wizard-command { flex-wrap: wrap; }
 .hookup .wizard-command code { font-size: 0.9rem; }
 
+/* ---------- command palette ---------- */
+
+.palette-dialog { width: min(620px, calc(100vw - 32px)); padding: 0; margin-top: 12vh; overflow: hidden; }
+.palette { display: flex; flex-direction: column; }
+.palette-input {
+  width: 100%; padding: 16px 18px !important; font-size: 1.05rem;
+  border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; box-shadow: none !important;
+}
+.palette-list { list-style: none; margin: 0; padding: 6px; max-height: 50vh; overflow-y: auto; }
+.palette-entry {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; cursor: pointer; border-radius: var(--r-sm);
+}
+.palette-entry.selected { background: var(--accent-soft); }
+.palette-icon { width: 20px; text-align: center; color: var(--ink-soft); }
+.palette-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.palette-hint { font-size: 0.72rem; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.04em; }
+.palette-empty { padding: 10px; }
+.palette-foot { margin: 0; padding: 8px 14px; font-size: 0.75rem; border-top: 1px solid var(--border); }
+.palette-trigger { color: var(--ink-soft); font-weight: 500; }
+kbd {
+  font-family: var(--font-mono); font-size: 0.7rem; padding: 1px 5px; color: var(--ink-soft);
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px;
+}
+
 /* ---------- toasts ---------- */
 
 .toasts { position: fixed; left: 16px; bottom: 16px; z-index: 30; display: flex; flex-direction: column; gap: 8px; }
@@ -723,7 +747,7 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 
 @media (max-width: 640px) {
   .topbar-main, .topbar-nav { padding-inline: 16px; }
-  #hookup-btn .btn-label { display: none; }
+  #hookup-btn .btn-label, .palette-trigger .btn-label, .palette-trigger kbd { display: none; }
   .crumb-sep, .project-name { display: none; }
   .board-tools { flex-wrap: wrap; }
   .quick-add { flex-basis: 100%; }

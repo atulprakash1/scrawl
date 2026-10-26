@@ -125,6 +125,7 @@
     S.board.bindToolbar();
     bindViews();
     document.getElementById('hookup-btn').addEventListener('click', S.hookup.open);
+    document.getElementById('palette-btn').addEventListener('click', S.palette.open);
     S.store.on((change) => {
       renderView();
       S.drawer.refresh();
@@ -154,6 +155,6 @@
     welcome('Pick the root folder of your repo (the one that holds .scrawl/).', [pickButton()]);
   }
 
-  S.app = { setOffline };
+  S.app = { setOffline, setView };
   document.addEventListener('DOMContentLoaded', boot);
 })();
