@@ -26,16 +26,11 @@
   <div id="app" hidden>
     <header class="topbar">
       <div class="topbar-main">
-        <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
-        <span class="crumb-sep" aria-hidden="true">/</span>
-        <span id="project-name" class="project-name"></span>
-        <span class="spacer"></span>
-        <button id="palette-btn" class="btn palette-trigger" title="Command palette (Ctrl+K)">⌕ <span class="btn-label">Search</span> <kbd>Ctrl K</kbd></button>
-        <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 <span class="btn-label">Hook up Claude</span></button>
-        <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
-        <button id="theme-toggle" class="icon-btn" title="Light / dark" aria-label="Toggle theme">◐</button>
-      </div>
-      <div class="topbar-nav">
+        <div class="brand">
+          <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
+          <span class="crumb-sep" aria-hidden="true">/</span>
+          <span id="project-name" class="project-name"></span>
+        </div>
         <nav class="views" aria-label="View">
           <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
           <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
@@ -44,19 +39,25 @@
           <button class="view-btn" data-view="timeline" aria-pressed="false">Timeline</button>
           <button class="view-btn" data-view="releases" aria-pressed="false">Releases</button>
         </nav>
-        <!-- Only on the Board: these act on its cards -->
-        <div id="board-tools" class="board-tools">
-          <form id="quick-add" class="quick-add" autocomplete="off">
-            <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
-            <button class="btn" type="submit">+ Add</button>
-          </form>
-          <input id="filter-text" class="filter" type="search" placeholder="Filter" aria-label="Filter cards">
-          <select id="filter-who" class="filter" aria-label="Filter by assignee">
-            <option value="">Everyone</option>
-            <option value="me">☕ Me</option>
-            <option value="claude">🤖 Claude</option>
-          </select>
+        <div class="top-actions">
+          <button id="palette-btn" class="btn palette-trigger" title="Command palette (Ctrl+K)">⌕ <span class="btn-label">Search</span> <kbd>Ctrl K</kbd></button>
+          <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 <span class="btn-label">Hook up Claude</span></button>
+          <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
+          <button id="theme-toggle" class="icon-btn" title="Light / dark" aria-label="Toggle theme">◐</button>
         </div>
+      </div>
+      <!-- Only on the Board: these act on its cards -->
+      <div id="board-tools" class="board-tools">
+        <form id="quick-add" class="quick-add" autocomplete="off">
+          <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
+          <button class="btn" type="submit">+ Add</button>
+        </form>
+        <input id="filter-text" class="filter" type="search" placeholder="Filter" aria-label="Filter cards">
+        <select id="filter-who" class="filter" aria-label="Filter by assignee">
+          <option value="">Everyone</option>
+          <option value="me">☕ Me</option>
+          <option value="claude">🤖 Claude</option>
+        </select>
       </div>
     </header>
 
