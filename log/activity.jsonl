@@ -72,3 +72,5 @@
 {"at":"2026-10-26T23:04","who":"me","id":36,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-26T23:05","who":"me","id":37,"action":"create","to":"backlog"}
 {"at":"2026-10-26T23:06","who":"me","id":37,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-26T23:07","who":"me","id":38,"action":"create","to":"backlog"}
+{"at":"2026-10-26T23:07","who":"me","id":38,"action":"move","from":"backlog","to":"ready"}
