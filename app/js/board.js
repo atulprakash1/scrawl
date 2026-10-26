@@ -135,7 +135,7 @@
     const shown = new Set(store.config.columns.map((c) => c.status));
     const hidden = store.list().filter((i) => !shown.has(i.meta.status));
     const note = document.getElementById('hidden-note');
-    note.textContent = hidden.length ? `+${hidden.length} not on the board (proposed / wontfix)` : '';
+    note.textContent = hidden.length ? `+${hidden.length} not on the board (proposed / wontfix). Proposals wait in the Plan view.` : '';
   }
 
   const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;

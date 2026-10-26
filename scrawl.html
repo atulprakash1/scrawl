@@ -27,6 +27,10 @@
     <header class="topbar">
       <h1 class="logo logo-small">Scrawl<span class="logo-dot">.</span></h1>
       <span id="project-name" class="project-name"></span>
+      <nav class="views" aria-label="View">
+        <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
+        <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
+      </nav>
       <form id="quick-add" class="quick-add" autocomplete="off">
         <input name="title" placeholder="Add… e.g. bug: crash on empty form" aria-label="Quick add item">
         <button class="btn" type="submit">+ add</button>
@@ -49,6 +53,7 @@
 
     <main id="board" class="board"></main>
     <p id="hidden-note" class="hidden-note muted"></p>
+    <main id="plan" class="plan" hidden></main>
   </div>
 
   <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Item details"></aside>
@@ -65,6 +70,7 @@
   <script src="app/js/store.js"></script>
   <script src="app/js/watcher.js"></script>
   <script src="app/js/board.js"></script>
+  <script src="app/js/plan.js"></script>
   <script src="app/js/drawer.js"></script>
   <script src="app/js/wizard.js"></script>
   <script src="app/js/main.js"></script>

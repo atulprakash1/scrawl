@@ -12,6 +12,29 @@
     document.getElementById('offline').hidden = !off;
   }
 
+  // Board or Plan. The choice is remembered per browser.
+  let view = 'board';
+
+  function renderView() {
+    if (view === 'plan') S.plan.render();
+    else S.board.render();
+  }
+
+  function setView(next) {
+    view = next === 'plan' ? 'plan' : 'board';
+    document.getElementById('board').hidden = view !== 'board';
+    document.getElementById('hidden-note').hidden = view !== 'board';
+    document.getElementById('plan').hidden = view !== 'plan';
+    for (const b of document.querySelectorAll('.view-btn')) b.setAttribute('aria-pressed', String(b.dataset.view === view));
+    try { localStorage.setItem('scrawl-view', view); } catch { /* private window */ }
+    renderView();
+  }
+
+  function bindViews() {
+    try { view = localStorage.getItem('scrawl-view') || 'board'; } catch { /* fine */ }
+    for (const b of document.querySelectorAll('.view-btn')) b.addEventListener('click', () => setView(b.dataset.view));
+  }
+
   function applyTheme(theme) {
     if (theme) document.documentElement.dataset.theme = theme;
     else delete document.documentElement.dataset.theme;
@@ -63,7 +86,7 @@
 
   function openBoard() {
     show('app');
-    S.board.render();
+    setView(view);
     S.watcher.start();
   }
 
@@ -92,8 +115,9 @@
         '(Brave: enable "File System Access API" in brave://flags.)', []);
     }
     S.board.bindToolbar();
+    bindViews();
     S.store.on((change) => {
-      S.board.render();
+      renderView();
       S.drawer.refresh();
       if (change.outside && change.outside.length) {
         const ids = change.outside.map((f) => (S.store.get(f) ? `#${S.store.get(f).id}` : f)).join(', ');
