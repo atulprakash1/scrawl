@@ -33,12 +33,6 @@
     return slug || 'item';
   }
 
-  // Deterministic 0..1 from a number, so card tilt doesn't jitter between reloads.
-  function seeded(n) {
-    const x = Math.sin(Number(n) * 9301 + 49297) * 233280;
-    return x - Math.floor(x);
-  }
-
   function toast(msg, kind = 'info') {
     const box = document.getElementById('toasts');
     if (!box) return;
@@ -65,5 +59,5 @@
     return window.DOMPurify.sanitize(window.marked.parse(md || ''));
   }
 
-  S.util = { el, pad, stamp, slugify, seeded, toast, copy, markdown };
+  S.util = { el, pad, stamp, slugify, toast, copy, markdown };
 })();

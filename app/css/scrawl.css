@@ -300,64 +300,75 @@ select.filter { width: auto; }
 
 .hidden-note { padding: 0 16px 12px; font-size: 0.9rem; }
 
-/* ---------- sticky-note cards ---------- */
+/* ---------- Studio cards: a colour band per type, a tint, chips in the footer ---------- */
 
 .card {
-  position: relative; cursor: grab;
-  padding: 14px 12px 10px;
-  color: var(--card-ink);
-  background: var(--butter);
-  border-radius: 2px 2px 14px 2px;
-  box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.12), 3px 6px 10px -6px rgba(0, 0, 0, 0.35);
-  transform: rotate(var(--tilt, 0deg));
-  transition: transform 0.12s, box-shadow 0.12s;
+  --c: var(--c-story);
+  --t: var(--t-story);
+  position: relative; flex-shrink: 0; cursor: grab; overflow: hidden;
+  padding: 11px 12px 10px 18px;
+  color: var(--ink);
+  background: linear-gradient(160deg, var(--t) 0%, var(--surface) 62%);
+  border: 1px solid color-mix(in srgb, var(--c) 18%, var(--border));
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
 }
-.card:hover { transform: rotate(0deg) translateY(-2px); }
-.card.type-feature { background: var(--mint); }
-.card.type-story { background: var(--butter); }
-.card.type-bug { background: var(--coral); }
-.card.type-idea { background: var(--lilac); }
+.card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--c);
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--c) 40%, var(--border)); }
+.card.type-feature, .plan-row.type-feature { --c: var(--c-feature); --t: var(--t-feature); }
+.card.type-story, .plan-row.type-story { --c: var(--c-story); --t: var(--t-story); }
+.card.type-bug, .plan-row.type-bug { --c: var(--c-bug); --t: var(--t-bug); }
+.card.type-idea, .plan-row.type-idea { --c: var(--c-idea); --t: var(--t-idea); }
 
-.tape {
-  position: absolute; top: -9px; left: 50%; width: 64px; height: 18px;
-  transform: translateX(-50%) rotate(calc(var(--tilt, 0deg) * -2));
-  background: var(--tape);
-  clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 50%);
+.card-top { display: flex; gap: 6px; align-items: center; }
+.type-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px 1px 6px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--c) 78%, var(--ink)); background: color-mix(in srgb, var(--c) 15%, transparent);
+  border-radius: 999px;
 }
-.card-top { display: flex; gap: 8px; align-items: baseline; font-size: 0.85rem; }
-.card .num { font-family: var(--font-hand); font-size: 1.2rem; }
-.card .kind, .card .sev { opacity: 0.8; }
-.card h3 { margin: 4px 0 8px; font-size: 1.05rem; font-weight: normal; line-height: 1.25; overflow-wrap: anywhere; }
-.card-foot { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.8rem; align-items: center; }
-.label { padding: 0 6px; border: 1.5px solid rgba(0, 0, 0, 0.45); border-radius: 8px 3px 9px 4px; }
-.card .who-claude { color: #1f47a8; }
-.card:has(.stamp) { padding-bottom: 36px; }
+.card .sev { font-size: 0.75rem; color: var(--ink-soft); }
+.card .num { margin-left: auto; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--ink-faint); }
+.card h3 { margin: 7px 0 10px; font-size: 0.95rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; overflow-wrap: anywhere; }
 
-.stamp {
-  position: absolute; right: 8px; bottom: 6px;
-  font-family: var(--font-hand); font-size: 1.15rem; letter-spacing: 1px;
-  padding: 0 6px; border: 3px double currentColor; border-radius: 6px;
-  transform: rotate(-11deg); opacity: 0.85; pointer-events: none;
+.card-foot { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px;
+  font-size: 0.75rem; color: var(--ink-soft); background: var(--surface-2); border-radius: 999px;
 }
-.stamp-needs { color: #1f47a8; }
-.stamp-shipped { color: #b3261e; }
+.chip.who-claude { color: var(--accent); background: var(--accent-soft); }
+.chip.label { background: none; border: 1px solid var(--border-strong); }
+.meter { width: 26px; height: 4px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--green); border-radius: 4px; }
+.label { padding: 0 6px; border: 1px solid var(--border-strong); border-radius: 999px; }
+
+.badge {
+  margin-left: auto; padding: 2px 8px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  border-radius: 999px; pointer-events: none;
+}
+.badge-needs { color: var(--accent-ink); background: var(--accent); }
+.badge-shipped { color: var(--green); background: color-mix(in srgb, var(--green) 15%, transparent); }
+.card:has(.badge-shipped) { opacity: 0.85; }
 .smudge {
-  position: absolute; top: 6px; right: 8px; font-size: 0.75rem; color: #b3261e;
-  border: 1.5px solid #b3261e; border-radius: 10px; padding: 0 5px; background: rgba(255, 255, 255, 0.6);
+  position: absolute; top: 8px; right: 40px; font-size: 0.7rem; font-weight: 600; color: var(--red);
+  border: 1px solid currentColor; border-radius: 999px; padding: 0 6px; background: var(--surface);
 }
-.card.smudged { outline: 2px dashed #b3261e; }
+.card.smudged { outline: 2px dashed var(--red); outline-offset: -2px; }
 
 /* Drag states. SortableJS moves the floating copy by rewriting only the translation part of its
    transform matrix, so a tilt set in `transform` here is kept while the copy follows the pointer.
    No scale: Sortable divides pointer movement by it, which would make the copy drift. */
-.card-ghost { opacity: 0.3; outline: 2px dashed var(--line); outline-offset: 2px; }
+.card-ghost { opacity: 0.35; outline: 2px dashed var(--accent); outline-offset: -2px; background: var(--accent-soft); }
 .card-ghost > * { visibility: hidden; }
 .card-drag {
   cursor: grabbing;
   opacity: 1 !important;
-  transform: rotate(3deg);
+  transform: rotate(2deg);
   transition: none !important; /* follow the pointer exactly, no easing lag */
-  box-shadow: 8px 12px 0 rgba(43, 42, 51, 0.18), 3px 6px 14px -4px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-lg);
 }
 body.dragging, body.dragging * { cursor: grabbing !important; }
 
@@ -601,5 +612,5 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .card, .card:hover { transform: none; }
+  .card:hover { transform: none; }
 }
