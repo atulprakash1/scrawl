@@ -30,6 +30,7 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
   "Claude's tray" is `status: ready` + `assignee: claude`. After review the user may accept an item
   (`resolved`); the board marks `review`/`resolved` items `done` (Shipped) once their PR is merged into main.
 - Picking up: set `status: doing`, `assignee: claude`, update `updated:`, add an Activity line.
+  Empty Acceptance section? Write 2-5 criteria from the Description, say so in Activity, and carry on.
 - Activity lines are append-only, newest last, one line each:
   `- 2026-10-25 11:02 · claude · Picked up. Root cause: null email.`
   Lines from `me` are the user's comments and instructions; read them before starting.
@@ -37,7 +38,9 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
   `scrawl-board` branch (set up once per clone by `sh .scrawl/hooks/scrawl-setup`). Edit item files
   there as usual, but never `git add` or commit them yourself; `scrawl-sync` commits and pushes the board.
 - Git: never commit to or push `main`. Each item gets its own branch `scrawl/<id>-<slug>`, pushed
-  with a PR (`gh pr create`); the user merges on GitHub. Start every command with
+  with a PR (`gh pr create`); the user merges on GitHub. A feature is the exception: its stories
+  share the feature's branch, one commit each, and go out in one PR titled with every id
+  (`#3 #4 #5 Title`). See "Resolving a feature" in `.claude/commands/resolve.md`. Start every command with
   `sh .scrawl/hooks/scrawl-sync` — it fast-forwards `main` from GitHub (no manual pull) and saves the board.
 - Commits: start the message with the item number, e.g. `#42 Handle empty form`. Only a leading
   `#N` links a commit to an item (GitHub's `(#12)` PR suffix is ignored). Merging the PR ships the card.
