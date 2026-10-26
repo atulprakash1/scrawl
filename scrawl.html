@@ -42,7 +42,7 @@
         <div class="top-actions">
           <button id="palette-btn" class="btn palette-trigger" title="Command palette (Ctrl+K)">⌕ <span class="btn-label">Search</span> <kbd>Ctrl K</kbd></button>
           <button id="hookup-btn" class="btn btn-claude" title="Write the Claude Code protocol, commands and hooks into this repo">🤖 <span class="btn-label">Hook up Claude</span></button>
-          <button id="switch-folder" class="icon-btn" title="Open another folder" aria-label="Open another folder">📂</button>
+          <button id="switch-folder" class="icon-btn" title="Projects: recent folders, or pick another" aria-label="Projects">📂</button>
           <button id="theme-toggle" class="icon-btn" title="Light / dark" aria-label="Toggle theme">◐</button>
         </div>
       </div>
@@ -81,6 +81,7 @@
   <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Item details"></aside>
   <dialog id="hookup" class="dialog" aria-label="Hook up Claude"></dialog>
   <dialog id="palette" class="dialog palette-dialog" aria-label="Command palette"></dialog>
+  <dialog id="projects" class="dialog" aria-label="Projects"></dialog>
   <div id="toasts" class="toasts" aria-live="polite"></div>
 
   <!-- Classic scripts on purpose: Chrome blocks type="module" on file:// pages. -->

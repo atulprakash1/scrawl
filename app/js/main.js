@@ -61,11 +61,58 @@
     });
   }
 
-  function welcome(message, actions) {
+  function welcome(message, actions, { recent = false } = {}) {
     const box = document.getElementById('welcome-actions');
     document.getElementById('welcome-msg').textContent = message;
     box.replaceChildren(...actions);
     show('welcome');
+    if (recent) recentList().then((list) => { if (list) box.after(list); });
+  }
+
+  /* Recent projects, newest first. Opening one asks the browser for access again if it needs to
+     (that needs this click). `current` is marked instead of offered. */
+  async function recentList(current) {
+    document.querySelector('.recent')?.remove();
+    const handles = await S.fs.recent();
+    const others = [];
+    for (const h of handles) if (!current || !(await h.isSameEntry(current))) others.push(h);
+    if (!others.length && !current) return null;
+    return el('div', { class: 'recent' },
+      el('p', { class: 'recent-title' }, 'Recent projects'),
+      el('ul', {},
+        current ? el('li', {}, el('span', { class: 'recent-item current' }, `📁 ${current.name}`, el('span', { class: 'muted' }, ' · open now'))) : null,
+        others.map((h) => el('li', {}, el('button', {
+          class: 'recent-item',
+          onclick: async () => {
+            if (!(await S.fs.permission(h, true))) return S.util.toast(`No access to "${h.name}"`, 'warn');
+            document.getElementById('projects')?.close();
+            S.watcher.stop();
+            start(h);
+          },
+        }, `📁 ${h.name}`)))));
+  }
+
+  // The folder button: recent projects, plus picking any other folder.
+  async function openProjects() {
+    const box = document.getElementById('projects');
+    const list = await recentList(S.store.state.root);
+    box.replaceChildren(el('div', { class: 'projects' },
+      el('h2', {}, 'Projects'),
+      list,
+      el('div', { class: 'welcome-actions' },
+        el('button', {
+          class: 'btn btn-big',
+          onclick: async () => {
+            try {
+              const handle = await S.fs.pick();
+              box.close();
+              S.watcher.stop();
+              start(handle);
+            } catch (e) { if (e.name !== 'AbortError') S.util.toast(e.message, 'warn'); }
+          },
+        }, '📂 Pick another folder…'),
+        el('button', { class: 'btn', onclick: () => box.close() }, 'Close'))));
+    if (!box.open) box.showModal();
   }
 
   async function start(root) {
@@ -82,6 +129,7 @@
         pickButton('Pick a different folder'),
       ]);
     }
+    if (!S.store.state.readOnly) S.fs.remember(root);
     document.getElementById('project-name').textContent = S.store.project;
     // "Scrawl / Scrawl" says nothing: show the project only when it isn't Scrawl itself.
     document.querySelector('.topbar').classList.toggle('same-name', S.store.project.trim().toLowerCase() === 'scrawl');
@@ -157,7 +205,7 @@
     });
     document.getElementById('switch-folder').addEventListener('click', async () => {
       if (S.store.state.readOnly) return document.querySelector('#readonly-banner input[type=file]')?.click();
-      try { S.watcher.stop(); start(await S.fs.pick()); } catch (e) { if (e.name !== 'AbortError') S.util.toast(e.message, 'warn'); }
+      openProjects();
     });
 
     if (!S.fs.supported) {
@@ -175,9 +223,9 @@
           onclick: async () => { if (await S.fs.permission(handle, true)) start(handle); },
         }, `📂 Reopen "${handle.name}"`),
         pickButton('Pick a different folder'),
-      ]);
+      ], { recent: true });
     }
-    welcome('Pick the root folder of your repo (the one that holds .scrawl/).', [pickButton()]);
+    welcome('Pick the root folder of your repo (the one that holds .scrawl/).', [pickButton()], { recent: true });
   }
 
   S.app = { setOffline, setView };

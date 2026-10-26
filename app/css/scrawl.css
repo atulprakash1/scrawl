@@ -738,6 +738,20 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .hookup .wizard-command { flex-wrap: wrap; }
 .hookup .wizard-command code { font-size: 0.9rem; }
 
+/* ---------- recent projects (welcome screen and the folder button) ---------- */
+
+.recent { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border); text-align: left; }
+.recent-title { margin: 0 0 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+.recent ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.recent-item {
+  display: block; width: 100%; padding: 8px 12px; text-align: left; font-weight: 600; cursor: pointer;
+  background: var(--surface-2); border: 1px solid transparent; border-radius: var(--r-sm);
+}
+button.recent-item:hover { border-color: var(--accent); background: var(--accent-soft); }
+.recent-item.current { cursor: default; background: none; border-color: var(--border); }
+.projects h2 { font-size: 1.35rem; font-weight: 700; margin: 0 0 4px; }
+.projects .recent { margin-top: 8px; border-top: none; padding-top: 0; }
+
 /* ---------- command palette ---------- */
 
 .palette-dialog { width: min(620px, calc(100vw - 32px)); padding: 0; margin-top: 12vh; overflow: hidden; }

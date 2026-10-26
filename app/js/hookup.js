@@ -12,21 +12,34 @@
 
   /* Scrawl owns its hooks, so those are refreshed. CLAUDE.md and the commands may be yours by now:
      a missing protocol section is appended, an existing command is never overwritten. */
+  // AGENTS.md is what Codex, Gemini CLI, Cursor and other coding agents read.
+  const AGENTS_INTRO = 'This project tracks its work with Scrawl. Any coding agent follows the rules below: where they say ' +
+    'Claude or `assignee: claude`, that means you, the AI agent. The steps for /resolve, /next, /plan and the other ' +
+    'commands are in `.claude/commands/`; if your tool has no slash commands, follow those files as instructions.';
+
+  /* Puts the protocol in a guidance file (CLAUDE.md, AGENTS.md): created if missing, appended to one that
+     lacks the section (keeping its own line endings), and left alone when it already has it. */
+  async function protocolFile(root, path, heading, out) {
+    const t = S.templates;
+    const disk = await S.fs.read(root, path);
+    if (!disk) {
+      await S.fs.write(root, path, `${heading}${t.protocol}`);
+      out.push([path, 'created with the Scrawl protocol']);
+    } else if (!lf(disk.text).split('\n').some((l) => l.trim() === t.section)) {
+      const eol = disk.text.includes('\r\n') ? '\r\n' : '\n';
+      const text = disk.text.replace(/\s*$/, '') + eol + eol + t.protocol.replace(/\n/g, eol);
+      await S.fs.write(root, path, text);
+      out.push([path, 'Scrawl protocol added at the end']);
+    } else {
+      out.push([path, 'already has the protocol, left alone']);
+    }
+  }
+
   async function run(root) {
     const t = S.templates;
     const out = [];
-    const claude = await S.fs.read(root, 'CLAUDE.md');
-    if (!claude) {
-      await S.fs.write(root, 'CLAUDE.md', `# ${S.store.project}\n\n${t.protocol}`);
-      out.push(['CLAUDE.md', 'created with the Scrawl protocol']);
-    } else if (!lf(claude.text).split('\n').some((l) => l.trim() === t.section)) {
-      const eol = claude.text.includes('\r\n') ? '\r\n' : '\n';
-      const text = claude.text.replace(/\s*$/, '') + eol + eol + t.protocol.replace(/\n/g, eol);
-      await S.fs.write(root, 'CLAUDE.md', text);
-      out.push(['CLAUDE.md', 'Scrawl protocol added at the end']);
-    } else {
-      out.push(['CLAUDE.md', 'already has the protocol, left alone']);
-    }
+    await protocolFile(root, 'CLAUDE.md', `# ${S.store.project}\n\n`, out);
+    await protocolFile(root, 'AGENTS.md', `# AGENTS.md\n\n${AGENTS_INTRO}\n\n`, out);
 
     for (const [path, text] of Object.entries(t.files)) {
       const disk = await S.fs.read(root, path);
@@ -53,6 +66,7 @@
       el('p', {}, `Writes what Claude Code needs to work this board into "${S.store.state.root.name}":`),
       list([
         ['CLAUDE.md', 'the Scrawl protocol (appended; your own text stays)'],
+        ['AGENTS.md', 'the same protocol, for other coding agents (appended; your own text stays)'],
         ...Object.keys(t.files).map((p) => [p, isHook(p) ? 'git hook' : 'slash command, unless you have your own']),
       ]),
       el('div', { class: 'welcome-actions' },
