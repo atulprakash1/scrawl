@@ -1,0 +1,16 @@
+#!/bin/sh
+# Scrawl: after pushing a work branch, go back to main so the board (which reads the main checkout)
+# keeps showing the branch's card states. Usage: sh .scrawl/hooks/scrawl-home <branch>
+#
+# The board may write .scrawl/ files at any moment (index.json, moves, comments), so those live
+# edits are parked first, then laid back on top of the branch's .scrawl/ in the main checkout
+# (see scrawl-board).
+branch=${1:?usage: scrawl-home <branch>}
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+. .scrawl/hooks/scrawl-board
+go_home() { git switch -q main && git restore --source="$branch" --worktree -- .scrawl; }
+if ! with_board scrawl-home go_home; then
+  echo "scrawl-home: couldn't switch to main; still on $(git symbolic-ref -q --short HEAD)" >&2
+  exit 1
+fi

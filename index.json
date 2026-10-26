@@ -1,0 +1,23 @@
+[
+  {"id":1,"type":"feature","title":"Core loop: board, files and Claude","status":"done","assignee":"claude","rank":"1"},
+  {"id":2,"type":"story","title":"Spike: folder access from file:// on Windows and macOS","status":"done","parent":1,"assignee":"me","rank":"i"},
+  {"id":3,"type":"feature","title":"Planning: wizard, /plan and the Plan view","status":"ready","assignee":"claude","rank":"5"},
+  {"id":4,"type":"story","title":"Project wizard writes project.md","status":"ready","parent":3,"assignee":"claude","rank":"b"},
+  {"id":5,"type":"story","title":"Proposed lane and Plan tree with accept/reject","status":"ready","parent":3,"assignee":"claude","rank":"c"},
+  {"id":6,"type":"story","title":"Slash commands: /plan, /groom, /inbox","status":"ready","parent":3,"assignee":"claude","rank":"d"},
+  {"id":7,"type":"story","title":"Hook up Claude button and single-file scrawl.html","status":"backlog","parent":3,"assignee":"me","rank":"e"},
+  {"id":8,"type":"feature","title":"Visibility: Bug jar, Timeline, Today, Releases","status":"backlog","assignee":"me","rank":"f"},
+  {"id":9,"type":"story","title":"Timeline view with orphan commits","status":"backlog","parent":8,"assignee":"me","rank":"g"},
+  {"id":10,"type":"story","title":"Releases view and /release command","status":"backlog","parent":8,"assignee":"me","rank":"h"},
+  {"id":11,"type":"story","title":"Bug jar and Today view","status":"backlog","parent":8,"assignee":"me","rank":"j"},
+  {"id":12,"type":"feature","title":"Polish: sketchy theme, motion, palette, keyboard, read-only mode","status":"backlog","assignee":"me","rank":"k"},
+  {"id":13,"type":"idea","title":"Helper CLI scrawl.mjs","status":"backlog","assignee":"me","rank":"m"},
+  {"id":14,"type":"idea","title":"Experiments: FileSystemObserver, isomorphic-git, AGENTS.md","status":"backlog","assignee":"me","rank":"n"},
+  {"id":15,"type":"feature","title":"drag and drop cards","status":"done","assignee":"claude","rank":"t"},
+  {"id":16,"type":"idea","title":"multiple implementation sessions","status":"backlog","assignee":"me","rank":"t"},
+  {"id":17,"type":"idea","title":"the number of cards in a category","status":"done","assignee":"claude","rank":"w"},
+  {"id":18,"type":"story","title":"Branch and PR flow with auto-sync of main","status":"done","assignee":"claude","rank":"0i"},
+  {"id":19,"type":"bug","title":"Reopened hand-shipped card ships again from old commits","status":"backlog","parent":18,"assignee":"me"},
+  {"id":20,"type":"bug","title":"Shipped category display","status":"done","assignee":"claude","rank":"i"},
+  {"id":21,"type":"bug","title":"scrawl-home and scrawl-sync race with the open board","status":"doing","parent":18,"assignee":"claude"}
+]

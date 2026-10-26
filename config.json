@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "nextId": 22,
+  "columns": [
+    {
+      "status": "backlog",
+      "label": "Someday pile"
+    },
+    {
+      "status": "ready",
+      "label": "Claude's tray",
+      "wip": 5
+    },
+    {
+      "status": "doing",
+      "label": "On the bench",
+      "wip": 2
+    },
+    {
+      "status": "review",
+      "label": "Eyeball it"
+    },
+    {
+      "status": "resolved",
+      "label": "Resolved"
+    },
+    {
+      "status": "done",
+      "label": "Shipped!",
+      "foldable": true,
+      "sort": "recent"
+    }
+  ]
+}
