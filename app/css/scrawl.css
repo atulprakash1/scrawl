@@ -362,6 +362,46 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
   border: 2px solid currentColor; border-radius: 6px; padding: 0 5px; float: right; transform: rotate(6deg);
 }
 
+/* Bug jar: a glass jar with a lid, critters inside */
+.bugs-inner { max-width: 760px; margin: 0 auto; }
+.bug-add { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 16px; }
+.bug-add input { flex: 1 1 220px; min-width: 0; }
+.jar {
+  position: relative; padding: 26px 16px 22px; min-height: 160px;
+  border: 3px solid var(--line); border-top: none; border-radius: 18px 18px 60px 60px / 18px 18px 40px 40px;
+  background: linear-gradient(100deg, transparent 0 78%, rgba(255, 255, 255, 0.12) 80% 84%, transparent 86%),
+    color-mix(in srgb, var(--blue) 7%, transparent);
+}
+.jar-lid {
+  position: absolute; top: -14px; left: -8px; right: -8px; height: 18px;
+  background: var(--paper-2); border: 3px solid var(--line); border-radius: 8px 10px 6px 9px;
+}
+.jar-critters { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.critter {
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px; cursor: pointer; color: var(--card-ink);
+  background: var(--coral); border-radius: 14px 4px 16px 6px; box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.12);
+}
+.critter:nth-child(odd) { transform: rotate(-0.6deg); }
+.critter:nth-child(even) { transform: rotate(0.5deg); }
+.critter-icon { font-size: 1.6rem; line-height: 1; }
+.sev-kraken .critter-icon { font-size: 2.4rem; }
+.sev-cockroach .critter-icon { font-size: 2rem; }
+.sev-ant .critter-icon { font-size: 1.2rem; }
+.critter-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.critter .num { font-family: var(--font-hand); font-size: 1.15rem; }
+.critter-meta { font-size: 0.8rem; color: rgba(43, 42, 51, 0.7); }
+.critter .btn { color: var(--ink); font-size: 0.85rem; padding: 2px 8px; }
+.critter-tray { font-size: 0.8rem; color: #1f47a8; }
+.jar-empty { text-align: center; margin: 30px 0; }
+
+/* Today: three index cards */
+.today-inner { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.today-card { padding: 10px 16px 14px; background: var(--panel); border: 2px solid var(--line); border-radius: var(--wobble); box-shadow: var(--shadow); }
+.today-card h3 { font-family: var(--font-hand); font-size: 1.5rem; font-weight: normal; margin: 0 0 6px; }
+.today-card p { margin: 0; }
+.today-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.today-list .link-btn { font-size: 1rem; padding: 0; text-align: left; }
+
 /* Releases: notebook pages with a torn bottom edge */
 .releases-inner { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
 .release-page {

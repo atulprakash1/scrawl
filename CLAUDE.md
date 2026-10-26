@@ -8,7 +8,7 @@ The full design is in `Scrawl — Local LLM-Powered Project Board.md`; phases ar
 
 - No build step, no npm, no server. Plain JS in `app/js/` loaded with classic `<script>` tags
   (Chrome blocks `type="module"` on `file://`). Each file is an IIFE that adds to `window.Scrawl`.
-- Load order matters and is set in `scrawl.html`: util → parser → rank → fs → store → watcher → board → plan → releases → timeline → drawer → wizard → templates → hookup → main.
+- Load order matters and is set in `scrawl.html`: util → parser → rank → fs → store → watcher → board → plan → releases → timeline → bugs → today → drawer → wizard → templates → hookup → main.
 - Third-party code lives in `vendor/` (copied, never loaded from a CDN). Don't add dependencies lightly.
 - `app/js/templates.js` is generated: after changing the "Scrawl work tracking" section below,
   `.claude/commands/` or `.scrawl/hooks/`, run `node tools/bundle.mjs` and commit it. The same command

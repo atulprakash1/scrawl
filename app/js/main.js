@@ -16,6 +16,8 @@
   const VIEWS = {
     board: () => S.board.render(),
     plan: () => S.plan.render(),
+    bugs: () => S.bugs.render(),
+    today: () => S.today.render(),
     timeline: () => S.timeline.render(),
     releases: () => S.releases.render(),
   };
@@ -81,6 +83,7 @@
     }
     document.getElementById('project-name').textContent = S.store.project;
     document.title = `${S.store.project} · Scrawl`;
+    S.today.visit(S.store.project);
     if (S.store.state.projectEmpty) {
       show('wizard');
       return S.wizard.start(document.getElementById('wizard-card'), openBoard);

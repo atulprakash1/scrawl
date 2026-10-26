@@ -306,7 +306,7 @@
   // Newest commit on main, so a hand-shipped item also ignores older commits if it's reopened.
   function mainHead() { return state.main.length ? state.main[0].sha : undefined; }
 
-  async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '' }) {
+  async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '', severity = 'beetle' }) {
     await loadConfig(); // Claude may have bumped nextId since we last looked
     const maxId = Math.max(0, ...list().map((i) => i.id));
     const id = Math.max(Number(state.config.nextId) || 1, maxId + 1);
@@ -316,7 +316,7 @@
     const last = column(status).at(-1);
     const now = util.stamp();
     const meta = { id, type, title: title.trim(), status, assignee, rank: S.rank.between(last && last.meta.rank, null) };
-    if (type === 'bug') meta.severity = 'beetle';
+    if (type === 'bug') meta.severity = severity;
     Object.assign(meta, { labels: [], created: now, updated: now });
 
     const doc = { meta, keys: [], extra: [], body: parser.appendActivity(parser.newBody(description), 'me', 'Created') };
