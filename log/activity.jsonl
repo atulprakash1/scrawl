@@ -37,3 +37,4 @@
 {"at":"2026-10-26T18:45","who":"scrawl","id":6,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-26T18:55","who":"scrawl","id":7,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-26T19:29","who":"me","id":8,"action":"move","from":"ready","to":"backlog"}
+{"at":"2026-10-26T20:20","who":"me","id":8,"action":"move","from":"backlog","to":"ready"}
