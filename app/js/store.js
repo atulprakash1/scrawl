@@ -20,7 +20,7 @@
     version: 1,
     nextId: 1,
     columns: [
-      { status: 'backlog', label: 'Someday pile' },
+      { status: 'backlog', label: 'Someday pile', foldable: true },
       { status: 'ready', label: "Claude's tray", wip: 5 },
       { status: 'doing', label: 'On the bench', wip: 2 },
       { status: 'review', label: 'Eyeball it' },
