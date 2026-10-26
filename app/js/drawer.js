@@ -58,6 +58,15 @@
       onchange: (e) => e.target.value.trim() && save((d) => { d.meta.title = e.target.value.trim(); }),
     });
 
+    // Where the item sits in the plan: its feature above, its stories below.
+    const parent = m.parent ? store.byId(m.parent) : null;
+    const partOf = m.parent
+      ? el('p', { class: 'part-of' }, 'Part of ',
+        parent
+          ? el('button', { class: 'link-btn', onclick: () => open(parent.file) }, `#${parent.id} ${parent.meta.title || ''}`)
+          : el('span', { class: 'muted' }, `#${m.parent} (not found)`))
+      : null;
+
     const fields = el('div', { class: 'fields' },
       select('status', store.STATUSES, m.status, (v) => save((d) => { d.meta.status = v; },
         { activity: `Moved to ${v}${statusLabel(v) ? ` (${statusLabel(v)})` : ''}` })),
@@ -130,6 +139,16 @@
         },
       }, el('input', { name: 'check', placeholder: 'Add a criterion…' }), el('button', { class: 'btn', type: 'submit' }, '+')));
 
+    const kids = store.list().filter((i) => i.meta.parent === id && i.meta.status !== 'wontfix').sort(store.compareRank);
+    const finished = kids.filter((k) => k.meta.status === 'done' || k.meta.status === 'resolved').length;
+    const stories = kids.length
+      ? el('section', { class: 'drawer-section' },
+        el('h4', {}, 'Stories ', el('span', { class: 'muted kids-count' }, `${finished}/${kids.length} done`)),
+        el('ul', { class: 'kids' }, kids.map((k) => el('li', {},
+          el('button', { class: 'link-btn', onclick: () => open(k.file) }, `#${k.id} ${k.meta.title || '(untitled)'}`),
+          ' ', el('span', { class: `pill pill-${k.meta.status}` }, statusLabel(k.meta.status) || k.meta.status)))))
+      : null;
+
     const commitList = store.commitsFor(item);
     const commits = commitList.length
       ? el('section', { class: 'drawer-section' }, el('h4', {}, 'Commits'),
@@ -158,7 +177,7 @@
 
     const footer = el('p', { class: 'muted file-path' }, `.scrawl/items/${item.file}`);
 
-    panel().replaceChildren(el('div', { class: 'drawer-inner' }, head, title, fields, actions, smudge, description, acceptance, commits, activity, footer));
+    panel().replaceChildren(el('div', { class: 'drawer-inner' }, head, title, partOf, fields, actions, smudge, description, acceptance, stories, commits, activity, footer));
   }
 
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && current) close(); });
