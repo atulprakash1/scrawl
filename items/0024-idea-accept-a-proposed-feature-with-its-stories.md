@@ -2,12 +2,13 @@
 id: 24
 type: idea
 title: Accept a proposed feature together with its stories
-status: resolved
+status: done
 assignee: claude
 labels: [phase-2]
 created: 2026-10-26T14:28
-updated: 2026-10-27T00:46
+updated: 2026-10-27T01:05
 rank: i
+shipped: 7141aef
 ---
 ## Description
 In the Plan view's Proposed lane, accepting a feature only accepts the feature itself. After a big `/plan` run, accepting a feature and its eight stories takes nine clicks. An "accept all" on a proposed feature (or on the lane) would make this quicker.
@@ -22,3 +23,4 @@ In the Plan view's Proposed lane, accepting a feature only accepts the feature i
 - 2026-10-27 00:45 · claude · Done: a proposed feature with proposed stories gets "✔ all (N)" in the Plan view's Proposed lane, accepting the feature and those stories into the Someday pile in one click (each gets its Activity line, and one toast sums it up). Verified headless with a screenshot.
 - 2026-10-27 00:45 · claude · PR: https://github.com/atulprakash1/scrawl/pull/25
 - 2026-10-27 00:46 · me · Moved to resolved (Resolved)
+- 2026-10-27 01:05 · scrawl · Shipped: 7141aef is on main
