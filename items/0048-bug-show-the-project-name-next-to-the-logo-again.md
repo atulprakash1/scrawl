@@ -2,13 +2,14 @@
 id: 48
 type: bug
 title: Show the project name next to the logo again
-status: resolved
+status: done
 severity: beetle
 assignee: claude
 labels: [ui]
 created: 2026-10-27T00:20
-updated: 2026-10-27T00:24
+updated: 2026-10-27T00:30
 rank: i
+shipped: c5ca390
 ---
 ## Description
 #44 hid "/ <project>" when the project is called Scrawl, so the header shows only the logo and you can't tell which project is open. Logo and project name together worked better; always show the project name again.
@@ -23,3 +24,4 @@ rank: i
 - 2026-10-27 00:21 · claude · Done: removed the rule that hid "/ <project>" for a project called Scrawl, so the header always shows logo and project name. Checked headless for "Scrawl" and "demo": name and slash shown, tabs still centred, logo unchanged.
 - 2026-10-27 00:22 · claude · PR: https://github.com/atulprakash1/scrawl/pull/22
 - 2026-10-27 00:24 · me · Moved to resolved (Resolved)
+- 2026-10-27 00:30 · scrawl · Shipped: c5ca390 is on main
