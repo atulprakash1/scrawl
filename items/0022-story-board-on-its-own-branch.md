@@ -2,12 +2,13 @@
 id: 22
 type: story
 title: Keep the board on its own branch so it never dirties the project
-status: resolved
+status: done
 assignee: claude
 labels: [workflow]
 created: 2026-10-26T11:45
-updated: 2026-10-26T11:58
+updated: 2026-10-26T13:38
 rank: i
+shipped: 054a68d
 ---
 ## Description
 Every card move, comment and index rebuild edits tracked files under `.scrawl/`, so the project's `git status` and PRs are always full of files that aren't the user's work. The board's state also follows whatever branch is checked out, which is why scrawl-home and the park/restore dance in scrawl-board exist (and why #21 happened).
@@ -31,3 +32,4 @@ Move the board onto its own `scrawl-board` branch with no shared history, checke
 - 2026-10-26 11:58 · me · Moved to resolved (Resolved)
 - 2026-10-26 11:58 · me · Moved to review (Eyeball it)
 - 2026-10-26 11:58 · me · Moved to resolved (Resolved)
+- 2026-10-26 13:38 · scrawl · Shipped: 054a68d is on main
