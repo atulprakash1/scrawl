@@ -66,6 +66,10 @@
       m.type === 'bug' ? select('severity', store.SEVERITIES, m.severity, (v) => save((d) => { d.meta.severity = v; })) : null);
 
     const actions = el('div', { class: 'actions' },
+      m.status === 'proposed'
+        ? [el('button', { class: 'btn btn-ship', onclick: () => S.plan.accept(item).then(render) }, '✔ Accept proposal'),
+          el('button', { class: 'btn btn-reject', onclick: () => S.plan.reject(item).then(render) }, '✗ Reject')]
+        : null,
       el('button', { class: 'btn btn-claude', onclick: () => S.util.copy(`/resolve ${id}`) }, `📋 Copy /resolve ${id}`),
       who !== 'claude' || m.status !== 'ready'
         ? el('button', {
