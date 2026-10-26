@@ -30,6 +30,7 @@
       <nav class="views" aria-label="View">
         <button class="view-btn" data-view="board" aria-pressed="true">Board</button>
         <button class="view-btn" data-view="plan" aria-pressed="false">Plan</button>
+        <button class="view-btn" data-view="timeline" aria-pressed="false">Timeline</button>
         <button class="view-btn" data-view="releases" aria-pressed="false">Releases</button>
       </nav>
       <form id="quick-add" class="quick-add" autocomplete="off">
@@ -56,6 +57,7 @@
     <main id="board" class="board"></main>
     <p id="hidden-note" class="hidden-note muted"></p>
     <main id="plan" class="plan" hidden></main>
+    <main id="timeline" class="view" hidden></main>
     <main id="releases" class="view releases" hidden></main>
   </div>
 
@@ -76,6 +78,7 @@
   <script src="app/js/board.js"></script>
   <script src="app/js/plan.js"></script>
   <script src="app/js/releases.js"></script>
+  <script src="app/js/timeline.js"></script>
   <script src="app/js/drawer.js"></script>
   <script src="app/js/wizard.js"></script>
   <script src="app/js/templates.js"></script>

@@ -16,6 +16,7 @@
   const VIEWS = {
     board: () => S.board.render(),
     plan: () => S.plan.render(),
+    timeline: () => S.timeline.render(),
     releases: () => S.releases.render(),
   };
   let view = 'board';
