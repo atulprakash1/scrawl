@@ -7,7 +7,7 @@ assignee: claude
 rank: i
 labels: []
 created: 2026-10-26T23:48
-updated: 2026-10-26T23:55
+updated: 2026-10-26T23:58
 ---
 ## Description
 the header could be better. the tab's size could be a bit bigger. the Scrawl logo is okay, but the text "/ Scrawl" seems redundant.
@@ -28,3 +28,4 @@ the header could be better. the tab's size could be a bit bigger. the Scrawl log
 - 2026-10-26 23:53 · claude · Picked up on branch scrawl/44-header. Looked at the screenshot: "/ Scrawl" repeats the logo because this project is called Scrawl. Plan: show the crumb only when the name differs, and bigger tabs with a clearer active state.
 - 2026-10-26 23:55 · claude · Done: the view tabs are bigger (16px, roomier padding, a filled active tab with the underline) and never wrap; "/ <project>" is hidden when the project is called Scrawl. Below 1180px the Board tools take their own row instead of squeezing the tabs. Measured at 1400/1180/1000/700/500px (nothing cut off, single-line tabs) and checked by screenshot.
 - 2026-10-26 23:56 · claude · PR: https://github.com/atulprakash1/scrawl/pull/20
+- 2026-10-26 23:58 · me · i think the tabs and the main content area should shift to center and the logo is a bit bigger and occupies more space in the left corner. check the proportions as per design standards and make changes.
