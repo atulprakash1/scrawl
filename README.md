@@ -67,7 +67,9 @@ CLAUDE.md              the protocol Claude follows
 .claude/commands/      /resolve, /next, /plan, /groom, /inbox, /release
 .scrawl/               the board, from the scrawl-board branch: project.md, config.json, items/,
                        log/, hooks/, releases/ (plus the rebuilt index.json)
-docs/ROADMAP.md        phases and gates
 ```
 
-Design: `Scrawl — Local LLM-Powered Project Board.md`.
+## License
+
+MIT, see [LICENSE](LICENSE). The libraries and fonts in `vendor/` keep their own licenses, listed in
+[vendor/NOTICE.md](vendor/NOTICE.md).
