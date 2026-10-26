@@ -2,7 +2,8 @@
 
 Phases from the plan (`Scrawl — Local LLM-Powered Project Board.md`), adjusted for the answered
 open questions: one `scrawl.html` per repo, no helper CLI for now (keep it simple), Windows + macOS,
-continuous flow (no sprints), `.scrawl/` committed to git.
+continuous flow (no sprints), `.scrawl/` versioned in git on its own `scrawl-board` branch
+(a separate worktree, so it never shows up in the project's changes).
 
 Each phase ends with a gate: don't start the next phase until the gate passes.
 From Phase 1 on, the remaining work lives on Scrawl's own board in `.scrawl/items/`.
@@ -27,6 +28,7 @@ Tracked as item #2.
 - Watcher: polls every 2s while the tab is visible; "changed outside Scrawl" toasts.
 - `CLAUDE.md` protocol, `/resolve` and `/next` commands (Claude edits item files directly, no CLI).
 - Git `post-commit` hook (`.scrawl/hooks/`, via `core.hooksPath`) logs commits; cards link them by `#N`.
+- The board lives on its own `scrawl-board` branch, checked out at `.scrawl/` (#22).
 
 **Gate:** a card travels from Claude's tray to "Eyeball it" without you touching a file:
 hand it to Claude → paste `/resolve N` → watch it move to doing, then review with a linked commit. Tracked as #1.

@@ -1,4 +1,0 @@
-#!/bin/sh
-# Scrawl: a merge or pull may have brought branch work onto main.
-[ -d .scrawl/log ] || exit 0
-sh .scrawl/hooks/scrawl-main
