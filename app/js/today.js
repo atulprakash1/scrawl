@@ -1,5 +1,5 @@
-/* Today: a one-glance start to a session. What Claude (or git) did since your last visit, what waits
-   for you, and what has gone stale. "Last visit" is kept per project in this browser. */
+/* Today: a one-glance start to a session. What Claude (or git) did today and since your last visit,
+   what waits for you, and what has gone stale. "Last visit" is kept per project in this browser. */
 (function () {
   const S = window.Scrawl;
   const { el } = S.util;
@@ -9,19 +9,42 @@
   // Same thresholds as /groom.
   const STALE_DAYS = { doing: 14, review: 14, ready: 30 };
 
-  let since = null; // 'YYYY-MM-DD HH:MM' of the previous visit, or null on a first visit
+  // A reload is not a new visit: a visit ends after this long away from the board.
+  const AWAY_MS = 30 * 60000;
+  const fmt = (d) => S.util.stamp(d).replace('T', ' ');
 
-  // Called once when a project opens: remember the previous visit and record this one.
-  function visit(project) {
-    const key = `scrawl-last-visit:${project}`;
-    since = null;
-    try {
-      since = localStorage.getItem(key);
-      localStorage.setItem(key, S.util.stamp().replace('T', ' '));
-    } catch { /* private window: show the last day instead */ }
+  let since = null; // 'YYYY-MM-DD HH:MM' when you left the board last time, or null on a first visit
+  let seenKey = null;
+  let heartbeat = null;
+
+  function remember(key, value) {
+    try { localStorage.setItem(key, value); } catch { /* private window */ }
+  }
+  function recall(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
   }
 
-  const fmt = (d) => S.util.stamp(d).replace('T', ' ');
+  // While the board is open (and visible) keep "last seen" fresh, so it marks when you left.
+  function touch() {
+    if (seenKey && !document.hidden) remember(seenKey, fmt(new Date()));
+  }
+
+  // Called when a project opens. Within AWAY_MS of the last time the board was seen, this is the same
+  // visit (keep its "since"); after a longer break, "since" becomes the moment you left.
+  function visit(project) {
+    seenKey = `scrawl-last-seen:${project}`;
+    const sinceKey = `scrawl-visit-since:${project}`;
+    const seen = recall(seenKey) || recall(`scrawl-last-visit:${project}`); // older builds kept only this
+    const away = seen ? Date.now() - Date.parse(seen.replace(' ', 'T')) : Infinity;
+    since = away > AWAY_MS ? seen : recall(sinceKey);
+    if (since) remember(sinceKey, since);
+    touch();
+    if (!heartbeat) {
+      heartbeat = setInterval(touch, 60000);
+      document.addEventListener('visibilitychange', touch);
+      window.addEventListener('pagehide', touch);
+    }
+  }
 
   function link(item, extra) {
     return el('li', {},
@@ -64,7 +87,11 @@
 
   function render() {
     const root = document.getElementById('today');
-    const from = since || fmt(new Date(Date.now() - DAY));
+    // At least all of today; further back if your last visit was before midnight.
+    const midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+    const today = fmt(midnight);
+    const from = since && since < today ? since : today;
     const { out, commits } = changes(from);
     const wait = waiting();
     const old = stale();
@@ -77,7 +104,9 @@
 
     root.replaceChildren(el('div', { class: 'today-inner' },
       el('header', { class: 'view-head' }, el('h2', { class: 'view-title' }, 'Today'),
-        el('span', { class: 'muted' }, since ? `since your last visit, ${since}` : 'first visit here: showing the last day')),
+        el('span', { class: 'muted' }, from === today
+          ? `changes today${since ? `, last visit ${since}` : ''}`
+          : `changes since your last visit, ${since}`)),
       section('What changed', changed),
       section('Waiting for you', wait.length
         ? el('ul', { class: 'today-list' }, wait.map((i) => link(i, i.meta.status === 'review' ? 'ready for review' : 'Claude asked you something')))
