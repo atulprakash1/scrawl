@@ -116,6 +116,7 @@
     }
     S.board.bindToolbar();
     bindViews();
+    document.getElementById('hookup-btn').addEventListener('click', S.hookup.open);
     S.store.on((change) => {
       renderView();
       S.drawer.refresh();

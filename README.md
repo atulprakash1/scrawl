@@ -11,6 +11,14 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 4. In Claude Code, paste `/resolve <n>` (the drawer has a copy button) or `/next`.
    The card moves to *On the bench*, then *Eyeball it* with a linked commit. You ship it.
 
+### In another repo
+
+Run `node tools/bundle.mjs` here once (Node 18+, nothing to install). It builds `dist/scrawl.html`, the
+whole board in one file. Copy it into the other repo, open it, click **Start Scrawl**, answer the
+project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md`, the slash
+commands into `.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own
+`CLAUDE.md` text or commands. Run the setup command it shows once, then `/plan` in Claude Code.
+
 Firefox and Safari can't write to folders. If `file://` gives you trouble, serve it locally:
 `python -m http.server` (or `npx serve`) and open `http://localhost:8000/scrawl.html`.
 
@@ -53,8 +61,9 @@ Code PRs carry code only.
 scrawl.html            the board (open in Chromium)
 app/js, app/css        plain classic scripts and styles
 vendor/                SortableJS, marked, DOMPurify, Rough.js, fonts (no CDN at runtime)
+tools/bundle.mjs       builds app/js/templates.js and the single-file dist/scrawl.html
 CLAUDE.md              the protocol Claude follows
-.claude/commands/      /resolve, /next
+.claude/commands/      /resolve, /next, /plan, /groom, /inbox
 .scrawl/               the board, from the scrawl-board branch: project.md, config.json, items/,
                        log/, hooks/, releases/ (plus the rebuilt index.json)
 docs/ROADMAP.md        phases and gates

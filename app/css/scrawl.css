@@ -375,6 +375,19 @@ body.dragging, body.dragging * { cursor: grabbing !important; }
 .smudge-box { border: 2px dashed var(--red); border-radius: 10px; padding: 8px 10px; }
 .file-path { font-family: var(--font-mono); font-size: 0.75rem; }
 
+/* ---------- hook up Claude ---------- */
+
+.dialog {
+  width: min(600px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 22px 24px; color: var(--ink);
+  background: var(--panel); border: 2.5px solid var(--line); border-radius: var(--wobble); box-shadow: var(--shadow);
+}
+.dialog::backdrop { background: rgba(43, 42, 51, 0.35); }
+.hookup h2 { font-family: var(--font-hand); font-size: 2rem; margin: 0 0 6px; }
+.hookup-list { margin: 0 0 8px; padding-left: 18px; font-size: 0.9rem; }
+.hookup-list code { overflow-wrap: anywhere; }
+.hookup .wizard-command { flex-wrap: wrap; }
+.hookup .wizard-command code { font-size: 0.95rem; }
+
 /* ---------- toasts ---------- */
 
 .toasts { position: fixed; left: 16px; bottom: 16px; z-index: 30; display: flex; flex-direction: column; gap: 8px; }
