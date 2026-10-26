@@ -79,24 +79,34 @@
     const featureIds = new Set(features.map((f) => f.id));
     const proposed = store.list().filter((i) => i.meta.status === 'proposed');
 
-    const children = (parent) => el('ul', { class: 'plan-list plan-children', dataset: { parent: String(parent) } },
-      items.filter((i) => (parent ? i.meta.parent === parent : i.meta.type === 'story' && !featureIds.has(i.meta.parent)))
-        .filter((i) => i.meta.type !== 'feature')
-        .sort(store.compareRank)
-        .map((i) => el('li', { dataset: { file: i.file } }, row(i, pill(i)))));
+    const kidsOf = (parent) => items
+      .filter((i) => (parent ? i.meta.parent === parent : i.meta.type === 'story' && !featureIds.has(i.meta.parent)))
+      .filter((i) => i.meta.type !== 'feature')
+      .sort(store.compareRank);
+    const children = (parent, kids) => el('ul', { class: 'plan-list plan-children', dataset: { parent: String(parent) } },
+      kids.map((i) => el('li', { dataset: { file: i.file } }, row(i, pill(i)))));
+    const finished = (kids) => kids.filter((k) => k.meta.status === 'done' || k.meta.status === 'resolved').length;
 
+    // Each feature is a card: its header row, its stories, and how far along they are.
     const groups = features.map((f) => {
+      const kids = kidsOf(f.id);
       const waiting = proposed.filter((p) => p.meta.parent === f.id).length;
-      return el('section', { class: 'plan-feature' },
-        row(f, waiting ? el('span', { class: 'muted', title: 'proposed stories waiting in the lane' }, `+${waiting} proposed`) : null, pill(f)),
-        children(f.id));
+      const done = finished(kids);
+      return el('section', { class: 'plan-feature type-feature' },
+        row(f, pill(f)),
+        children(f.id, kids),
+        el('footer', { class: 'plan-feature-foot' },
+          el('span', {}, kids.length ? `${done}/${kids.length} done` : 'no stories yet'),
+          kids.length ? el('span', { class: 'meter', 'aria-hidden': 'true' }, el('span', { style: `width:${Math.round((done / kids.length) * 100)}%` })) : null,
+          waiting ? el('span', { class: 'plan-waiting', title: 'proposed stories waiting in the lane' }, `+${waiting} proposed`) : null));
     });
+    const loose = kidsOf(0);
     groups.push(el('section', { class: 'plan-feature plan-orphans' },
-      el('h3', {}, 'Stories without a feature'),
-      children(0)));
+      el('h3', {}, 'Stories without a feature', el('span', { class: 'count' }, String(loose.length))),
+      children(0, loose)));
 
     return el('section', { class: 'plan-tree' },
-      el('header', {}, el('h2', {}, 'Features → stories'),
+      el('header', {}, el('h2', {}, 'Features'), el('span', { class: 'count' }, String(features.length)),
         el('span', { class: 'muted' }, 'drag a story onto another feature to move it')),
       groups);
   }
