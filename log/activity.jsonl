@@ -32,3 +32,4 @@
 {"at":"2026-10-26T12:06","who":"me","id":23,"action":"move","from":"ready","to":"backlog"}
 {"at":"2026-10-26T12:06","who":"me","id":8,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-26T13:38","who":"scrawl","id":22,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-26T13:40","who":"me","id":3,"action":"move","from":"ready","to":"backlog"}

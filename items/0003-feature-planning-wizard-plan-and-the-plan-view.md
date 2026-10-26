@@ -2,12 +2,12 @@
 id: 3
 type: feature
 title: Planning: wizard, /plan and the Plan view
-status: ready
+status: backlog
 assignee: claude
 rank: 5
 labels: [phase-2]
 created: 2026-10-25T13:30
-updated: 2026-10-25T22:56
+updated: 2026-10-26T13:40
 ---
 ## Description
 Phase 2. Go from an empty repo to a planned, accepted backlog using only the board and Claude.
@@ -17,3 +17,4 @@ Phase 2. Go from an empty repo to a planned, accepted backlog using only the boa
 ## Activity
 - 2026-10-25 13:30 · claude · Created from the plan
 - 2026-10-25 22:56 · me · Handed to Claude (Claude's tray)
+- 2026-10-26 13:40 · me · Moved to backlog (Someday pile)
