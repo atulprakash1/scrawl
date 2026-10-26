@@ -121,6 +121,7 @@
       sortables.push(window.Sortable.create(list, {
         group: 'plan',
         sort: false, // order comes from rank on the board; here only the parent changes
+        disabled: store.state.readOnly,
         animation: 150,
         ghostClass: 'card-ghost',
         dragClass: 'card-drag',

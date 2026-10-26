@@ -40,9 +40,17 @@
     releases: [], // .scrawl/releases/v*.md, newest version first: { file, version, text }
     releasesSeen: '',
     known: new Map(), // path -> lastModified we last saw or wrote
+    readOnly: false, // Firefox/Safari: nothing may be written
     lastIndex: '',
   };
   const listeners = new Set();
+
+  // In read-only mode every change is refused with a short note instead.
+  function refused() {
+    if (!state.readOnly) return false;
+    util.toast('Read-only here: open scrawl.html in Chrome or Edge to make changes', 'warn');
+    return true;
+  }
 
   function on(fn) { listeners.add(fn); }
   function emit(change) { for (const fn of listeners) fn(change); }
@@ -85,6 +93,7 @@
   }
 
   async function saveProject(text) {
+    if (refused()) return;
     await fs.write(state.root, PROJECT, text);
     await loadProject();
   }
@@ -232,6 +241,7 @@
 
   // index.json is a cache for cheap overviews (one line per item). Rewritten only when it differs.
   async function writeIndex() {
+    if (state.readOnly) return;
     const rows = list().sort((a, b) => a.id - b.id).map((i) => {
       const m = i.meta;
       const row = { id: i.id, type: m.type, title: m.title, status: m.status };
@@ -254,6 +264,7 @@
   /* Apply `mutate` to the latest copy on disk, not our cached one. That is the field-level merge:
      whatever Claude changed meanwhile survives, and only the fields we touch are overwritten. */
   async function update(file, mutate, { activity, who = 'me' } = {}) {
+    if (refused()) return undefined;
     const path = `${ITEMS}/${file}`;
     const disk = await fs.read(state.root, path);
     if (!disk) {
@@ -292,6 +303,7 @@
   }
 
   async function autoShip() {
+    if (state.readOnly) return;
     if (!state.main.length) return;
     for (const item of list()) {
       if (!SHIPPABLE.has(item.meta.status)) continue;
@@ -317,6 +329,7 @@
   }
 
   async function create({ type = 'story', title, status = 'backlog', assignee = 'me', description = '', severity = 'beetle' }) {
+    if (refused()) return null;
     const id = await takeId();
 
     const last = column(status).at(-1);
@@ -341,6 +354,7 @@
      Description so nothing is lost; an id that another item already uses gets a new number (and the
      file is renamed to match). Returns the repaired item. */
   async function repair(file) {
+    if (refused()) return null;
     const path = `${ITEMS}/${file}`;
     const disk = await fs.read(state.root, path);
     if (!disk) {

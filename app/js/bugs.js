@@ -57,7 +57,7 @@
         if (!title) return;
         f.title.value = '';
         const item = await store.create({ type: 'bug', title, severity: f.severity.value });
-        S.util.toast(`Caught #${item.id} in the jar`);
+        if (item) S.util.toast(`Caught #${item.id} in the jar`);
       },
     },
     el('input', { name: 'title', placeholder: 'A bug in one line…', 'aria-label': 'Bug title' }),

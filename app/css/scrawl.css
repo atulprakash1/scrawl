@@ -269,6 +269,16 @@ select.filter { width: auto; }
   background: color-mix(in srgb, var(--red) 12%, var(--panel));
 }
 
+/* Read-only (Firefox/Safari): a calm banner, and every control that would write is gone. */
+.banner-info {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.9rem;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); background: var(--accent-soft);
+}
+body.read-only :is(.quick-add, #hookup-btn, .drawer .actions, .comment-form, .inline-form, .drawer-section h4 .link-btn,
+  .attach-remove, .decide, .bug-add, .critter .btn, .smudge-box .btn, .plan-tree > header .muted) { display: none !important; }
+body.read-only :is(.fields select, .checklist input, .drawer-title) { pointer-events: none; }
+body.read-only .card, body.read-only .plan-children .plan-row { cursor: pointer; }
+
 /* ---------- board: calm column panels with a status dot and a count pill ---------- */
 
 .board {

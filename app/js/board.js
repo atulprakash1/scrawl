@@ -91,6 +91,7 @@
       sortables.push(window.Sortable.create(cards, {
         group: 'board',
         sort: !recent, // date-ordered columns accept drops but can't be hand-reordered
+        disabled: store.state.readOnly,
         animation: 180,
         easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)',
         ghostClass: 'card-ghost',
@@ -306,7 +307,7 @@
       return;
     }
     if (e.key === 'Enter') S.drawer.open(item.file);
-    else if (e.key === ' ' && !carrying) { e.preventDefault(); pickUp(node); }
+    else if (e.key === ' ' && !carrying && !store.state.readOnly) { e.preventDefault(); pickUp(node); }
   }
 
   // A click anywhere puts a carried card back.
@@ -325,7 +326,7 @@
       const title = m ? m[2] : raw;
       input.value = '';
       const item = await store.create({ type, title });
-      S.util.toast(`Added #${item.id} to the Someday pile`);
+      if (item) S.util.toast(`Added #${item.id} to the Someday pile`);
     });
     document.getElementById('filter-text').addEventListener('input', (e) => { filters.text = e.target.value.trim(); render(); });
     document.getElementById('filter-who').addEventListener('change', (e) => { filters.who = e.target.value; render(); });

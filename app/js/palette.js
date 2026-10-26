@@ -49,11 +49,14 @@
     // "bug: …" (or story/feature/idea) picks the type; otherwise offer a story and a bug.
     const typed = q.match(/^(story|bug|feature|idea)\s*:\s*/i);
     const title = q.slice(typed ? typed[0].length : 0).trim();
-    if (title && !/^#?\d+$/.test(q)) {
+    if (title && !/^#?\d+$/.test(q) && !S.store.state.readOnly) {
       for (const type of typed ? [typed[1].toLowerCase()] : ['story', 'bug']) {
         out.push({
           kind: 'add', icon: '+', label: `Add ${type}: ${title}`, hint: 'Someday pile',
-          run: async () => S.util.toast(`Added #${(await S.store.create({ type, title })).id} to the Someday pile`),
+          run: async () => {
+            const item = await S.store.create({ type, title });
+            if (item) S.util.toast(`Added #${item.id} to the Someday pile`);
+          },
         });
       }
     }

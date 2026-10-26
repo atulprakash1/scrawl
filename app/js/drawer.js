@@ -123,7 +123,7 @@
     // Attached files are saved next to the item and linked from the Description, so Claude sees them.
     // While editing, the links go into the textarea; otherwise straight into the file.
     async function attach(files) {
-      if (!files.length) return;
+      if (!files.length || store.state.readOnly) return;
       const lines = await S.attachments.add(id, files);
       if (!lines.length) return;
       const box = panel().querySelector('textarea[name="desc"]');
