@@ -10,6 +10,7 @@ labels: [phase-2]
 created: 2026-10-25T13:30
 updated: 2026-10-26T18:45
 shipped: 552a0bc
+release: 0.1.0
 ---
 ## Description
 Five questions (what, for whom, stack, must-haves, out of scope) write `.scrawl/project.md` and then show the `/plan` command to paste.
@@ -27,3 +28,4 @@ Five questions (what, for whom, stack, must-haves, out of scope) write `.scrawl/
 - 2026-10-26 13:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/5
 - 2026-10-26 14:24 · me · Moved to resolved (Resolved)
 - 2026-10-26 18:45 · scrawl · Shipped: 552a0bc is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

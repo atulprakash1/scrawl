@@ -11,6 +11,7 @@ created: 2026-10-26T23:34
 updated: 2026-10-26T23:55
 rank: n
 shipped: 461dce7
+release: 0.1.0
 ---
 ## Description
 Firefox and Safari can't write to folders, so they only see a "use Chrome" message. Let them pick the repo folder with a folder input and browse the board and the other views read-only, with a clear note why.
@@ -27,3 +28,4 @@ Firefox and Safari can't write to folders, so they only see a "use Chrome" messa
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: 461dce7 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

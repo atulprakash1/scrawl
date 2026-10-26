@@ -9,6 +9,7 @@ labels: [phase-3]
 created: 2026-10-25T13:30
 updated: 2026-10-26T23:55
 shipped: c098579
+release: 0.1.0
 ---
 ## Description
 Rough.js frames and charts, footprints/confetti motion, Ctrl+K palette, Space-to-pick-up keyboard drag, read-only fallback for Firefox/Safari, fix button for smudged items.
@@ -27,3 +28,4 @@ Rough.js frames and charts, footprints/confetti motion, Ctrl+K palette, Space-to
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: c098579 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

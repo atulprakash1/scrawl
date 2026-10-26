@@ -9,6 +9,7 @@ labels: []
 created: 2026-10-26T23:48
 updated: 2026-10-27T00:04
 shipped: 0f2007c
+release: 0.1.0
 ---
 ## Description
 the header could be better. the tab's size could be a bit bigger. the Scrawl logo is okay, but the text "/ Scrawl" seems redundant.
@@ -35,3 +36,4 @@ the header could be better. the tab's size could be a bit bigger. the Scrawl log
 - 2026-10-26 23:59 · claude · Back on scrawl/44-header for the review comment. Plan: one header row (bigger logo left, tabs centered, actions right, about 64px tall on an 8px grid), Board tools on a slim centered row below, content centered; tabs drop to a centered second row on narrow screens. Added two criteria for this and unticked the rest to re-check.
 - 2026-10-27 00:01 · claude · Reworked per review: one 64px header row (logo about 25% bigger on the left, tabs centred, actions on the right), the Board tools on a slim centred row below, and the board, Plan and views centred. Below 1100px the tabs take a centred second row. Measured at 2200 to 500px: tabs exactly centred, nothing cut off, and the board centred with equal gaps on a wide screen.
 - 2026-10-27 00:04 · scrawl · Shipped: 0f2007c is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

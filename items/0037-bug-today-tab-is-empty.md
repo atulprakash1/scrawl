@@ -10,6 +10,7 @@ labels: []
 created: 2026-10-26T23:05
 updated: 2026-10-26T23:15
 shipped: 3203111
+release: 0.1.0
 ---
 ## Description
 what happened to the data in Today's tab. it is empty
@@ -29,3 +30,4 @@ what happened to the data in Today's tab. it is empty
 - 2026-10-26 23:13 · claude · PR: https://github.com/atulprakash1/scrawl/pull/17
 - 2026-10-26 23:15 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:15 · scrawl · Shipped: 3203111 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

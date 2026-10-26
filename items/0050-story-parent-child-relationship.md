@@ -9,6 +9,7 @@ labels: []
 created: 2026-10-27T00:26
 updated: 2026-10-27T00:40
 shipped: 739b6cf
+release: 0.1.0
 ---
 ## Description
 the story should show somewhere the parent item and link.
@@ -27,3 +28,4 @@ the story should show somewhere the parent item and link.
 - 2026-10-27 00:36 · claude · PR: https://github.com/atulprakash1/scrawl/pull/24
 - 2026-10-27 00:39 · me · Moved to resolved (Resolved)
 - 2026-10-27 00:40 · scrawl · Shipped: 739b6cf is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

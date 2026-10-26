@@ -10,6 +10,7 @@ labels: []
 created: 2026-10-26T23:02
 updated: 2026-10-26T23:09
 shipped: f164d95
+release: 0.1.0
 ---
 ## Description
 retaled to #35. there should be a small delete button after the attached file. the user can delete it if wrong file is attached.
@@ -25,3 +26,4 @@ retaled to #35. there should be a small delete button after the attached file. t
 - 2026-10-26 23:07 · claude · Done: each file in the drawer's Attachments list has a small × after it. After a confirm it deletes the file from .scrawl/attachments/<id>/, removes its link or image from the Description, and adds a "Removed attachment" Activity line. Verified headless (cancel keeps everything, confirm removes only that file and link).
 - 2026-10-26 23:08 · claude · PR: https://github.com/atulprakash1/scrawl/pull/16
 - 2026-10-26 23:09 · scrawl · Shipped: f164d95 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

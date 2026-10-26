@@ -9,6 +9,7 @@ rank: i
 labels: [phase-0]
 created: 2026-10-25T13:30
 updated: 2026-10-25T14:10
+release: 0.1.0
 ---
 ## Description
 Open `scrawl.html` by double-click (file://) in Chrome or Edge and check the File System Access API behaves on both OSes. Fallback if not: `python -m http.server` and open via localhost.
@@ -28,3 +29,4 @@ Open `scrawl.html` by double-click (file://) in Chrome or Edge and check the Fil
 - 2026-10-25 14:06 · me · Moved to backlog (Someday pile)
 - 2026-10-25 14:06 · me · Moved to resolved (Resolved)
 - 2026-10-25 14:10 · me · Shipped by hand
+- 2026-10-27 01:07 · claude · Released in v0.1.0

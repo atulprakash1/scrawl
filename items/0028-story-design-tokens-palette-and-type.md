@@ -10,6 +10,7 @@ labels: [ui]
 created: 2026-10-26T21:30
 updated: 2026-10-26T22:02
 shipped: 71cb74b
+release: 0.1.0
 ---
 ## Description
 Groundwork for the Studio look picked for #23: a richer, more colourful palette with one accent colour per item type, layered surfaces and shadows, and a clean UI font for body text (handwriting kept for the logo and headings). Works in light and dark.
@@ -26,3 +27,4 @@ Groundwork for the Studio look picked for #23: a richer, more colourful palette 
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
 - 2026-10-26 22:02 · scrawl · Shipped: 71cb74b is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

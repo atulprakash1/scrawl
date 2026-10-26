@@ -10,6 +10,7 @@ labels: [phase-2]
 created: 2026-10-25T13:30
 updated: 2026-10-26T18:45
 shipped: 81fd595
+release: 0.1.0
 ---
 ## Description
 Items with `status: proposed` show in a Proposed lane. Plan view shows features → stories. Accept moves to backlog, reject to wontfix.
@@ -26,3 +27,4 @@ Items with `status: proposed` show in a Proposed lane. Plan view shows features 
 - 2026-10-26 14:29 · claude · Done: a Board/Plan toggle in the top bar opens the Plan view. Its Proposed lane groups proposals under their feature, with accept (→ backlog) and reject (→ wontfix) buttons, also in the drawer. Next to it, a features → stories tree where dragging a story onto another feature (or onto "Stories without a feature") changes its parent. Verified in headless Chrome with real pointer drags. Filed #24 for accepting a whole feature at once.
 - 2026-10-26 14:29 · claude · PR: https://github.com/atulprakash1/scrawl/pull/6
 - 2026-10-26 18:45 · scrawl · Shipped: 81fd595 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

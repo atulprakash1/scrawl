@@ -10,6 +10,7 @@ labels: [phase-3]
 created: 2026-10-25T13:30
 updated: 2026-10-26T21:27
 shipped: e49e782
+release: 0.1.0
 ---
 ## Description
 `/release 0.2.0` tags the repo and writes `.scrawl/releases/v0.2.0.md` from done items. The view previews the next changelog.
@@ -27,3 +28,4 @@ shipped: e49e782
 - 2026-10-26 20:29 · me · Moved to resolved (Resolved)
 - 2026-10-26 20:30 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 21:27 · scrawl · Shipped: e49e782 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

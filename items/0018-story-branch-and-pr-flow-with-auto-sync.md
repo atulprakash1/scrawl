@@ -8,6 +8,7 @@ labels: [workflow]
 created: 2026-10-25T14:23
 updated: 2026-10-25T14:57
 rank: 0i
+release: 0.1.0
 ---
 ## Description
 Work must never go to `main` directly. `/resolve` and `/next` do each item on its own branch (`scrawl/<id>-<slug>`), push it and open a PR; the user merges on GitHub.
@@ -29,3 +30,4 @@ Board edits that are not committed yet (moves, comments) travel with the next PR
 - 2026-10-25 14:29 · claude · Added scrawl-home: the open board rewrote index.json after the commit and blocked the switch back to main, so handing the board back now parks live board edits and lays them over the branch state (5 more checks).
 - 2026-10-25 14:29 · claude · PR: https://github.com/atulprakash1/scrawl/pull/1
 - 2026-10-25 14:57 · me · Moved to done (Shipped!)
+- 2026-10-27 01:07 · claude · Released in v0.1.0

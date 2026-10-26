@@ -9,6 +9,7 @@ labels: []
 created: 2026-10-26T23:07
 updated: 2026-10-26T23:23
 shipped: 719ef81
+release: 0.1.0
 ---
 ## Description
 The Someday pile can get long; give it the same hide/show button the Shipped column has.
@@ -27,3 +28,4 @@ The Someday pile can get long; give it the same hide/show button the Shipped col
 - 2026-10-26 23:19 · claude · PR: https://github.com/atulprakash1/scrawl/pull/18
 - 2026-10-26 23:21 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:23 · scrawl · Shipped: 719ef81 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

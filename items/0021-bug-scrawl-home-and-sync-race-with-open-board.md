@@ -11,6 +11,7 @@ created: 2026-10-25T15:11
 updated: 2026-10-26T11:43
 rank: i
 shipped: b052734
+release: 0.1.0
 ---
 ## Description
 Both scripts set the uncommitted `.scrawl/` edits aside, reset `.scrawl/` to HEAD, then run `git switch main` (scrawl-home) or `git merge --ff-only` (scrawl-sync).
@@ -33,3 +34,4 @@ Likely fix: retry the switch/merge a few times, discarding only `.scrawl/` chang
 - 2026-10-25 22:59 · claude · PR: https://github.com/atulprakash1/scrawl/pull/3
 - 2026-10-26 11:43 · me · Moved to resolved (Resolved)
 - 2026-10-26 11:43 · me · Shipped by hand
+- 2026-10-27 01:07 · claude · Released in v0.1.0

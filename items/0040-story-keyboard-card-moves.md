@@ -11,6 +11,7 @@ created: 2026-10-26T23:34
 updated: 2026-10-26T23:55
 rank: m
 shipped: 4370b01
+release: 0.1.0
 ---
 ## Description
 Cards can only be moved with a mouse. Focus a card, press Space to pick it up, use the arrow keys to move it (left/right between columns, up/down within one), then Space to drop or Esc to cancel. Saves exactly like a drag.
@@ -27,3 +28,4 @@ Cards can only be moved with a mouse. Focus a card, press Space to pick it up, u
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: 4370b01 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

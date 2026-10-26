@@ -10,6 +10,7 @@ labels: []
 created: 2026-10-25T15:04
 updated: 2026-10-25T22:54
 shipped: b052734
+release: 0.1.0
 ---
 ## Description
 the vertical display of Shipped section looks awkward. keep it unhidden by default. sort the items in the recent on top order. hide button stays but the width do not change when hidden. there is enough space to the right.
@@ -27,3 +28,4 @@ the vertical display of Shipped section looks awkward. keep it unhidden by defau
 - 2026-10-25 15:10 · claude · PR: https://github.com/atulprakash1/scrawl/pull/2
 - 2026-10-25 15:11 · me · Reviewed and accepted (Resolved)
 - 2026-10-25 22:54 · scrawl · Shipped: b052734 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

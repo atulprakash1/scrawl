@@ -10,6 +10,7 @@ labels: [phase-3]
 created: 2026-10-25T13:30
 updated: 2026-10-26T21:26
 shipped: 919da11
+release: 0.1.0
 ---
 ## Description
 Everything in date order: commits, moves, comments, releases. Filter by you vs Claude. Commits without `#N` show as orphan sticky notes.
@@ -27,3 +28,4 @@ Everything in date order: commits, moves, comments, releases. Filter by you vs C
 - 2026-10-26 20:29 · me · Moved to resolved (Resolved)
 - 2026-10-26 20:30 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 21:26 · scrawl · Shipped: 919da11 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

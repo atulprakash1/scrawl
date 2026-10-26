@@ -10,6 +10,7 @@ labels: [ui]
 created: 2026-10-26T21:30
 updated: 2026-10-26T22:02
 shipped: 7fe702c
+release: 0.1.0
 ---
 ## Description
 Bring every other screen in line with the Studio look, so the app feels like one product: Plan rows, Bug jar, Today cards, Timeline, Releases pages, the welcome screen and the project wizard.
@@ -26,3 +27,4 @@ Bring every other screen in line with the Studio look, so the app feels like one
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
 - 2026-10-26 22:02 · scrawl · Shipped: 7fe702c is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

@@ -10,6 +10,7 @@ labels: [phase-2]
 created: 2026-10-25T13:30
 updated: 2026-10-26T18:45
 shipped: 23ef224
+release: 0.1.0
 ---
 ## Description
 `/plan` proposes features and stories from project.md, `/groom` splits big stories and fills acceptance, `/inbox` answers `@claude` comments.
@@ -26,3 +27,4 @@ shipped: 23ef224
 - 2026-10-26 15:03 · claude · Done: added /plan (proposed features and stories with parent, size and acceptance; `feature N` for one feature), /groom (proposes splits, fills missing acceptance on stories and bugs, flags stale items once, never changes status) and /inbox (answers unanswered @claude comments). I only dry-ran the detection rules on this board, so the boxes are unticked. Please try /plan in a fresh repo after the wizard.
 - 2026-10-26 15:04 · claude · PR: https://github.com/atulprakash1/scrawl/pull/7
 - 2026-10-26 18:45 · scrawl · Shipped: 23ef224 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

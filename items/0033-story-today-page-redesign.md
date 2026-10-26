@@ -9,6 +9,7 @@ labels: []
 created: 2026-10-26T22:03
 updated: 2026-10-26T22:46
 shipped: 41787bc
+release: 0.1.0
 ---
 ## Description
 Today page can use redesign. when there are several items, user has to scroll to see Waiting for You section. there is enough space for horizontal or same level display.
@@ -25,3 +26,4 @@ Today page can use redesign. when there are several items, user has to scroll to
 - 2026-10-26 22:08 · claude · PR: https://github.com/atulprakash1/scrawl/pull/13
 - 2026-10-26 22:13 · me · Moved to resolved (Resolved)
 - 2026-10-26 22:46 · scrawl · Shipped: 41787bc is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

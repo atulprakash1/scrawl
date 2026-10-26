@@ -10,6 +10,7 @@ labels: [ui]
 created: 2026-10-26T21:30
 updated: 2026-10-26T22:02
 shipped: c99bd64
+release: 0.1.0
 ---
 ## Description
 Replace the sticky notes with Studio cards: a thick colour band on the left by type, a type badge with icon and word, title, and a footer of chips (assignee, acceptance, commits, labels). Layered shadow, lift on hover. NEEDS YOU and SHIPPED become tidy badges.
@@ -26,3 +27,4 @@ Replace the sticky notes with Studio cards: a thick colour band on the left by t
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
 - 2026-10-26 22:02 · scrawl · Shipped: c99bd64 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

@@ -10,6 +10,7 @@ labels: []
 created: 2026-10-27T00:28
 updated: 2026-10-27T00:40
 shipped: 92a9bdc
+release: 0.1.0
 ---
 ## Description
 there was a red horizontal bar when new item created. just a flicker for a fraction of a second. what was that? if it has no significant purpose, then remove it.
@@ -28,3 +29,4 @@ there was a red horizontal bar when new item created. just a flicker for a fract
 - 2026-10-27 00:32 · claude · PR: https://github.com/atulprakash1/scrawl/pull/23
 - 2026-10-27 00:34 · me · Moved to resolved (Resolved)
 - 2026-10-27 00:40 · scrawl · Shipped: 92a9bdc is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

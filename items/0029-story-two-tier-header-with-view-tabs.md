@@ -10,6 +10,7 @@ labels: [ui]
 created: 2026-10-26T21:30
 updated: 2026-10-26T22:02
 shipped: a8fd28e
+release: 0.1.0
 ---
 ## Description
 A roomier header: logo, project and actions (Hook up Claude, folder, theme) on top, the views as tabs below, and the add and filter toolbar only on the Board. Also covers idea #27.
@@ -26,3 +27,4 @@ A roomier header: logo, project and actions (Hook up Claude, folder, theme) on t
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
 - 2026-10-26 22:02 · scrawl · Shipped: a8fd28e is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

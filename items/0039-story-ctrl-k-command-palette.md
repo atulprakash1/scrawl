@@ -11,6 +11,7 @@ created: 2026-10-26T23:34
 updated: 2026-10-26T23:55
 rank: r
 shipped: 6b2716c
+release: 0.1.0
 ---
 ## Description
 A command palette on Ctrl+K (Cmd+K on macOS): type to find an item by number or title and open it, switch views, copy /resolve N or /next, and add a bug or story, all without the mouse.
@@ -28,3 +29,4 @@ A command palette on Ctrl+K (Cmd+K on macOS): type to find an item by number or 
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: 6b2716c is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

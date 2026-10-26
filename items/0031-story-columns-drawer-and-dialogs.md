@@ -10,6 +10,7 @@ labels: [ui]
 created: 2026-10-26T21:30
 updated: 2026-10-26T22:02
 shipped: 01d2394
+release: 0.1.0
 ---
 ## Description
 Columns get clean headers (name, count, WIP), a calm background and a clear drop highlight. The item drawer and the Hook up dialog get the same surfaces, spacing and type.
@@ -26,3 +27,4 @@ Columns get clean headers (name, count, WIP), a calm background and a clear drop
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
 - 2026-10-26 22:02 · scrawl · Shipped: 01d2394 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

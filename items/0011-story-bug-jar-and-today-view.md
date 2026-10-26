@@ -10,6 +10,7 @@ labels: [phase-3]
 created: 2026-10-25T13:30
 updated: 2026-10-26T21:27
 shipped: 415316d
+release: 0.1.0
 ---
 ## Description
 Bugs by severity and age as critters in a jar, one-line quick add, "Hand to Claude". Today: what changed since last visit, what waits for you, what is stale.
@@ -27,3 +28,4 @@ Bugs by severity and age as critters in a jar, one-line quick add, "Hand to Clau
 - 2026-10-26 20:30 · claude · PR: https://github.com/atulprakash1/scrawl/pull/11
 - 2026-10-26 20:35 · me · Moved to resolved (Resolved)
 - 2026-10-26 21:27 · scrawl · Shipped: 415316d is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

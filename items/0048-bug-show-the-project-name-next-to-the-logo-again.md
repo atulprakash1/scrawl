@@ -10,6 +10,7 @@ created: 2026-10-27T00:20
 updated: 2026-10-27T00:30
 rank: i
 shipped: c5ca390
+release: 0.1.0
 ---
 ## Description
 #44 hid "/ <project>" when the project is called Scrawl, so the header shows only the logo and you can't tell which project is open. Logo and project name together worked better; always show the project name again.
@@ -25,3 +26,4 @@ shipped: c5ca390
 - 2026-10-27 00:22 · claude · PR: https://github.com/atulprakash1/scrawl/pull/22
 - 2026-10-27 00:24 · me · Moved to resolved (Resolved)
 - 2026-10-27 00:30 · scrawl · Shipped: c5ca390 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

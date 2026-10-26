@@ -11,6 +11,7 @@ created: 2026-10-26T23:34
 updated: 2026-10-26T23:55
 rank: o
 shipped: 36525ed
+release: 0.1.0
 ---
 ## Description
 Studio-style motion instead of the sketchbook footprints: cards that Claude (or anything outside the board) changes get a short highlight, and a card that ships gets a small celebration. Everything is off under reduced motion.
@@ -27,3 +28,4 @@ Studio-style motion instead of the sketchbook footprints: cards that Claude (or 
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: 36525ed is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

@@ -9,6 +9,7 @@ labels: []
 created: 2026-10-26T22:48
 updated: 2026-10-26T23:00
 shipped: 06fa3e1
+release: 0.1.0
 ---
 ## Description
 the description field could use a upload functionality. user can provide some sample for inspiration, bug fixing, etc. drag and drop should also work, but active area is only the description box.
@@ -25,3 +26,4 @@ the description field could use a upload functionality. user can provide some sa
 - 2026-10-26 22:55 · claude · PR: https://github.com/atulprakash1/scrawl/pull/15
 - 2026-10-26 22:59 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:00 · scrawl · Shipped: 06fa3e1 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

@@ -9,6 +9,7 @@ created: 2026-10-26T14:28
 updated: 2026-10-27T01:05
 rank: i
 shipped: 7141aef
+release: 0.1.0
 ---
 ## Description
 In the Plan view's Proposed lane, accepting a feature only accepts the feature itself. After a big `/plan` run, accepting a feature and its eight stories takes nine clicks. An "accept all" on a proposed feature (or on the lane) would make this quicker.
@@ -24,3 +25,4 @@ In the Plan view's Proposed lane, accepting a feature only accepts the feature i
 - 2026-10-27 00:45 · claude · PR: https://github.com/atulprakash1/scrawl/pull/25
 - 2026-10-27 00:46 · me · Moved to resolved (Resolved)
 - 2026-10-27 01:05 · scrawl · Shipped: 7141aef is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

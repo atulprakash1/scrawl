@@ -10,6 +10,7 @@ labels: [phase-4]
 created: 2026-10-27T00:10
 updated: 2026-10-27T00:24
 shipped: 9c473c9
+release: 0.1.0
 ---
 ## Description
 Opening another repo means the folder picker every time. Remember the last few project folders and offer them on the welcome screen and from the folder button for one-click switching.
@@ -25,3 +26,4 @@ Opening another repo means the folder picker every time. Remember the last few p
 - 2026-10-27 00:17 · claude · Done: the last 6 opened folders are kept in IndexedDB (newest first, deduplicated with isSameEntry). The welcome screen lists them as one-click buttons, and the folder button opens a Projects list (current one marked) with Pick another folder. Verified headless with stand-in handles; the IndexedDB storage itself wasn't exercised here (headless IndexedDB doesn't work on this machine).
 - 2026-10-27 00:17 · claude · PR: https://github.com/atulprakash1/scrawl/pull/21
 - 2026-10-27 00:24 · scrawl · Shipped: 9c473c9 is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0

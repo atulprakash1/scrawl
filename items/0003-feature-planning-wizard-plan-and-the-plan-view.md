@@ -9,6 +9,7 @@ labels: [phase-2]
 created: 2026-10-25T13:30
 updated: 2026-10-26T22:59
 shipped: c254c72
+release: 0.1.0
 ---
 ## Description
 Phase 2. Go from an empty repo to a planned, accepted backlog using only the board and Claude.
@@ -21,3 +22,4 @@ Phase 2. Go from an empty repo to a planned, accepted backlog using only the boa
 - 2026-10-26 13:40 · me · Moved to backlog (Someday pile)
 - 2026-10-26 22:47 · me · Moved to resolved (Resolved)
 - 2026-10-26 22:59 · me · Shipped by hand
+- 2026-10-27 01:07 · claude · Released in v0.1.0

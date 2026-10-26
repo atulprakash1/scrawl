@@ -11,6 +11,7 @@ created: 2026-10-26T23:34
 updated: 2026-10-26T23:55
 rank: mi
 shipped: 3f3a8cd
+release: 0.1.0
 ---
 ## Description
 An item whose header can't be read fully is shown as "smudged". The drawer explains the problem but offers no fix. Add a Fix button that rewrites the header cleanly, keeping every field and line it can read.
@@ -27,3 +28,4 @@ An item whose header can't be read fully is shown as "smudged". The drawer expla
 - 2026-10-26 23:44 · claude · PR: https://github.com/atulprakash1/scrawl/pull/19
 - 2026-10-26 23:45 · me · Moved to resolved (Resolved)
 - 2026-10-26 23:55 · scrawl · Shipped: 3f3a8cd is on main
+- 2026-10-27 01:07 · claude · Released in v0.1.0
