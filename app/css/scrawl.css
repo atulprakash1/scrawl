@@ -244,19 +244,22 @@ textarea { width: 100%; resize: vertical; }
 .project-name { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; }
 .spacer { flex: 1; }
 
-.topbar-nav { display: flex; align-items: flex-end; gap: 16px; padding: 0 20px; min-height: 46px; }
+.topbar-nav { display: flex; align-items: flex-end; gap: 16px; padding: 2px 20px 0; min-height: 52px; }
 .views { display: flex; gap: 2px; align-self: stretch; align-items: flex-end; }
 .view-btn {
-  cursor: pointer; position: relative; padding: 10px 12px 11px;
-  font-weight: 600; font-size: 0.9rem; color: var(--ink-soft);
-  background: none; border: none; border-radius: var(--r-sm) var(--r-sm) 0 0;
+  cursor: pointer; position: relative; padding: 13px 18px 14px;
+  font-weight: 600; font-size: 1rem; color: var(--ink-soft);
+  background: none; border: none; border-radius: var(--r-md) var(--r-md) 0 0;
+  white-space: nowrap; flex: none;
+  transition: color 0.12s, background 0.12s;
 }
 .view-btn:hover { color: var(--ink); background: var(--surface-2); }
-.view-btn[aria-pressed="true"] { color: var(--accent); }
+.view-btn[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); }
 .view-btn[aria-pressed="true"]::after {
-  content: ''; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px;
+  content: ''; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 3px;
   border-radius: 3px 3px 0 0; background: var(--accent);
 }
+.topbar.same-name :is(.crumb-sep, .project-name) { display: none; }
 
 .board-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; padding: 6px 0; }
 .quick-add { display: flex; gap: 6px; width: clamp(180px, 24vw, 340px); }
@@ -763,13 +766,17 @@ kbd {
 .toast-warn { border-left-color: var(--red); }
 .toast.leaving { opacity: 0; transform: translateY(8px); }
 
+/* The tabs and the Board's tools no longer fit side by side: the tools get their own row. */
+@media (max-width: 1180px) {
+  .topbar-nav { flex-wrap: wrap; }
+  .views { overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+  .board-tools { margin-left: 0; width: 100%; padding: 0 0 10px; }
+  .quick-add { flex: 1; width: auto; max-width: 520px; }
+}
+
 @media (max-width: 900px) {
   .today-inner { grid-template-columns: minmax(0, 1fr); }
   .today-card { max-height: 45vh; }
-  .topbar-nav { flex-wrap: wrap; }
-  .views { overflow-x: auto; max-width: 100%; }
-  .board-tools { margin-left: 0; width: 100%; padding: 0 0 8px; }
-  .quick-add { flex: 1; width: auto; }
 }
 
 @media (max-width: 640px) {
