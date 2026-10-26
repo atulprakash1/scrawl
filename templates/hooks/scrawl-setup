@@ -1,0 +1,76 @@
+#!/bin/sh
+# Scrawl: keep the board out of your project's git. Run once per clone: sh .scrawl/hooks/scrawl-setup
+#
+# The board (.scrawl/) lives on its own branch, scrawl-board, which shares no history with your code.
+# It is checked out as a separate git worktree at .scrawl/ and listed in .git/info/exclude, so card
+# moves never show up in your project's `git status`, diffs or PRs, and switching branches never
+# touches the board. scrawl-sync commits and pushes the board branch for you.
+#
+# A plain .scrawl/ folder is moved onto the branch (on top of it, if the branch already exists).
+# On a fresh clone .scrawl/ isn't there yet; fetch it first: git worktree add .scrawl scrawl-board
+cd "$(dirname "$0")/../.." || exit 1
+board=scrawl-board
+
+exclude="$(git rev-parse --git-common-dir)/info/exclude"
+mkdir -p "$(dirname "$exclude")"
+grep -qx '/.scrawl/' "$exclude" 2>/dev/null || printf '/.scrawl/\n' >> "$exclude"
+git config core.hooksPath .scrawl/hooks
+
+if [ -e .scrawl/.git ]; then
+  echo "scrawl-setup: the board is on branch $(git -C .scrawl symbolic-ref -q --short HEAD)"
+  exit 0
+fi
+[ -d .scrawl ] || { echo "scrawl-setup: no .scrawl/ folder here" >&2; exit 1; }
+if [ -n "$(git ls-files -- .scrawl | head -n 1)" ]; then
+  echo "scrawl-setup: .scrawl/ is still tracked by $(git symbolic-ref -q --short HEAD || echo HEAD)." >&2
+  echo "  Untrack it first (git rm -r -q --cached .scrawl), commit that, then run this again." >&2
+  exit 1
+fi
+
+# The board branch keeps its own LF rule and leaves out everything Scrawl rebuilds.
+[ -f .scrawl/.gitattributes ] || printf '* text=auto eol=lf\n' > .scrawl/.gitattributes
+[ -f .scrawl/.gitignore ] || printf '%s\n' '# Rebuilt by the board and the git hooks' \
+  index.json log/commits.txt log/main.txt log/main.txt.tmp > .scrawl/.gitignore
+
+parent=
+if git rev-parse --verify -q "refs/heads/$board" >/dev/null; then
+  parent=$(git rev-parse "refs/heads/$board")
+elif git rev-parse --verify -q "refs/remotes/origin/$board" >/dev/null; then
+  parent=$(git rev-parse "refs/remotes/origin/$board")
+fi
+
+# Commit the folder as it is onto the board branch, using a throwaway index.
+gitdir=$(git rev-parse --absolute-git-dir)
+idx="$gitdir/scrawl-setup.index"
+rm -f "$idx"
+commit=$(
+  cd .scrawl || exit 1
+  export GIT_DIR="$gitdir" GIT_WORK_TREE=. GIT_INDEX_FILE="$idx"
+  if [ -n "$parent" ]; then git read-tree "$parent"; else git read-tree --empty; fi
+  git add -A . || exit 1
+  git ls-files -ci --exclude-standard | while IFS= read -r f; do git rm -q --cached -- "$f"; done
+  git ls-files -- hooks | while IFS= read -r f; do git update-index --chmod=+x -- "$f"; done
+  tree=$(git write-tree) || exit 1
+  if [ -n "$parent" ] && [ "$tree" = "$(git rev-parse "$parent^{tree}")" ]; then echo "$parent"; exit 0; fi
+  if [ -n "$parent" ]; then git commit-tree "$tree" -p "$parent" -m "Board: moved onto its own branch"
+  else git commit-tree "$tree" -m "Board: moved onto its own branch"; fi
+)
+rc=$?
+rm -f "$idx"
+[ $rc -eq 0 ] && [ -n "$commit" ] || { echo "scrawl-setup: couldn't commit the board" >&2; exit 1; }
+git update-ref "refs/heads/$board" "$commit"
+
+# Turn the folder into a worktree of the branch where it stands (its files already match the branch):
+# make an empty worktree elsewhere, hand its .git link to .scrawl/, and let git repair the paths.
+# Nothing is moved, so the open board keeps working and rebuilt files stay put.
+tmp="$gitdir/scrawl-setup/.scrawl"
+rm -rf "$gitdir/scrawl-setup"
+if ! git worktree add -q --no-checkout "$tmp" "$board"; then
+  echo "scrawl-setup: couldn't make a worktree for $board; .scrawl/ is unchanged" >&2
+  exit 1
+fi
+mv "$tmp/.git" .scrawl/.git
+rm -rf "$gitdir/scrawl-setup"
+git worktree repair .scrawl >/dev/null 2>&1
+git -C .scrawl reset -q
+echo "scrawl-setup: the board is now on branch $board (scrawl-sync commits and pushes it)"
