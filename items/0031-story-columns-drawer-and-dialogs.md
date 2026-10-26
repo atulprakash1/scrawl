@@ -2,13 +2,14 @@
 id: 31
 type: story
 title: Columns, drawer and dialogs in the Studio style
-status: resolved
+status: done
 parent: 23
 assignee: claude
 size: S
 labels: [ui]
 created: 2026-10-26T21:30
-updated: 2026-10-26T21:49
+updated: 2026-10-26T22:02
+shipped: 01d2394
 ---
 ## Description
 Columns get clean headers (name, count, WIP), a calm background and a clear drop highlight. The item drawer and the Hook up dialog get the same surfaces, spacing and type.
@@ -24,3 +25,4 @@ Columns get clean headers (name, count, WIP), a calm background and a clear drop
 - 2026-10-26 21:38 · claude · Done: columns are calm panels with a status dot, an uppercase name and a count pill; over WIP turns the pill red and adds a red top bar, and the drop target glows in the accent colour. The drawer shows the card's type badge, a borderless title, a fields panel and small uppercase section labels, and activity has round avatars. The Hook up dialog uses the same surfaces with a blurred backdrop. Verified headless (over-WIP after a real drag) and by screenshots.
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
+- 2026-10-26 22:02 · scrawl · Shipped: 01d2394 is on main

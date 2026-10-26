@@ -2,13 +2,14 @@
 id: 29
 type: story
 title: Two-tier header with view tabs
-status: resolved
+status: done
 parent: 23
 assignee: claude
 size: S
 labels: [ui]
 created: 2026-10-26T21:30
-updated: 2026-10-26T21:49
+updated: 2026-10-26T22:02
+shipped: a8fd28e
 ---
 ## Description
 A roomier header: logo, project and actions (Hook up Claude, folder, theme) on top, the views as tabs below, and the add and filter toolbar only on the Board. Also covers idea #27.
@@ -24,3 +25,4 @@ A roomier header: logo, project and actions (Hook up Claude, folder, theme) on t
 - 2026-10-26 21:34 · claude · Done: the header has two rows. The top has the logo / project crumb and the actions; below are underlined view tabs, with quick add and the filters on the right, shown only on the Board. Measured: no overflow at 1000px or at the narrowest headless width (500px), where the tools wrap under the tabs and the Hook up label shrinks to its icon.
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
+- 2026-10-26 22:02 · scrawl · Shipped: a8fd28e is on main

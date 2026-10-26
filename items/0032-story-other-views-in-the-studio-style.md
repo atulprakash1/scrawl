@@ -2,13 +2,14 @@
 id: 32
 type: story
 title: Plan, Bug jar, Today, Timeline, Releases and welcome in the Studio style
-status: resolved
+status: done
 parent: 23
 assignee: claude
 size: M
 labels: [ui]
 created: 2026-10-26T21:30
-updated: 2026-10-26T21:49
+updated: 2026-10-26T22:02
+shipped: 7fe702c
 ---
 ## Description
 Bring every other screen in line with the Studio look, so the app feels like one product: Plan rows, Bug jar, Today cards, Timeline, Releases pages, the welcome screen and the project wizard.
@@ -24,3 +25,4 @@ Bring every other screen in line with the Studio look, so the app feels like one
 - 2026-10-26 21:41 · claude · Done: Plan (rows as mini cards with type bands, status-coloured pills, lanes as panels), Bug jar (critter cards with a severity band and icon circle), Today (three panels with coloured top edges), Timeline (event dots on a spine, orphan commits as amber cards), Releases (theme-aware pages, torn edge kept) and welcome/wizard (one main button, quieter secondary) are on the Studio tokens. Checked all of them in light and dark by screenshot.
 - 2026-10-26 21:42 · claude · PR: https://github.com/atulprakash1/scrawl/pull/12
 - 2026-10-26 21:49 · me · Reviewed and accepted (Resolved)
+- 2026-10-26 22:02 · scrawl · Shipped: 7fe702c is on main
