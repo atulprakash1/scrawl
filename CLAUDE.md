@@ -30,13 +30,15 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
 - Activity lines are append-only, newest last, one line each:
   `- 2026-10-25 11:02 · claude · Picked up. Root cause: null email.`
   Lines from `me` are the user's comments and instructions; read them before starting.
+- The board is not part of the project's git: `.scrawl/` is a separate worktree of its own
+  `scrawl-board` branch (set up once per clone by `sh .scrawl/hooks/scrawl-setup`). Edit item files
+  there as usual, but never `git add` or commit them yourself; `scrawl-sync` commits and pushes the board.
 - Git: never commit to or push `main`. Each item gets its own branch `scrawl/<id>-<slug>`, pushed
   with a PR (`gh pr create`); the user merges on GitHub. Start every command with
-  `sh .scrawl/hooks/scrawl-sync` on `main` — it fast-forwards `main` from GitHub (no manual pull)
-  and keeps uncommitted board edits. The board lives in the main checkout, so after pushing a branch,
-  run `sh .scrawl/hooks/scrawl-home <branch>` (see `.claude/commands/resolve.md`).
+  `sh .scrawl/hooks/scrawl-sync` — it fast-forwards `main` from GitHub (no manual pull) and saves the board.
 - Commits: start the message with the item number, e.g. `#42 Handle empty form`. Only a leading
   `#N` links a commit to an item (GitHub's `(#12)` PR suffix is ignored). Merging the PR ships the card.
+  Commits and PRs carry code only.
 - Finishing: tick acceptance boxes you verified (`- [x]`), add a 1-3 sentence summary Activity line,
   set `status: review`. Never set `resolved` or `done` — the user accepts items after review.
 - Creating an item: take `nextId` from `.scrawl/config.json`, then increment it there. File name is

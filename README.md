@@ -14,16 +14,23 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 Firefox and Safari can't write to folders. If `file://` gives you trouble, serve it locally:
 `python -m http.server` (or `npx serve`) and open `http://localhost:8000/scrawl.html`.
 
-## Git hook (once per clone)
+## Setup (once per clone)
+
+The board stays out of your project's git. `.scrawl/` is checked out from its own `scrawl-board`
+branch (a separate git worktree, listed in `.git/info/exclude`), so moving cards never shows up in
+`git status`, diffs or PRs, and switching branches never touches the board.
 
 ```sh
-git config core.hooksPath .scrawl/hooks
+git worktree add .scrawl scrawl-board   # fresh clone only: fetch the board
+sh .scrawl/hooks/scrawl-setup           # exclude .scrawl/, install the git hooks
 ```
 
-Every commit is then logged to `.scrawl/log/commits.txt` (ignored by git; rebuilt from history
-if missing), and commits whose message starts with `#42` show up on card #42.
-The hooks also list the commits on `main` in `.scrawl/log/main.txt` (after commits, merges, pulls and syncs).
-On macOS/Linux make sure the hooks are executable: `chmod +x .scrawl/hooks/*`.
+Starting Scrawl in a new folder? Run just `scrawl-setup`: it moves the plain `.scrawl/` folder onto
+the `scrawl-board` branch. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
+
+Every commit is then logged to `.scrawl/log/commits.txt`, and commits whose message starts with
+`#42` show up on card #42. The hooks also list the commits on `main` in `.scrawl/log/main.txt`.
+Both are rebuilt from git history when missing and never committed, nor is `index.json`.
 
 ## Flow
 
@@ -35,8 +42,9 @@ pushes it and opens a PR, and the card lands in *Eyeball it*. You review and mer
 the PR waits to be merged.
 
 You never `git pull` by hand: every `/resolve` and `/next` starts with `.scrawl/hooks/scrawl-sync`,
-which fast-forwards `main` from GitHub and keeps your uncommitted board edits. The board then
-ships every card whose work is on `main`. Board edits (moves, comments) travel with the next PR.
+which fast-forwards `main` from GitHub, then commits the board's changes (moves, comments, Claude's
+notes) on `scrawl-board` and pushes them. The board then ships every card whose work is on `main`.
+Code PRs carry code only.
 *Shipped!* lists the most recently shipped first; **▾ hide** tucks its cards away without changing its width.
 
 ## Layout
@@ -47,7 +55,8 @@ app/js, app/css        plain classic scripts and styles
 vendor/                SortableJS, marked, DOMPurify, Rough.js, fonts (no CDN at runtime)
 CLAUDE.md              the protocol Claude follows
 .claude/commands/      /resolve, /next
-.scrawl/               project.md, config.json, index.json, items/, log/, hooks/, releases/
+.scrawl/               the board, from the scrawl-board branch: project.md, config.json, items/,
+                       log/, hooks/, releases/ (plus the rebuilt index.json)
 docs/ROADMAP.md        phases and gates
 ```
 
