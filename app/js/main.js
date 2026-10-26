@@ -3,7 +3,7 @@
   const S = window.Scrawl;
   const { el } = S.util;
 
-  const screens = ['welcome', 'app'];
+  const screens = ['welcome', 'wizard', 'app'];
   function show(name) {
     for (const s of screens) document.getElementById(s).hidden = s !== name;
   }
@@ -54,6 +54,14 @@
     }
     document.getElementById('project-name').textContent = S.store.project;
     document.title = `${S.store.project} · Scrawl`;
+    if (S.store.state.projectEmpty) {
+      show('wizard');
+      return S.wizard.start(document.getElementById('wizard-card'), openBoard);
+    }
+    openBoard();
+  }
+
+  function openBoard() {
     show('app');
     S.board.render();
     S.watcher.start();
