@@ -10,6 +10,7 @@ labels: []
 created: 2026-10-27T01:19
 updated: 2026-10-27T01:27
 shipped: 16968d1
+release: 0.2.0
 ---
 ## Description
 the parent link increases the item box size causing a bottom scroll bar. reduce the link size.
@@ -31,3 +32,4 @@ the parent link increases the item box size causing a bottom scroll bar. reduce 
 - 2026-10-27 01:26 · claude · PR: https://github.com/atulprakash1/scrawl/pull/28
 - 2026-10-27 01:27 · me · Moved to resolved (Resolved)
 - 2026-10-27 01:27 · me · Shipped by hand
+- 2026-10-27 14:00 · claude · Released in v0.2.0

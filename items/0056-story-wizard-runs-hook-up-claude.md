@@ -9,6 +9,7 @@ labels: [install]
 created: 2026-10-27T09:56
 updated: 2026-10-27T11:00
 shipped: a26eae9
+release: 0.2.0
 ---
 ## Description
 Start Scrawl and Hook up Claude are separate actions. When the wizard finishes in a repo that isn't hooked up yet, run the hook-up right away and show the one setup command to paste. The Hook up Claude button stays for re-running/refreshing.
@@ -25,3 +26,4 @@ Start Scrawl and Hook up Claude are separate actions. When the wizard finishes i
 - 2026-10-27 10:04 · claude · Finishing the wizard now runs the hook-up when CLAUDE.md lacks the protocol or .scrawl/hooks/scrawl-setup is missing, then shows the written files, the setup command and /plan on one screen; a failed hook-up toasts and still shows /plan. Verified with a stubbed fs/DOM harness (new repo, own CLAUDE.md and command kept, already hooked up, write failure); not clicked through in a real browser.
 - 2026-10-27 10:07 · claude · PR: https://github.com/atulprakash1/scrawl/pull/29
 - 2026-10-27 11:00 · scrawl · Shipped: a26eae9 is on main
+- 2026-10-27 14:00 · claude · Released in v0.2.0
