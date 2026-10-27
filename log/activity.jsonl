@@ -116,3 +116,5 @@
 {"at":"2026-10-27T09:57","who":"me","id":55,"action":"move","from":"proposed","to":"wontfix"}
 {"at":"2026-10-27T10:00","who":"me","id":55,"action":"move","from":"proposed","to":"backlog"}
 {"at":"2026-10-27T10:00","who":"me","id":54,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-27T11:00","who":"scrawl","id":54,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-27T11:00","who":"scrawl","id":58,"action":"move","from":"review","to":"done"}

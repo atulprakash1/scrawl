@@ -2,12 +2,13 @@
 id: 55
 type: story
 title: Prebuilt scrawl.html on GitHub Releases
-status: review
+status: done
 parent: 54
 assignee: claude
 labels: [install]
 created: 2026-10-27T09:56
-updated: 2026-10-27T10:02
+updated: 2026-10-27T11:00
+shipped: b777316
 ---
 ## Description
 Users must run `node tools/bundle.mjs` to get `dist/scrawl.html`. Attach the built file to each GitHub Release (e.g. as part of `/release`, via `gh release upload`) so installing needs no Node.
@@ -22,3 +23,4 @@ Users must run `node tools/bundle.mjs` to get `dist/scrawl.html`. Attach the bui
 - 2026-10-27 10:01 · claude · Picked up on the feature branch scrawl/54-one-click-install. Plan: /release builds and attaches dist/scrawl.html when the repo is Scrawl itself; README links the latest release download.
 - 2026-10-27 10:02 · claude · /release step 6 now builds dist/scrawl.html from the tag and attaches it with gh release create/upload, only in the Scrawl repo (other repos have no bundler). README links releases/latest/download/scrawl.html. Not exercised: the first box (and the link) can only be checked at the next release, so I left it unticked.
 - 2026-10-27 10:07 · claude · PR: https://github.com/atulprakash1/scrawl/pull/29
+- 2026-10-27 11:00 · scrawl · Shipped: b777316 is on main
