@@ -2,12 +2,12 @@
 id: 61
 type: bug
 title: Hook-up setup command fails in Windows PowerShell
-status: ready
+status: review
 severity: beetle
 assignee: claude
 labels: [install]
 created: 2026-10-27T21:02
-updated: 2026-10-27T21:35
+updated: 2026-10-27T21:40
 ---
 ## Description
 The Hook up Claude dialog tells you to run `chmod +x .scrawl/hooks/* && sh .scrawl/hooks/scrawl-setup`
@@ -16,10 +16,13 @@ The Hook up Claude dialog tells you to run `chmod +x .scrawl/hooks/* && sh .scra
 needed on macOS/Linux; on Windows only `sh .scrawl/hooks/scrawl-setup` matters.
 
 ## Acceptance
-- [ ] On Windows the dialog shows a command that works pasted into PowerShell (e.g. `& "$env:ProgramFiles\Git\bin\sh.exe" .scrawl/hooks/scrawl-setup`) or clearly says to use Git Bash
-- [ ] macOS keeps the chmod + sh command
-- [ ] README's setup instructions mention the Windows form
+- [x] On Windows the dialog shows a command that works pasted into PowerShell (e.g. `& "$env:ProgramFiles\Git\bin\sh.exe" .scrawl/hooks/scrawl-setup`) or clearly says to use Git Bash
+- [x] macOS keeps the chmod + sh command
+- [x] README's setup instructions mention the Windows form
 
 ## Activity
 - 2026-10-27 21:02 · claude · Created from user report: setup command failed in PowerShell for a new project
 - 2026-10-27 21:35 · me · Handed to Claude (Claude's tray)
+- 2026-10-27 21:38 · claude · Picked up on branch scrawl/61-windows-setup-command. Show a PowerShell-ready command on Windows, keep chmod + sh elsewhere, document both in the README.
+- 2026-10-27 21:40 · claude · On Windows the dialog and wizard now show Git's sh via PowerShell (with a Git Bash note), and macOS keeps chmod + sh. The README has the PowerShell form. I ran the exact command in PowerShell 5.1 on a test repo, and it installed the hooks and the board branch. The same issue in the fresh-clone command is now #62.
+- 2026-10-27 21:40 · claude · PR: https://github.com/atulprakash1/scrawl/pull/35
