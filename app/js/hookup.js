@@ -114,5 +114,5 @@
       el('div', { class: 'welcome-actions' }, el('button', { class: 'btn', onclick: () => dialog().close() }, 'Close'))));
   }
 
-  S.hookup = { open, needed, run, list, SETUP, SETUP_ASK };
+  S.hookup = { open, needed, run, list, WINDOWS, SETUP, SETUP_ASK };
 })();

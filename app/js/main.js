@@ -125,7 +125,7 @@
     }
     if (!ok && await hasBoardBranch(root)) {
       // A fresh clone: the board exists on its branch, it just isn't checked out. Starting a new one would fork it.
-      return welcome(`"${root.name}" already has a Scrawl board on its scrawl-board branch. Check it out once in a terminal ` +
+      return welcome(`"${root.name}" already has a Scrawl board on its scrawl-board branch. Check it out once in ${S.hookup.WINDOWS ? 'PowerShell' : 'a terminal'} ` +
         'at the repo root (or ask Claude Code to: the Scrawl protocol in CLAUDE.md tells it how), then open it again:', [
         el('div', { class: 'wizard-command' },
           el('code', {}, CHECKOUT),
@@ -177,7 +177,10 @@
     start({ name: (entries[0].path || '').split('/')[0] || 'project' });
   }
 
-  const CHECKOUT = 'git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup';
+  // PowerShell 5.1 has no `&&` (`if ($?)` does the same) and seldom sh on PATH, so Windows runs Git's own sh.
+  const CHECKOUT = S.hookup.WINDOWS
+    ? 'git worktree add .scrawl scrawl-board; if ($?) { & "$env:ProgramFiles\\Git\\bin\\sh.exe" .scrawl/hooks/scrawl-setup }'
+    : 'git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup';
 
   // Whether the repo's git knows a scrawl-board branch, local or fetched (loose ref or packed-refs).
   async function hasBoardBranch(root) {
