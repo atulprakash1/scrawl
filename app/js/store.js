@@ -283,6 +283,8 @@
     const doc = parser.parse(disk.text);
     const before = { ...doc.meta };
     mutate(doc);
+    // Reopened: whatever is on main by now was already shipped, so only later commits can ship it again.
+    if (before.status === 'done' && doc.meta.status !== 'done' && mainHead()) doc.meta.shipped = mainHead();
     doc.meta.updated = util.stamp();
     if (activity) doc.body = parser.appendActivity(doc.body, who, activity);
     const text = parser.serialize(doc);
@@ -300,7 +302,7 @@
   /* Review/Resolved -> Shipped once the item's work is on main: a commit on main names the item
      (squash, rebase or merge commit), or one of its own commits got there. The browser can't run
      git, so this relies on .scrawl/log/main.txt from the hooks and scrawl-sync.
-     `shipped:` remembers the main commit an item shipped at; only newer commits can ship it again. */
+     `shipped:` remembers the main commit an item shipped (or was reopened) at; only newer commits can ship it again. */
   const SHIPPABLE = new Set(['review', 'resolved']);
 
   function mainHitFor(item) {
