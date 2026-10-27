@@ -89,7 +89,7 @@
         el('h2', { class: 'wizard-ask' }, hooked ? 'project.md is written and Claude is hooked up ✓' : 'project.md is written ✓'),
         ...(hooked ? [
           S.hookup.list(hooked),
-          el('p', {}, 'Once, in a terminal at the repo root (it needs git), turn on the hooks and give the board its own branch:'),
+          el('p', {}, S.hookup.SETUP_ASK),
           command(S.hookup.SETUP),
         ] : []),
         el('p', {}, `${hooked ? 'Then' : 'Now'} let Claude plan it. Paste this into Claude Code in this repo:`),

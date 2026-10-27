@@ -87,6 +87,12 @@ Starting Scrawl in a new folder? Run just `sh .scrawl/hooks/scrawl-setup` (the w
 the plain `.scrawl/` folder onto the `scrawl-board` branch, excludes it from the project's git and installs
 the hooks. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
 
+On Windows, run it in Git Bash as above, or in PowerShell through Git's own shell:
+
+```powershell
+& "$env:ProgramFiles\Git\bin\sh.exe" .scrawl/hooks/scrawl-setup
+```
+
 Every commit is then logged to `.scrawl/log/commits.txt`, and commits whose message starts with
 `#42` show up on card #42. The hooks also list the commits on `main` in `.scrawl/log/main.txt`.
 Both are rebuilt from git history when missing and never committed, nor is `index.json`.
