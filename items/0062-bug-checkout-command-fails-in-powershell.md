@@ -2,13 +2,14 @@
 id: 62
 type: bug
 title: Fresh-clone checkout command fails in Windows PowerShell
-status: resolved
+status: done
 severity: ant
 assignee: claude
 labels: [install]
 created: 2026-10-27T21:40
-updated: 2026-10-27T22:23
+updated: 2026-10-27T22:26
 rank: i
+shipped: fffe805
 ---
 ## Description
 Opening scrawl.html on a fresh clone shows `git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup`
@@ -27,3 +28,4 @@ seldom on PATH there.
 - 2026-10-27 22:20 · claude · On Windows the fresh-clone screen now says PowerShell and chains with if ($?) into Git's own sh. Other platforms are unchanged. Tested in PowerShell 5.1 on a fresh clone: it checks out the board and runs setup, and skips setup when the checkout fails.
 - 2026-10-27 22:20 · claude · PR: https://github.com/atulprakash1/scrawl/pull/36
 - 2026-10-27 22:23 · me · Moved to resolved (Resolved)
+- 2026-10-27 22:26 · scrawl · Shipped: fffe805 is on main
