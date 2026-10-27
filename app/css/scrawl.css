@@ -240,14 +240,14 @@ textarea { width: 100%; resize: vertical; }
   box-shadow: var(--shadow-sm);
 }
 .topbar-main {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr); align-items: stretch;
   min-height: 64px; padding: 0 24px;
 }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; justify-self: start; }
 .topbar .logo-small { font-size: 2.6rem; line-height: 1; transform: rotate(-2deg); margin: 0 4px 2px 0; }
 .crumb-sep { color: var(--ink-faint); font-size: 1.4rem; font-weight: 300; }
 .project-name { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.top-actions { display: flex; align-items: center; gap: 8px; justify-self: end; }
+.top-actions { display: flex; align-items: center; gap: 8px; justify-self: end; white-space: nowrap; }
 .spacer { flex: 1; }
 
 /* tabs fill the row's height so the active underline sits on the header's bottom edge */
@@ -796,8 +796,8 @@ kbd {
 .toast.leaving { opacity: 0; transform: translateY(8px); }
 
 /* The tabs and the Board's tools no longer fit side by side: the tools get their own row. */
-/* Not enough room for brand, tabs and actions on one line: the tabs take a second, centred row. */
-@media (max-width: 1100px) {
+/* Not enough room for brand, tabs and actions on one line (they need about 1160px): the tabs take a second, centred row. */
+@media (max-width: 1200px) {
   .topbar-main { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 64px 48px; }
   .views {
     grid-column: 1 / -1; grid-row: 2; justify-self: center; max-width: 100%;
