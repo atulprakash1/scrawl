@@ -2,11 +2,11 @@
 id: 54
 type: feature
 title: One-click install in another project
-status: ready
+status: review
 assignee: claude
 labels: [install]
 created: 2026-10-27T09:56
-updated: 2026-10-27T10:00
+updated: 2026-10-27T10:07
 ---
 ## Description
 Installing Scrawl in another repo takes too many steps: build `dist/scrawl.html` with Node, Start Scrawl, wizard, Hook up Claude, paste the setup command, and on a fresh clone a manual `git worktree add` first. Missing `gh` or an `origin` remote only shows up later as confusing failures.
@@ -18,9 +18,12 @@ Stories: #55 prebuilt release file, #56 wizard runs Hook up Claude, #57 fresh-cl
 ## Acceptance
 - [ ] A new repo is set up with: download scrawl.html, finish the wizard, paste one command
 - [ ] A fresh clone of a Scrawl repo gets its board without the user typing git commands
-- [ ] The README "In another repo" and "Setup" sections describe the shorter flow and list the prerequisites
+- [x] The README "In another repo" and "Setup" sections describe the shorter flow and list the prerequisites
 
 ## Activity
 - 2026-10-27 09:56 · claude · Created from an assessment of the install steps
 - 2026-10-27 10:00 · me · Accepted (Someday pile)
 - 2026-10-27 10:00 · me · Handed to Claude (Claude's tray)
+- 2026-10-27 10:01 · claude · Picked up on branch scrawl/54-one-click-install. Stories in id order: #55 release file, #56 wizard hook-up, #57 fresh-clone fallback, #58 setup checks.
+- 2026-10-27 10:07 · claude · All four stories are in review: the release attaches scrawl.html, the wizard hooks up Claude, fresh clones get their board from the protocol (or a pasted command), and scrawl-setup warns about missing origin/gh. Two boxes are unticked until they can be tried for real: the download link only works after the next /release, and the fresh-clone path hasn't had a real Claude run.
+- 2026-10-27 10:07 · claude · PR: https://github.com/atulprakash1/scrawl/pull/29
