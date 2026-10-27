@@ -118,3 +118,4 @@
 {"at":"2026-10-27T10:00","who":"me","id":54,"action":"move","from":"backlog","to":"ready"}
 {"at":"2026-10-27T11:00","who":"scrawl","id":54,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-27T11:00","who":"scrawl","id":58,"action":"move","from":"review","to":"done"}
+{"at":"2026-10-27T15:36","who":"me","id":19,"action":"move","from":"review","to":"resolved"}

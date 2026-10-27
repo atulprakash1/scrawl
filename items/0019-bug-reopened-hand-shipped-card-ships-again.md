@@ -2,13 +2,14 @@
 id: 19
 type: bug
 title: Reopened hand-shipped card ships again from old commits
-status: review
+status: resolved
 severity: ant
 parent: 18
 assignee: claude
 labels: [workflow]
 created: 2026-10-25T15:02
-updated: 2026-10-27T15:31
+updated: 2026-10-27T15:36
+rank: i
 ---
 ## Description
 Auto-ship and **Ship now** record a `shipped:` marker (the main commit at shipping time), so a reopened card only ships again from newer commits. Dragging a card into Shipped records nothing.
@@ -29,3 +30,4 @@ Low impact: only matters when hand-shipped cards are reopened.
 - 2026-10-27 15:29 · claude · Picked up on branch scrawl/19-reopened-card-reships. Plan: when a card leaves Shipped, stamp the current main head as its shipped: marker, so only commits that reach main after the reopen can ship it again; covers drags and hand-ships before the merge alike.
 - 2026-10-27 15:31 · claude · Moving a card out of Shipped now stamps the current main head as its shipped: marker, so only commits that reach main after the reopen can ship it again. Tested in headless Chrome: the dragged and hand-shipped-before-merge cases stay reopened and new merges still ship both; on main the same test re-ships both at once. Not covered: a reopen made by editing the file outside the board (Claude or an editor) gets no marker.
 - 2026-10-27 15:31 · claude · PR: https://github.com/atulprakash1/scrawl/pull/30
+- 2026-10-27 15:36 · me · Moved to resolved (Resolved)
