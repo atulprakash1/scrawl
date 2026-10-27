@@ -20,9 +20,13 @@
 
   const supported = typeof window.showDirectoryPicker === 'function';
 
+  /* Every file:// page shares one origin, so all copies of scrawl.html share this database. The folder
+     to reopen is kept per page path, so a fresh copy in a new project doesn't open another project's board. */
+  const ROOT = `root:${location.pathname}`;
+
   async function pick() {
     const handle = await window.showDirectoryPicker({ id: 'scrawl', mode: 'readwrite' });
-    try { await idb('readwrite', (s) => s.put(handle, 'root')); } catch { /* still usable this session */ }
+    try { await idb('readwrite', (s) => s.put(handle, ROOT)); } catch { /* still usable this session */ }
     return handle;
   }
 
@@ -38,12 +42,12 @@
       const others = [];
       for (const h of await recent()) if (!(await h.isSameEntry(handle))) others.push(h);
       await idb('readwrite', (s) => s.put([handle, ...others].slice(0, RECENT_MAX), 'recent'));
-      await idb('readwrite', (s) => s.put(handle, 'root'));
+      await idb('readwrite', (s) => s.put(handle, ROOT));
     } catch { /* still usable this session */ }
   }
 
   async function remembered() {
-    try { return (await idb('readonly', (s) => s.get('root'))) || null; } catch { return null; }
+    try { return (await idb('readonly', (s) => s.get(ROOT))) || null; } catch { return null; }
   }
 
   // ask=true must run inside a user gesture (click).
