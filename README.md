@@ -3,6 +3,16 @@
 A sketchbook-style project board that lives in your repo. You and Claude Code share work through
 plain Markdown files in `.scrawl/`. No server, no API, no database, no build step.
 
+## Requirements
+
+- **Chrome or Edge**, to open the board (Firefox and Safari can only show it read-only)
+- **git**, and a POSIX `sh` for the hooks: built into macOS; on Windows, Git Bash (part of Git for Windows)
+- A GitHub remote named **`origin`**: the board syncs there and Claude's PRs go there
+- The **GitHub CLI** (`gh`), logged in with `gh auth login`: `/resolve` opens PRs with it
+- **Claude Code**, or another coding agent that reads `AGENTS.md`
+
+`scrawl-setup` warns when the remote or `gh` is missing; the board itself still works locally without them.
+
 ## Use it
 
 1. Open `scrawl.html` in **Chrome or Edge** (double-click is fine).
