@@ -131,3 +131,4 @@
 {"at":"2026-10-27T22:14","who":"scrawl","id":60,"action":"move","from":"resolved","to":"done"}
 {"at":"2026-10-27T22:14","who":"scrawl","id":61,"action":"move","from":"review","to":"done"}
 {"at":"2026-10-27T22:18","who":"me","id":62,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-27T22:23","who":"me","id":62,"action":"move","from":"review","to":"resolved"}
