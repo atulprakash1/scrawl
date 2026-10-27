@@ -10,6 +10,7 @@ created: 2026-10-27T21:40
 updated: 2026-10-27T22:26
 rank: i
 shipped: fffe805
+release: 0.2.2
 ---
 ## Description
 Opening scrawl.html on a fresh clone shows `git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup`
@@ -29,3 +30,4 @@ seldom on PATH there.
 - 2026-10-27 22:20 · claude · PR: https://github.com/atulprakash1/scrawl/pull/36
 - 2026-10-27 22:23 · me · Moved to resolved (Resolved)
 - 2026-10-27 22:26 · scrawl · Shipped: fffe805 is on main
+- 2026-10-27 22:26 · claude · Released in v0.2.2
