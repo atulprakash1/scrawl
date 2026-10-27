@@ -140,7 +140,9 @@
       ]);
     }
     if (!S.store.state.readOnly) S.fs.remember(root);
-    document.getElementById('project-name').textContent = S.store.project;
+    const name = document.getElementById('project-name');
+    name.textContent = S.store.project;
+    name.title = S.store.project; // the full name, when it's cut short
     document.title = `${S.store.project} · Scrawl`;
     S.today.visit(S.store.project);
     if (S.store.state.projectEmpty && !S.store.state.readOnly) {
