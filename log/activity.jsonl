@@ -112,3 +112,7 @@
 {"at":"2026-10-27T01:23","who":"scrawl","id":52,"action":"move","from":"resolved","to":"done"}
 {"at":"2026-10-27T01:27","who":"me","id":53,"action":"move","from":"review","to":"resolved"}
 {"at":"2026-10-27T01:27","who":"me","id":53,"action":"move","from":"resolved","to":"done"}
+{"at":"2026-10-27T09:51","who":"me","id":19,"action":"move","from":"backlog","to":"ready"}
+{"at":"2026-10-27T09:57","who":"me","id":55,"action":"move","from":"proposed","to":"wontfix"}
+{"at":"2026-10-27T10:00","who":"me","id":55,"action":"move","from":"proposed","to":"backlog"}
+{"at":"2026-10-27T10:00","who":"me","id":54,"action":"move","from":"backlog","to":"ready"}

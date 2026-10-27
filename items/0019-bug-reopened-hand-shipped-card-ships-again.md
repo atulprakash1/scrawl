@@ -2,13 +2,13 @@
 id: 19
 type: bug
 title: Reopened hand-shipped card ships again from old commits
-status: backlog
+status: ready
 severity: ant
 parent: 18
-assignee: me
+assignee: claude
 labels: [workflow]
 created: 2026-10-25T15:02
-updated: 2026-10-25T15:02
+updated: 2026-10-27T09:51
 ---
 ## Description
 Auto-ship and **Ship now** record a `shipped:` marker (the main commit at shipping time), so a reopened card only ships again from newer commits. Dragging a card into Shipped records nothing.
@@ -25,3 +25,4 @@ Low impact: only matters when hand-shipped cards are reopened.
 
 ## Activity
 - 2026-10-25 15:02 · claude · Created at your request while discussing #18 (manual ship, then merge). Parked for later.
+- 2026-10-27 09:51 · me · Handed to Claude (Claude's tray)
