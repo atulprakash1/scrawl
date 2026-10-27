@@ -32,13 +32,17 @@ The board stays out of your project's git. `.scrawl/` is checked out from its ow
 branch (a separate git worktree, listed in `.git/info/exclude`), so moving cards never shows up in
 `git status`, diffs or PRs, and switching branches never touches the board.
 
+On a fresh clone there's nothing to do by hand: the first `/next` or `/resolve` in Claude Code sees that
+`.scrawl/` is missing and checks the board out (the protocol in `CLAUDE.md` tells it how). Opening
+`scrawl.html` first shows the same command to paste instead:
+
 ```sh
-git worktree add .scrawl scrawl-board   # fresh clone only: fetch the board
-sh .scrawl/hooks/scrawl-setup           # exclude .scrawl/, install the git hooks
+git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup
 ```
 
-Starting Scrawl in a new folder? Run just `scrawl-setup`: it moves the plain `.scrawl/` folder onto
-the `scrawl-board` branch. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
+Starting Scrawl in a new folder? Run just `sh .scrawl/hooks/scrawl-setup` (the wizard shows it): it moves
+the plain `.scrawl/` folder onto the `scrawl-board` branch, excludes it from the project's git and installs
+the hooks. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
 
 Every commit is then logged to `.scrawl/log/commits.txt`, and commits whose message starts with
 `#42` show up on card #42. The hooks also list the commits on `main` in `.scrawl/log/main.txt`.

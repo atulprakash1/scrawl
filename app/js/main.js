@@ -123,6 +123,16 @@
       console.error(e);
       return welcome(`Couldn't read "${root.name}": ${e.message}`, [pickButton()]);
     }
+    if (!ok && await hasBoardBranch(root)) {
+      // A fresh clone: the board exists on its branch, it just isn't checked out. Starting a new one would fork it.
+      return welcome(`"${root.name}" already has a Scrawl board on its scrawl-board branch. Check it out once in a terminal ` +
+        'at the repo root (or ask Claude Code to: the Scrawl protocol in CLAUDE.md tells it how), then open it again:', [
+        el('div', { class: 'wizard-command' },
+          el('code', {}, CHECKOUT),
+          el('button', { class: 'btn btn-claude', onclick: () => S.util.copy(CHECKOUT) }, '📋 Copy')),
+        el('button', { class: 'btn btn-big', onclick: () => start(root) }, '↻ Open it again'),
+      ]);
+    }
     if (!ok) {
       return welcome(`"${root.name}" has no .scrawl/ folder yet. Pick your repo's root folder, or start Scrawl here.`, [
         el('button', { class: 'btn btn-big', onclick: async () => start(await initAndReturn(root)) }, `✎ Start Scrawl in "${root.name}"`),
@@ -163,6 +173,22 @@
     banner.querySelector('.btn').classList.remove('btn-big');
     banner.hidden = false;
     start({ name: (entries[0].path || '').split('/')[0] || 'project' });
+  }
+
+  const CHECKOUT = 'git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup';
+
+  // Whether the repo's git knows a scrawl-board branch, local or fetched (loose ref or packed-refs).
+  async function hasBoardBranch(root) {
+    if (S.store.state.readOnly) return false;
+    try {
+      for (const ref of ['refs/heads/scrawl-board', 'refs/remotes/origin/scrawl-board']) {
+        if (await S.fs.read(root, `.git/${ref}`)) return true;
+      }
+      const packed = await S.fs.read(root, '.git/packed-refs');
+      return !!packed && /^\w+ refs\/(heads|remotes\/[^/\s]+)\/scrawl-board\s*$/m.test(packed.text);
+    } catch {
+      return false; // .git is a file (a worktree or submodule) or unreadable: offer the usual start
+    }
   }
 
   async function initAndReturn(root) {
