@@ -3,6 +3,39 @@
 A sketchbook-style project board that lives in your repo. You and Claude Code share work through
 plain Markdown files in `.scrawl/`. No server, no API, no database, no build step.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/board-dark.png">
+  <img alt="The Scrawl board: Someday pile, Claude's tray, On the bench, Eyeball it, Resolved and Shipped columns" src="docs/media/board.png">
+</picture>
+
+**[⬇ Download scrawl.html](https://github.com/atulprakash1/scrawl/releases/latest/download/scrawl.html)**:
+one file, open it in Chrome or Edge, pick your repo.
+
+## See it work
+
+![Adding a card, handing it to Claude, the board updating live as Claude works, then the Plan, Bug jar, Today, Timeline and Releases views](docs/media/demo.gif)
+
+You jot work down, hand a card to Claude, and Claude Code picks it up from the same files: the card
+moves to *On the bench*, then *Eyeball it* with a PR to review. Merge it and the card ships. The board
+never talks to Claude; it just watches the files you both edit.
+
+## What you get
+
+| | |
+|---|---|
+| ![Card drawer with acceptance criteria and activity](docs/media/drawer.png) | **Cards are Markdown files.** Description, acceptance boxes and an append-only activity log. Comment with `@claude` and `/inbox` answers. **Hand to Claude** puts it in Claude's tray; `/next` takes the top one. |
+| ![Plan view with a proposed feature and its stories](docs/media/plan.png) | **Plan.** Describe the project once; `/plan` proposes features and stories. Accept a feature with all its stories in one click, and watch each one's progress. |
+| ![Bug jar sorted by severity](docs/media/bugs.png) | **Bug jar.** Bugs come in four sizes, from 🐜 ant to 🐙 kraken. Catch one in a line, hand the worst to Claude. |
+| ![Today view: what changed, what waits for you, what went stale](docs/media/today.png) | **Today.** What Claude did while you were away, what's waiting for your review, and what has gone stale. |
+| ![Timeline of comments, moves and commits](docs/media/timeline.png) | **Timeline.** Every comment, move and commit, linked to its card. Commits starting with `#42` land on card #42. |
+| ![Releases view with release notes](docs/media/releases.png) | **Releases.** `/release 1.2.0` writes the notes from what shipped and tags `main`. The next release is previewed as you go. |
+| ![Project wizard finished: Claude hooked up](docs/media/hooked-up.png) | **Set up in a minute.** A five-question wizard writes `project.md`, installs the Claude protocol, commands and git hooks, and leaves one command to paste. |
+| ![Command palette searching cards](docs/media/palette.png) | **Keyboard first.** <kbd>Ctrl</kbd>+<kbd>K</kbd> finds any card or runs a command. Light and dark themes. |
+
+**Why it's nice to live with:** the board stays out of your project's git (it has its own branch),
+Claude never marks its own work done, every change is a readable diff, and it works offline from
+`file://`.
+
 ## Requirements
 
 - **Chrome or Edge**, to open the board (Firefox and Safari can only show it read-only)
@@ -85,7 +118,16 @@ CLAUDE.md              the protocol Claude follows
 .claude/commands/      /resolve, /next, /plan, /groom, /inbox, /release
 .scrawl/               the board, from the scrawl-board branch: project.md, config.json, items/,
                        log/, hooks/, releases/ (plus the rebuilt index.json)
+docs/media/            the screenshots and demo in this README
 ```
+
+## Releasing
+
+`/release <version>` in Claude Code does it all; its steps are in
+[`.claude/commands/release.md`](.claude/commands/release.md). It writes the notes for every shipped card
+to `.scrawl/releases/v<version>.md`, tags `main` and pushes the tag. In this repo it also builds
+`dist/scrawl.html` from the tag and attaches it to the GitHub release, which is what the download link
+above points to.
 
 ## License
 
