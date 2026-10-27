@@ -14,11 +14,12 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 ### In another repo
 
 Download [`scrawl.html`](https://github.com/atulprakash1/scrawl/releases/latest/download/scrawl.html)
-from the latest release: the whole board in one file. Put it in the other repo, open it, click **Start Scrawl**, answer the
-project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md` (and `AGENTS.md`,
-for other coding agents such as Codex, Gemini CLI or Cursor), the slash
-commands into `.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own
-`CLAUDE.md` text or commands. Run the setup command it shows once, then `/plan` in Claude Code.
+from the latest release: the whole board in one file. Put it in the other repo, open it, click **Start Scrawl**
+and answer the project wizard. Finishing it hooks up Claude: it writes the protocol into `CLAUDE.md` (and
+`AGENTS.md`, for other coding agents such as Codex, Gemini CLI or Cursor), the slash commands into
+`.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own `CLAUDE.md` text or
+commands. Paste the setup command it shows into a terminal once, then `/plan` into Claude Code.
+(**🤖 Hook up Claude** on the board does the same again, e.g. to refresh the hooks after updating Scrawl.)
 
 Changed Scrawl itself? `node tools/bundle.mjs` (Node 18+, nothing to install) builds the same file in `dist/`.
 
