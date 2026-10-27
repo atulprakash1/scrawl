@@ -4,7 +4,15 @@
   const { el } = S.util;
 
   // chmod: files written by the browser aren't executable, and git on macOS skips such hooks.
-  const SETUP = 'chmod +x .scrawl/hooks/* && sh .scrawl/hooks/scrawl-setup';
+  // Windows has no exec bit, but PowerShell 5.1 has no `&&` and seldom sh on PATH, so it runs Git's own sh.
+  const WINDOWS = /Windows/.test(navigator.userAgent);
+  const SETUP = WINDOWS
+    ? '& "$env:ProgramFiles\\Git\\bin\\sh.exe" .scrawl/hooks/scrawl-setup'
+    : 'chmod +x .scrawl/hooks/* && sh .scrawl/hooks/scrawl-setup';
+  const SETUP_ASK = WINDOWS
+    ? 'Once, at the repo root (it needs Git for Windows), turn on the hooks and give the board its own branch. ' +
+      'In PowerShell (in Git Bash it\'s just sh .scrawl/hooks/scrawl-setup):'
+    : 'Once, in a terminal at the repo root (it needs git), turn on the hooks and give the board its own branch:';
 
   const dialog = () => document.getElementById('hookup');
   const isHook = (path) => path.startsWith('.scrawl/hooks/');
@@ -98,7 +106,7 @@
     dialog().replaceChildren(el('div', { class: 'hookup' },
       el('h2', {}, 'Claude is hooked up ✓'),
       list(rows),
-      el('p', {}, 'Once, in a terminal at the repo root (it needs git), turn on the hooks and give the board its own branch:'),
+      el('p', {}, SETUP_ASK),
       el('div', { class: 'wizard-command' },
         el('code', {}, SETUP),
         el('button', { class: 'btn btn-claude', onclick: () => S.util.copy(SETUP) }, '📋 Copy')),
@@ -106,5 +114,5 @@
       el('div', { class: 'welcome-actions' }, el('button', { class: 'btn', onclick: () => dialog().close() }, 'Close'))));
   }
 
-  S.hookup = { open, needed, run, list, SETUP };
+  S.hookup = { open, needed, run, list, SETUP, SETUP_ASK };
 })();
