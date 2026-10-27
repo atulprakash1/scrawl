@@ -1,4 +1,4 @@
-/* Project wizard: five questions for a project whose project.md is still empty, then the /plan command to paste. */
+/* Project wizard: five questions for a project whose project.md is still empty, then (in a new repo) Hook up Claude, and the commands to paste. */
 (function () {
   const S = window.Scrawl;
   const { el } = S.util;
@@ -43,10 +43,10 @@
         if (!last) { step += 1; return ask(); }
         try {
           await S.store.saveProject(compose(S.store.project, answers));
-          planned();
         } catch (err) {
-          S.util.toast(`Couldn't write project.md: ${err.message}`, 'warn');
+          return S.util.toast(`Couldn't write project.md: ${err.message}`, 'warn');
         }
+        planned(await hookUp());
       };
 
       box.replaceChildren(
@@ -69,13 +69,31 @@
       input.focus();
     }
 
-    function planned() {
+    // A new repo gets hooked up right away, so the setup command is the only step left. Null if it already was.
+    async function hookUp() {
+      const root = S.store.state.root;
+      try {
+        return (await S.hookup.needed(root)) ? await S.hookup.run(root) : null;
+      } catch (err) {
+        S.util.toast(`Couldn't hook up Claude: ${err.message}. Try 🤖 Hook up Claude on the board.`, 'warn');
+        return null;
+      }
+    }
+
+    const command = (text) => el('div', { class: 'wizard-command' },
+      el('code', {}, text),
+      el('button', { class: 'btn btn-claude', onclick: () => S.util.copy(text) }, '📋 Copy'));
+
+    function planned(hooked) {
       box.replaceChildren(
-        el('h2', { class: 'wizard-ask' }, 'project.md is written ✓'),
-        el('p', {}, 'Now let Claude plan it. Paste this into Claude Code in this repo:'),
-        el('div', { class: 'wizard-command' },
-          el('code', {}, PLAN),
-          el('button', { class: 'btn btn-claude', onclick: () => S.util.copy(PLAN) }, '📋 Copy')),
+        el('h2', { class: 'wizard-ask' }, hooked ? 'project.md is written and Claude is hooked up ✓' : 'project.md is written ✓'),
+        ...(hooked ? [
+          S.hookup.list(hooked),
+          el('p', {}, 'Once, in a terminal at the repo root (it needs git), turn on the hooks and give the board its own branch:'),
+          command(S.hookup.SETUP),
+        ] : []),
+        el('p', {}, `${hooked ? 'Then' : 'Now'} let Claude plan it. Paste this into Claude Code in this repo:`),
+        command(PLAN),
         el('div', { class: 'welcome-actions' },
           el('button', { class: 'btn btn-big', onclick: done }, 'Open the board →')));
     }

@@ -3,6 +3,16 @@
 A sketchbook-style project board that lives in your repo. You and Claude Code share work through
 plain Markdown files in `.scrawl/`. No server, no API, no database, no build step.
 
+## Requirements
+
+- **Chrome or Edge**, to open the board (Firefox and Safari can only show it read-only)
+- **git**, and a POSIX `sh` for the hooks: built into macOS; on Windows, Git Bash (part of Git for Windows)
+- A GitHub remote named **`origin`**: the board syncs there and Claude's PRs go there
+- The **GitHub CLI** (`gh`), logged in with `gh auth login`: `/resolve` opens PRs with it
+- **Claude Code**, or another coding agent that reads `AGENTS.md`
+
+`scrawl-setup` warns when the remote or `gh` is missing; the board itself still works locally without them.
+
 ## Use it
 
 1. Open `scrawl.html` in **Chrome or Edge** (double-click is fine).
@@ -13,12 +23,15 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 
 ### In another repo
 
-Run `node tools/bundle.mjs` here once (Node 18+, nothing to install). It builds `dist/scrawl.html`, the
-whole board in one file. Copy it into the other repo, open it, click **Start Scrawl**, answer the
-project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md` (and `AGENTS.md`,
-for other coding agents such as Codex, Gemini CLI or Cursor), the slash
-commands into `.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own
-`CLAUDE.md` text or commands. Run the setup command it shows once, then `/plan` in Claude Code.
+Download [`scrawl.html`](https://github.com/atulprakash1/scrawl/releases/latest/download/scrawl.html)
+from the latest release: the whole board in one file. Put it in the other repo, open it, click **Start Scrawl**
+and answer the project wizard. Finishing it hooks up Claude: it writes the protocol into `CLAUDE.md` (and
+`AGENTS.md`, for other coding agents such as Codex, Gemini CLI or Cursor), the slash commands into
+`.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own `CLAUDE.md` text or
+commands. Paste the setup command it shows into a terminal once, then `/plan` into Claude Code.
+(**🤖 Hook up Claude** on the board does the same again, e.g. to refresh the hooks after updating Scrawl.)
+
+Changed Scrawl itself? `node tools/bundle.mjs` (Node 18+, nothing to install) builds the same file in `dist/`.
 
 Firefox and Safari can't write to folders. If `file://` gives you trouble, serve it locally:
 `python -m http.server` (or `npx serve`) and open `http://localhost:8000/scrawl.html`.
@@ -29,13 +42,17 @@ The board stays out of your project's git. `.scrawl/` is checked out from its ow
 branch (a separate git worktree, listed in `.git/info/exclude`), so moving cards never shows up in
 `git status`, diffs or PRs, and switching branches never touches the board.
 
+On a fresh clone there's nothing to do by hand: the first `/next` or `/resolve` in Claude Code sees that
+`.scrawl/` is missing and checks the board out (the protocol in `CLAUDE.md` tells it how). Opening
+`scrawl.html` first shows the same command to paste instead:
+
 ```sh
-git worktree add .scrawl scrawl-board   # fresh clone only: fetch the board
-sh .scrawl/hooks/scrawl-setup           # exclude .scrawl/, install the git hooks
+git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup
 ```
 
-Starting Scrawl in a new folder? Run just `scrawl-setup`: it moves the plain `.scrawl/` folder onto
-the `scrawl-board` branch. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
+Starting Scrawl in a new folder? Run just `sh .scrawl/hooks/scrawl-setup` (the wizard shows it): it moves
+the plain `.scrawl/` folder onto the `scrawl-board` branch, excludes it from the project's git and installs
+the hooks. (If your code branch still tracks `.scrawl/`, it tells you to untrack it first.)
 
 Every commit is then logged to `.scrawl/log/commits.txt`, and commits whose message starts with
 `#42` show up on card #42. The hooks also list the commits on `main` in `.scrawl/log/main.txt`.

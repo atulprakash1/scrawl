@@ -41,6 +41,8 @@ Work items live in `.scrawl/items/`, one Markdown file per item, named `0042-bug
 - The board is not part of the project's git: `.scrawl/` is a separate worktree of its own
   `scrawl-board` branch (set up once per clone by `sh .scrawl/hooks/scrawl-setup`). Edit item files
   there as usual, but never `git add` or commit them yourself; `scrawl-sync` commits and pushes the board.
+  No `.scrawl/` yet (a fresh clone)? If `git branch -a` lists `scrawl-board`, set the board up first:
+  `git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup`, then carry on.
 - Git: never commit to or push `main`. Each item gets its own branch `scrawl/<id>-<slug>`, pushed
   with a PR (`gh pr create`); the user merges on GitHub. A feature is the exception: its stories
   share the feature's branch, one commit each, and go out in one PR titled with every id

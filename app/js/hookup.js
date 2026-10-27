@@ -35,6 +35,14 @@
     }
   }
 
+  // A repo that lacks the protocol in CLAUDE.md or the setup hook hasn't been hooked up yet.
+  async function needed(root) {
+    const t = S.templates;
+    const claude = await S.fs.read(root, 'CLAUDE.md');
+    if (!claude || !lf(claude.text).split('\n').some((l) => l.trim() === t.section)) return true;
+    return !(await S.fs.read(root, '.scrawl/hooks/scrawl-setup'));
+  }
+
   async function run(root) {
     const t = S.templates;
     const out = [];
@@ -98,5 +106,5 @@
       el('div', { class: 'welcome-actions' }, el('button', { class: 'btn', onclick: () => dialog().close() }, 'Close'))));
   }
 
-  S.hookup = { open, run, SETUP };
+  S.hookup = { open, needed, run, list, SETUP };
 })();

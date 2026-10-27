@@ -16,6 +16,16 @@ mkdir -p "$(dirname "$exclude")"
 grep -qx '/.scrawl/' "$exclude" 2>/dev/null || printf '/.scrawl/\n' >> "$exclude"
 git config core.hooksPath .scrawl/hooks
 
+# The board works locally without these; syncing and opening PRs don't. Warn now rather than fail later.
+warn() { echo "scrawl-setup: warning: $*" >&2; }
+git remote get-url origin >/dev/null 2>&1 ||
+  warn "no 'origin' remote, so the board and PRs have nowhere to go. Add one: git remote add origin <GitHub URL>"
+if ! command -v gh >/dev/null 2>&1; then
+  warn "the GitHub CLI (gh) isn't installed; /resolve uses it to open PRs. Get it from https://cli.github.com, then: gh auth login"
+elif ! gh auth status >/dev/null 2>&1; then
+  warn "the GitHub CLI isn't logged in; /resolve needs it to open PRs. Run: gh auth login"
+fi
+
 if [ -e .scrawl/.git ]; then
   echo "scrawl-setup: the board is on branch $(git -C .scrawl symbolic-ref -q --short HEAD)"
   exit 0
