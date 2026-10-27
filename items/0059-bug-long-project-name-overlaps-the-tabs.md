@@ -10,6 +10,7 @@ created: 2026-10-27T15:38
 updated: 2026-10-27T15:42
 rank: i
 shipped: f18c4a3
+release: 0.2.1
 ---
 ## Description
 A long project name (the `# heading` of project.md, e.g. "Pantry: recipes, meal plans and the weekly shopping list") runs under the view tabs instead of being cut off with an ellipsis. `.project-name` has `text-overflow: ellipsis`, but the brand isn't held to its grid column, so it never shrinks. Happens at every width, before and after #49.
@@ -26,3 +27,4 @@ A long project name (the `# heading` of project.md, e.g. "Pantry: recipes, meal 
 - 2026-10-27 15:41 · claude · PR: https://github.com/atulprakash1/scrawl/pull/32
 - 2026-10-27 15:41 · me · Moved to resolved (Resolved)
 - 2026-10-27 15:42 · me · Shipped by hand
+- 2026-10-27 20:50 · claude · Released in v0.2.1

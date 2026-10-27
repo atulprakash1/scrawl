@@ -11,6 +11,7 @@ created: 2026-10-25T15:02
 updated: 2026-10-27T15:39
 rank: i
 shipped: 6807b1b
+release: 0.2.1
 ---
 ## Description
 Auto-ship and **Ship now** record a `shipped:` marker (the main commit at shipping time), so a reopened card only ships again from newer commits. Dragging a card into Shipped records nothing.
@@ -33,3 +34,4 @@ Low impact: only matters when hand-shipped cards are reopened.
 - 2026-10-27 15:31 · claude · PR: https://github.com/atulprakash1/scrawl/pull/30
 - 2026-10-27 15:36 · me · Moved to resolved (Resolved)
 - 2026-10-27 15:39 · scrawl · Shipped: 6807b1b is on main
+- 2026-10-27 20:50 · claude · Released in v0.2.1

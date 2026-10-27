@@ -10,6 +10,7 @@ created: 2026-10-27T00:21
 updated: 2026-10-27T15:39
 rank: i
 shipped: f18c4a3
+release: 0.2.1
 ---
 ## Description
 Between about 1100px and 1380px wide (common laptop widths, e.g. 1366px), the logo, centred tabs and actions don't fit on one row: "Hook up Claude" and the Ctrl K hint wrap onto two lines. The tabs should take their own row sooner, and button labels should never wrap.
@@ -25,3 +26,4 @@ Between about 1100px and 1380px wide (common laptop widths, e.g. 1366px), the lo
 - 2026-10-27 15:38 · claude · PR: https://github.com/atulprakash1/scrawl/pull/31
 - 2026-10-27 15:39 · me · Moved to resolved (Resolved)
 - 2026-10-27 15:39 · scrawl · Shipped: f18c4a3 is on main
+- 2026-10-27 20:50 · claude · Released in v0.2.1
