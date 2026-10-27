@@ -39,5 +39,10 @@ This tags `main` but never commits to it; the release notes live on the board.
    keeps its order.
 6. Tag the newest commit on main and push the tag:
    `git tag -a v<version> main -m "v<version>"`, then `git push origin v<version>`.
+   Only in the Scrawl repo itself (it has `tools/bundle.mjs`): build the board from the tag and
+   publish it, so other projects can download it without Node:
+   `git switch --detach v<version>`, `node tools/bundle.mjs`, `git switch -`, then
+   `gh release create v<version> dist/scrawl.html --title v<version> --notes-file .scrawl/releases/v<version>.md`.
+   If the GitHub release exists already, `gh release upload v<version> dist/scrawl.html --clobber`.
 7. Run `sh .scrawl/hooks/scrawl-sync` to save the board, then tell me the version, how many items it
    has per group, and the tag.

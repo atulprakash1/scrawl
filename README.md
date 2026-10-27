@@ -13,12 +13,14 @@ plain Markdown files in `.scrawl/`. No server, no API, no database, no build ste
 
 ### In another repo
 
-Run `node tools/bundle.mjs` here once (Node 18+, nothing to install). It builds `dist/scrawl.html`, the
-whole board in one file. Copy it into the other repo, open it, click **Start Scrawl**, answer the
+Download [`scrawl.html`](https://github.com/atulprakash1/scrawl/releases/latest/download/scrawl.html)
+from the latest release: the whole board in one file. Put it in the other repo, open it, click **Start Scrawl**, answer the
 project wizard, then click **🤖 Hook up Claude**. That writes the protocol into `CLAUDE.md` (and `AGENTS.md`,
 for other coding agents such as Codex, Gemini CLI or Cursor), the slash
 commands into `.claude/commands/` and the git hooks into `.scrawl/hooks/`, without overwriting your own
 `CLAUDE.md` text or commands. Run the setup command it shows once, then `/plan` in Claude Code.
+
+Changed Scrawl itself? `node tools/bundle.mjs` (Node 18+, nothing to install) builds the same file in `dist/`.
 
 Firefox and Safari can't write to folders. If `file://` gives you trouble, serve it locally:
 `python -m http.server` (or `npx serve`) and open `http://localhost:8000/scrawl.html`.
