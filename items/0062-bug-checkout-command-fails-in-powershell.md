@@ -2,12 +2,13 @@
 id: 62
 type: bug
 title: Fresh-clone checkout command fails in Windows PowerShell
-status: backlog
+status: ready
 severity: ant
-assignee: me
+assignee: claude
 labels: [install]
 created: 2026-10-27T21:40
-updated: 2026-10-27T21:40
+updated: 2026-10-27T22:18
+rank: i
 ---
 ## Description
 Opening scrawl.html on a fresh clone shows `git worktree add .scrawl scrawl-board && sh .scrawl/hooks/scrawl-setup`
@@ -20,3 +21,5 @@ seldom on PATH there.
 
 ## Activity
 - 2026-10-27 21:40 · claude · Created while working on #61
+- 2026-10-27 22:18 · me · Moved to ready (Claude's tray)
+- 2026-10-27 22:18 · me · Handed to Claude (Claude's tray)

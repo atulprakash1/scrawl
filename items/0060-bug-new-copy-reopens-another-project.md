@@ -2,13 +2,14 @@
 id: 60
 type: bug
 title: A fresh scrawl.html silently reopens another project's board
-status: resolved
+status: done
 severity: beetle
 assignee: claude
 labels: [install]
 created: 2026-10-27T20:55
-updated: 2026-10-27T21:38
+updated: 2026-10-27T22:14
 rank: i
+shipped: f91809b
 ---
 ## Description
 Downloading the released scrawl.html into an empty folder (e.g. a new project) and opening it shows
@@ -31,3 +32,4 @@ wrong project's board without noticing.
 - 2026-10-27 21:37 · claude · The folder to reopen is now kept per scrawl.html path (fs.js), so a new copy shows the welcome screen with Recent projects. Existing copies lose auto-reopen once. Not browser-tested (folder picker can't be automated), so the boxes are left for review.
 - 2026-10-27 21:37 · claude · PR: https://github.com/atulprakash1/scrawl/pull/34
 - 2026-10-27 21:38 · me · Moved to resolved (Resolved)
+- 2026-10-27 22:14 · scrawl · Shipped: f91809b is on main
