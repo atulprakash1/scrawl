@@ -243,7 +243,9 @@ textarea { width: 100%; resize: vertical; }
   display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr); align-items: stretch;
   min-height: 64px; padding: 0 24px;
 }
-.brand { display: flex; align-items: center; gap: 12px; min-width: 0; justify-self: start; }
+/* fills its column (not its content), so a long project name ends in "…" before the tabs */
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; padding-right: 16px; }
+.brand > :not(.project-name) { flex: none; }
 .topbar .logo-small { font-size: 2.6rem; line-height: 1; transform: rotate(-2deg); margin: 0 4px 2px 0; }
 .crumb-sep { color: var(--ink-faint); font-size: 1.4rem; font-weight: 300; }
 .project-name { font-weight: 600; font-size: 1.05rem; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
