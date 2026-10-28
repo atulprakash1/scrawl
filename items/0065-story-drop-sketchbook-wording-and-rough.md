@@ -8,6 +8,7 @@ labels: [docs]
 created: 2026-10-28T14:10
 updated: 2026-10-28T14:08
 shipped: 2685f47
+release: 0.2.3
 ---
 ## Description
 Since the Studio redesign (#28, #30) the board is clean surfaces with handwriting only in the logo and
@@ -26,3 +27,4 @@ headings, so "sketchbook-style" in the README and the welcome tagline oversells 
 - 2026-10-28 14:20 · claude · README intro now says "A lightweight project board", tagline is "a project board for you & Claude", Rough.js and its notice/layout lines are gone; bundle builds. Found the Patrick Hand font unused too, filed as #66.
 - 2026-10-28 14:20 · claude · PR: https://github.com/atulprakash1/scrawl/pull/39
 - 2026-10-28 14:08 · scrawl · Shipped: 2685f47 is on main
+- 2026-10-28 13:45 · claude · Released in v0.2.3
