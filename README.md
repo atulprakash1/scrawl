@@ -1,6 +1,6 @@
 # Scrawl
 
-A sketchbook-style project board that lives in your repo. You and Claude Code share work through
+A lightweight project board that lives in your repo. You and Claude Code share work through
 plain Markdown files in `.scrawl/`. No server, no API, no database, no build step.
 
 <picture>
@@ -117,7 +117,7 @@ Code PRs carry code only.
 ```
 scrawl.html            the board (open in Chromium)
 app/js, app/css        plain classic scripts and styles
-vendor/                SortableJS, marked, DOMPurify, Rough.js, fonts (no CDN at runtime)
+vendor/                SortableJS, marked, DOMPurify, fonts (no CDN at runtime)
 templates/hooks/       the git hooks that Hook up Claude installs in .scrawl/hooks/
 tools/bundle.mjs       builds app/js/templates.js and the single-file dist/scrawl.html
 CLAUDE.md              the protocol Claude follows
