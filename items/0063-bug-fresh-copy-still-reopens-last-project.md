@@ -2,12 +2,13 @@
 id: 63
 type: bug
 title: scrawl.html in an empty folder still opens the last project
-status: review
+status: done
 severity: beetle
 assignee: claude
 labels: [install]
 created: 2026-10-28T10:00
-updated: 2026-10-28T10:20
+updated: 2026-10-28T12:51
+shipped: 1e65a36
 ---
 ## Description
 User report after v0.2.2: scrawl.html in an empty folder still opens the last project directly.
@@ -27,3 +28,4 @@ scrawl.html; anything else gets the one-click reopen screen with Recent projects
 - 2026-10-28 10:00 · claude · Picked up on branch scrawl/63-reopen-only-own-folder. Auto-open only a folder that contains this scrawl.html.
 - 2026-10-28 10:20 · claude · Boot now auto-opens the remembered folder only if this scrawl.html sits inside it (fs.holdsPage); otherwise it shows the welcome screen with one-click reopen and Recent projects. Path check tested in Node; not browser-tested, so the boxes are left for review.
 - 2026-10-28 10:20 · claude · PR: https://github.com/atulprakash1/scrawl/pull/37
+- 2026-10-28 12:51 · scrawl · Shipped: 1e65a36 is on main
