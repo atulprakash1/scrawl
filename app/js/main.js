@@ -244,9 +244,12 @@
     }
 
     const handle = await S.fs.remembered();
-    if (handle && (await S.fs.permission(handle, false))) return start(handle);
+    const granted = handle && (await S.fs.permission(handle, false));
+    if (granted && (await S.fs.holdsPage(handle))) return start(handle);
     if (handle) {
-      return welcome('Welcome back. Your browser needs one click to let Scrawl into the folder again.', [
+      return welcome(granted
+        ? `This scrawl.html isn't inside "${handle.name}", the project it opened last. Reopen it, or pick this project's folder.`
+        : 'Welcome back. Your browser needs one click to let Scrawl into the folder again.', [
         el('button', {
           class: 'btn btn-big',
           onclick: async () => { if (await S.fs.permission(handle, true)) start(handle); },
