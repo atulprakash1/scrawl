@@ -50,6 +50,22 @@
     try { return (await idb('readonly', (s) => s.get(ROOT))) || null; } catch { return null; }
   }
 
+  /* Whether this scrawl.html sits inside the folder: find the folder's name on the page path and walk the
+     rest of the path down from it. Only such a folder is reopened without asking; what the page last opened
+     may be some other project (picked from Recent projects, say). Needs read permission on the folder. */
+  async function holdsPage(handle) {
+    const parts = decodeURIComponent(location.pathname).split('/').filter(Boolean);
+    const name = handle.name.toLowerCase();
+    for (let i = parts.length - 2; i >= 0; i--) {
+      if (parts[i].toLowerCase() !== name) continue;
+      try {
+        await (await dir(handle, parts.slice(i + 1, -1).join('/'))).getFileHandle(parts[parts.length - 1]);
+        return true;
+      } catch { /* not this one */ }
+    }
+    return false;
+  }
+
   // ask=true must run inside a user gesture (click).
   async function permission(handle, ask) {
     const opts = { mode: 'readwrite' };
@@ -134,5 +150,5 @@
     }
   }
 
-  S.fs = { supported, pick, remembered, recent, remember, permission, dir, read, file, mtime, write, append, remove, list };
+  S.fs = { supported, pick, remembered, recent, remember, holdsPage, permission, dir, read, file, mtime, write, append, remove, list };
 })();
