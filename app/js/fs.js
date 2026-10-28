@@ -79,9 +79,15 @@
     return d;
   }
 
-  async function fileHandle(root, path, create = false) {
+  // 'a/b/c.md' -> ['a/b', 'c.md']; a root-level file like 'CLAUDE.md' -> ['', 'CLAUDE.md'].
+  function split(path) {
     const i = path.lastIndexOf('/');
-    return (await dir(root, path.slice(0, i), create)).getFileHandle(path.slice(i + 1), { create });
+    return [path.slice(0, Math.max(i, 0)), path.slice(i + 1)];
+  }
+
+  async function fileHandle(root, path, create = false) {
+    const [folder, name] = split(path);
+    return (await dir(root, folder, create)).getFileHandle(name, { create });
   }
 
   const missing = (e) => e && (e.name === 'NotFoundError' || e.name === 'TypeMismatchError');
@@ -130,9 +136,9 @@
   }
 
   async function remove(root, path) {
-    const i = path.lastIndexOf('/');
+    const [folder, name] = split(path);
     try {
-      await (await dir(root, path.slice(0, i))).removeEntry(path.slice(i + 1));
+      await (await dir(root, folder)).removeEntry(name);
     } catch (e) {
       if (!missing(e)) throw e;
     }
